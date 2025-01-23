@@ -16,14 +16,17 @@
             color: white;
             padding: 20px;
             text-align: center;
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+        header p {
+            font-size: 1em;
+            margin-top: 10px;
+        }
         main {
-            padding: 20px;
-            max-width: 900px;
-            margin: 20px auto;
+            padding: 15px;
+            margin: 15px auto;
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -31,6 +34,7 @@
         h1, h2 {
             text-align: center;
             color: #333;
+            font-size: 1.4em;
         }
         ul {
             list-style: none;
@@ -38,9 +42,9 @@
             margin: 0;
         }
         li {
-            margin: 15px 0;
+            margin: 10px 0;
             background: #e6f7ff;
-            padding: 15px;
+            padding: 10px;
             border-radius: 8px;
             transition: transform 0.2s, background 0.2s;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -50,10 +54,13 @@
             transform: translateY(-4px);
         }
         a {
+            display: block;
             text-decoration: none;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
             color: #1f76d2;
+            width: 100%;
+            height: 100%;
         }
         a:hover {
             text-decoration: underline;
@@ -67,12 +74,57 @@
             font-size: 0.9em;
             margin-top: 20px;
         }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                font-size: 1.2em;
+                padding: 15px;
+            }
+            header p {
+                font-size: 0.9em;
+            }
+            main {
+                padding: 10px;
+                margin: 10px;
+            }
+            h1, h2 {
+                font-size: 1.2em;
+            }
+            li {
+                padding: 8px;
+            }
+            a {
+                font-size: 0.9em;
+            }
+        }
+        @media (max-width: 480px) {
+            header {
+                font-size: 1em;
+                padding: 10px;
+            }
+            header p {
+                font-size: 0.8em;
+            }
+            main {
+                padding: 8px;
+                margin: 8px;
+            }
+            h1, h2 {
+                font-size: 1em;
+            }
+            li {
+                padding: 6px;
+            }
+            a {
+                font-size: 0.8em;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Welcome to DailyDoseofBCA</h1>
-        <p>Feel relieved when missed a class, notes are updated daily here with handwritten PDFs and you dont have to worry about the storage as this is a online viewing interface.</p>
+        <p>Feel relieved when you miss a class. Notes are updated daily here with handwritten PDFs, and you don't have to worry about storage as this is an online viewing interface.</p>
     </header>
     <main>
         <h2>Available Notes</h2>
