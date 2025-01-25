@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Notes</title>
+    <title>Class Notes - Republic Day Special</title>
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #2e3032;
+            background: linear-gradient(180deg, #FF9933, #FFFFFF, #138808);
         }
         header {
-            background: linear-gradient(90deg, #1f76d2, #4CAF50);
-            color: white;
+            background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
+            color: #000;
             padding: 20px;
             text-align: center;
             font-size: 1.5em;
@@ -24,120 +24,122 @@
             font-size: 1em;
             margin-top: 10px;
         }
+        .header-video {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
         main {
-            padding: 15px;
-            margin: 15px auto;
-            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            background: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h1, h2 {
+        h2 {
             text-align: center;
-            color: #333;
-            font-size: 1.4em;
+            color: #000;
+            font-size: 1.5em;
+            margin-bottom: 20px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        .notes-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
         }
-        li {
-            margin: 10px 0;
-            background: #e6f7ff;
-            padding: 10px;
-            border-radius: 8px;
-            transition: transform 0.2s, background 0.2s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .note-item {
+            background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        li:hover {
-            background: #ccf2ff;
-            transform: translateY(-4px);
+        .note-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
-        a {
-            display: block;
+        .note-title {
+            font-size: 1.2em;
+            color: #000;
+            margin-bottom: 10px;
+        }
+        .note-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #138808;
+            color: #fff;
             text-decoration: none;
-            font-size: 1em;
+            border-radius: 8px;
             font-weight: bold;
-            color: #1f76d2;
-            width: 100%;
-            height: 100%;
+            font-size: 1em;
+            transition: background 0.3s;
         }
-        a:hover {
-            text-decoration: underline;
-            color: #1f76d2;
+        .note-button:hover {
+            background: #FF9933;
         }
         footer {
             text-align: center;
             padding: 10px;
-            background: #1f76d2;
-            color: white;
+            background: linear-gradient(90deg, #138808, #FFFFFF, #FF9933);
+            color: #000;
             font-size: 0.9em;
             margin-top: 20px;
         }
-        /* Responsive design */
-        @media (max-width: 768px) {
-            header {
-                font-size: 1.2em;
-                padding: 15px;
-            }
-            header p {
-                font-size: 0.9em;
-            }
-            main {
-                padding: 10px;
-                margin: 10px;
-            }
-            h1, h2 {
-                font-size: 1.2em;
-            }
-            li {
-                padding: 8px;
-            }
-            a {
-                font-size: 0.9em;
-            }
-        }
-        @media (max-width: 480px) {
-            header {
-                font-size: 1em;
-                padding: 10px;
-            }
-            header p {
-                font-size: 0.8em;
-            }
-            main {
-                padding: 8px;
-                margin: 8px;
-            }
-            h1, h2 {
-                font-size: 1em;
-            }
-            li {
-                padding: 6px;
-            }
-            a {
-                font-size: 0.8em;
-            }
+        footer p {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <!-- Background Audio -->
+    <audio autoplay loop>
+        <source src="F:\web/jana.mp3" type="audio/mpeg">
+        <source src="F:\webjana.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
     <header>
         <h1>Welcome to DailyDoseofBCA</h1>
-        <p>Feel relieved when you miss a class. Notes are updated daily here with handwritten PDFs, and you don't have to worry about storage as this is an online viewing interface.</p>
+        <p>Celebrating the spirit of India - Happy Republic Day!</p>
     </header>
+    <video class="header-video" controls autoplay loop>
+        <source src="F:\web/naiduu.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
     <main>
         <h2>Available Notes</h2>
-        <ul>
-            <li><a href="https://drive.google.com/file/d/1SMrgKBQioqn9eqNgkhKtgX12YKXljtGQ/view?usp=sharing" target="_blank">OAT Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/1GAh4iEfLOs8Mo2EoanFvx2I7m61najdu/view?usp=sharing" target="_blank">C Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/14asPUZge5DbnwQWuvsO2YjLxk_pNUJtt/view?usp=sharing" target="_blank">DM Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/154vrkflNUxW8IXIjG2bU_Q9ai2_EHKBb/view?usp=sharing" target="_blank">BW Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/13_UAaIR0BRs4tHeOtaTKunZR1P3BxC7J/view?usp=sharing" target="_blank">MS Notes</a></li>
-        </ul>
+        <div class="notes-container">
+            <div class="note-item">
+                <p class="note-title">OAT Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1SMrgKBQioqn9eqNgkhKtgX12YKXljtGQ/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">C Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1GAh4iEfLOs8Mo2EoanFvx2I7m61najdu/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">DM Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/14asPUZge5DbnwQWuvsO2YjLxk_pNUJtt/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">BW Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/154vrkflNUxW8IXIjG2bU_Q9ai2_EHKBb/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">MS Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/13_UAaIR0BRs4tHeOtaTKunZR1P3BxC7J/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+        </div>
     </main>
     <footer>
-        <p>Chaduvukondi First-uuuu! &copy; 2095</p>
+        <p>Unity in Diversity! Jai Hind! &copy; 2095</p>
     </footer>
 </body>
 </html>
