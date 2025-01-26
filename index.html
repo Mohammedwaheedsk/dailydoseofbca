@@ -114,7 +114,7 @@
 
     // Check if user is already logged in
     if (localStorage.getItem('loggedInUser')) {
-      window.location.href = 'index.html';
+      window.location.href = 'home.html';
     }
 
     // Login Form Submission
@@ -134,9 +134,9 @@
         loginMessage.style.color = 'green';
         loginMessage.textContent = 'Login successful! Redirecting...';
 
-        // Simulate navigation to index.html
+        // Simulate navigation to home.html
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'home.html';
         }, 1000);
       } else {
         loginMessage.style.color = 'red';
