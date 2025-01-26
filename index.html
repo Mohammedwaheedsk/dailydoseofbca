@@ -7,17 +7,30 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
       background: #f5f5f5;
+    }
+    .header {
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header .welcome {
+      font-size: 16px;
     }
     .container {
       max-width: 400px;
       width: 100%;
       padding: 20px;
+      margin: 80px auto 0; /* Adjusted for header */
     }
     .card {
       background: white;
@@ -65,6 +78,10 @@
   </style>
 </head>
 <body>
+  <div class="header">
+    <span class="welcome" id="welcomeMessage"></span>
+  </div>
+
   <div class="container">
     <div class="card" id="loginCard">
       <h2>Login</h2>
@@ -111,10 +128,12 @@
     const signupForm = document.getElementById('signupForm');
     const loginMessage = document.getElementById('loginMessage');
     const signupMessage = document.getElementById('signupMessage');
+    const welcomeMessage = document.getElementById('welcomeMessage');
 
     // Check if user is already logged in
     if (localStorage.getItem('loggedInUser')) {
-      window.location.href = 'home.html';
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      welcomeMessage.textContent = `Welcome, ${loggedInUser}!`;
     }
 
     // Login Form Submission
