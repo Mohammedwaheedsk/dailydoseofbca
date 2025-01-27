@@ -3,117 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Notes - Republic Day Special</title>
+    <meta name="description" content="Explore high-quality educational resources on DailyDoseofBCA. A platform for organized and accessible study materials.">
+    <title>DailyDoseofBCA - Professional Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* General Styles */
         body {
-            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background: linear-gradient(180deg, #FF9933, #FFFFFF, #138808);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
         }
-        header {
-            background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
-            color: #000;
-            padding: 20px;
-            text-align: center;
+
+        /* Background Video */
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        nav .logo {
             font-size: 1.5em;
             font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            color: #f39c12;
+            text-shadow: 0 0 5px #f39c12;
         }
-        header p {
-            font-size: 1em;
-            margin-top: 10px;
-        }
-        .header-video {
-            display: block;
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            margin: 20px auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        main {
-            padding: 20px;
-            margin: 20px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #000;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-        .notes-container {
+
+        nav ul {
+            list-style: none;
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
+            gap: 15px;
         }
-        .note-item {
-            background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 200px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .note-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-        .note-title {
-            font-size: 1.2em;
-            color: #000;
-            margin-bottom: 10px;
-        }
-        .note-button {
-            display: inline-block;
-            padding: 10px 15px;
-            background: #138808;
+
+        nav ul li a {
             color: #fff;
             text-decoration: none;
-            border-radius: 8px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f39c12;
+        }
+
+        /* Hero Section */
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .neon-text {
+            font-size: 2.5em;
             font-weight: bold;
-            font-size: 1em;
-            transition: background 0.3s;
+            color: #fff;
+            text-shadow: 0 0 5px #1abc9c, 0 0 10px #1abc9c, 0 0 20px #1abc9c, 0 0 30px #1abc9c;
         }
+
+        .neon-subtext {
+            font-size: 1.2em;
+            color: #fff;
+            text-shadow: 0 0 5px #3498db, 0 0 10px #3498db;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            color: #fff;
+            background: linear-gradient(90deg, #f39c12, #e74c3c);
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px #f39c12;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #e74c3c;
+        }
+
+        /* Main Section */
+        main {
+            padding: 40px 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-shadow: 0 0 10px #f39c12;
+        }
+
+        .notes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .note-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px #3498db;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .note-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #1abc9c;
+        }
+
+        .note-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .note-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
         .note-button:hover {
-            background: #FF9933;
+            background: #1abc9c;
+            transform: scale(1.1);
         }
+
+        /* Footer */
         footer {
             text-align: center;
-            padding: 10px;
-            background: linear-gradient(90deg, #138808, #FFFFFF, #FF9933);
-            color: #000;
-            font-size: 0.9em;
-            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-shadow: 0 0 5px #3498db;
         }
-        footer p {
-            font-weight: bold;
+
+        footer a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            header {
+                padding: 50px 10px;
+            }
+
+            .neon-text {
+                font-size: 2em;
+            }
+
+            .neon-subtext {
+                font-size: 1em;
+            }
+
+            .cta-button {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Audio -->
-    <audio autoplay loop>
-        <source src="F:\web/jana.mp3" type="audio/mpeg">
-        <source src="F:\webjana.ogg" type="audio/ogg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <header>
-        <h1>Welcome to DailyDoseofBCA</h1>
-        <p>Celebrating the spirit of India - Happy Republic Day!</p>
-    </header>
-    <video class="header-video" controls autoplay loop>
-        <source src="Naiduu.mp4" type="video/mp4">
+    <!-- Background Video -->
+    <video id="video-bg" autoplay loop muted>
+        <source src="F:\web/bg.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-    <main>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">DailyDoseofBCA</div>
+        <ul>
+            <li><a href="#notes">Notes</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header>
+        <h1 class="neon-text">Welcome to DailyDoseofBCA</h1>
+        <p class="neon-subtext">Your one-stop platform for high-quality academic resources.</p>
+        <a href="#notes" class="cta-button">Explore Notes</a>
+    </header>
+
+    <!-- Main Section -->
+    <main id="notes">
         <h2>Available Notes</h2>
         <div class="notes-container">
             <div class="note-item">
@@ -138,8 +248,10 @@
             </div>
         </div>
     </main>
+
+    <!-- Footer -->
     <footer>
-        <p>Unity in Diversity! Jai Hind! &copy; 2095</p>
+        <p>&copy; 2025 DailyDoseofBCA | Designed with 💡</p>
     </footer>
 </body>
 </html>
