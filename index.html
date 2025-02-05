@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Explore high-quality educational notes on DailyDoseofBCA. A website for organized and accessible study materials and notes.">
-    <title>DailyDoseofBCA - Hand Written Notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore high-quality educational resources on DailyDoseofBCA. A platform for organized and accessible study materials.">
+    <title>DailyDoseofBCA - Professional Notes</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* General Styles */
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
             color: #fff;
             overflow-x: hidden;
-            text-align: center;
         }
 
+        /* Background Video */
         #video-bg {
             position: fixed;
             top: 0;
@@ -25,6 +26,7 @@
             z-index: -1;
         }
 
+        /* Navigation */
         nav {
             display: flex;
             justify-content: space-between;
@@ -32,185 +34,485 @@
             padding: 15px 20px;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 20; /* Ensure nav is on top */
         }
 
-        .menu-btn, .close-btn {
+        nav .logo {
             font-size: 1.5em;
-            cursor: pointer;
-            color: #fff;
-            background: none;
-            border: none;
-            outline: none;
-            z-index: 30; /* Ensure button is always on top */
+            font-weight: bold;
+            color: #f39c12;
+            text-shadow: 0 0 5px #f39c12;
         }
 
-        .resources-panel {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            transition: left 0.3s ease;
+        nav ul {
+            list-style: none;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10; /* Panel will be under the hamburger button */
+            gap: 15px;
         }
 
-        .resources-panel.open {
-            left: 0;
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
         }
 
-        .resources-panel h1 {
+        nav ul li a:hover {
+            color: #f39c12;
+        }
+
+        /* Hero Section */
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .neon-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 5px #1abc9c, 0 0 10px #1abc9c, 0 0 20px #1abc9c, 0 0 30px #1abc9c;
+        }
+
+        .neon-subtext {
+            font-size: 1.2em;
+            color: #fff;
+            text-shadow: 0 0 5px #3498db, 0 0 10px #3498db;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            color: #fff;
+            background: linear-gradient(90deg, #f39c12, #e74c3c);
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px #f39c12;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #e74c3c;
+        }
+
+        /* Main Section */
+        main {
+            padding: 40px 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
             color: #f1c40f;
             text-shadow: 0 0 10px #f39c12;
-            font-size: 1.5em;
+        }
+
+        .notes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .note-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
-            margin-bottom: 20px;
+            box-shadow: 0 0 10px #3498db;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .resources-panel ul {
-            list-style: none;
-            padding: 0;
-            text-align: center;
+        .note-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #1abc9c;
         }
 
-        .resources-panel ul li {
-            margin: 10px 0;
+        .note-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 10px;
         }
 
-        .resources-panel ul li a {
-            display: block;
-            padding: 10px;
+        .note-button {
+            display: inline-block;
+            padding: 10px 20px;
             background: #3498db;
             color: #fff;
             border-radius: 5px;
-            text-decoration: none;
             font-weight: bold;
-            transition: background 0.3s;
+            text-decoration: none;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
-        .resources-panel ul li a:hover {
+        .note-button:hover {
             background: #1abc9c;
+            transform: scale(1.1);
         }
 
-        .content {
-            padding: 80px 20px;
-            text-align: center;
-            position: relative;
-            z-index: 15;
-            transition: margin-left 0.4s ease;
-        }
-
-        .video-container {
-            margin-top: 20px;
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
+        /* Footer */
         footer {
             text-align: center;
             padding: 15px;
             background: rgba(0, 0, 0, 0.6);
             color: #fff;
             text-shadow: 0 0 5px #3498db;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            z-index: 5;
         }
 
-        @media (max-width: 768px) {
-            .resources-panel {
-                width: 100%;
-                left: -100%;
+        footer a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            header {
+                padding: 50px 10px;
             }
 
-            .resources-panel.open {
-                left: 0;
+            .neon-text {
+                font-size: 2em;
             }
 
-            .content {
-                padding: 60px 10px;
-                margin-left: 0;
-            }
-
-            .content h1 {
-                font-size: 1.8em;
-            }
-
-            .content p {
+            .neon-subtext {
                 font-size: 1em;
+            }
+
+            .cta-button {
+                font-size: 1em;
+                padding: 10px 20px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Background Video -->
     <video id="video-bg" autoplay loop muted>
         <source src="bg.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
+    <!-- Navigation -->
     <nav>
-        <button class="menu-btn" id="menu-btn" onclick="toggleResources()">&#9776;</button>
-        <button class="close-btn" id="close-btn" style="display: none;" onclick="toggleResources()">&#10006;</button>
+        <div class="logo">DailyDoseofBCA</div>
+        <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
     </nav>
 
-    <div class="resources-panel" id="resources">
-        <h1>DailyDoseofBCA</h1>
-        <ul>
-            <li><a href="https://drive.google.com/file/d/1xCJoUtoyr3zcTbeTdIeaxywraQ4g4361/view?usp=drive_link" target="_blank">OAT Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/1Qwr06QYCtl_op4wwDlzTqOQI-tz3RUAe/view?usp=drive_link" target="_blank">C Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/1tlf3raZ-es2PGHBpcStFHYDC4JuNnpHZ/view?usp=drive_link" target="_blank">DM Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/154vrkflNUxW8IXIjG2bU_Q9ai2_EHKBb/view?usp=drive_link" target="_blank">BW Notes</a></li>
-            <li><a href="https://drive.google.com/file/d/1DYxlKeVq-uBzIRLHhHHVSDTsfVaOL2t6/view?usp=drive_link" target="_blank">BW Notes</a></li>
-        </ul>
-    </div>
-
-    <div class="content">
+    <!-- Hero Section -->
+    <header>
         <h1 class="neon-text">Welcome to DailyDoseofBCA</h1>
-        <p class="neon-subtext">Your one-stop site for Bad hand writing-quality Hand-Written Notes.</p>
-        <div class="video-container">
-            <h1 class="neon-text">Play a GAME</h1>
-            <iframe src= "https://gamesnacks.com/games/omnomrun" allowfullscreen></iframe>
-        </div>
-    </div>
+        <p class="neon-subtext">Your one-stop platform for high-quality academic resources.</p>
+        <!-- Play a GAME button added below the header -->
+        <h1 class="neon-text">Play a GAME</h1>
+        <iframe src="https://gamesnacks.com/games/omnomrun" allowfullscreen></iframe>
 
+    </header>
+
+    <!-- Main Section -->
+    <main id="notes">
+        <h2>Available Notes</h2>
+        <div class="notes-container">
+            <div class="note-item">
+                <p class="note-title">OAT Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1hRrq1kC65SSjy6cE9UvQ_Y78-wYu5Imu/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">C Notes</p>
+                <a class="note-button" href="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore high-quality educational resources on DailyDoseofBCA. A platform for organized and accessible study materials.">
+    <title>DailyDoseofBCA - Professional Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Background Video */
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #f39c12;
+            text-shadow: 0 0 5px #f39c12;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f39c12;
+        }
+
+        /* Hero Section */
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .neon-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 5px #1abc9c, 0 0 10px #1abc9c, 0 0 20px #1abc9c, 0 0 30px #1abc9c;
+        }
+
+        .neon-subtext {
+            font-size: 1.2em;
+            color: #fff;
+            text-shadow: 0 0 5px #3498db, 0 0 10px #3498db;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            color: #fff;
+            background: linear-gradient(90deg, #f39c12, #e74c3c);
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px #f39c12;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #e74c3c;
+        }
+
+        /* Main Section */
+        main {
+            padding: 40px 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-shadow: 0 0 10px #f39c12;
+        }
+
+        .notes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .note-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px #3498db;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .note-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #1abc9c;
+        }
+
+        .note-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .note-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .note-button:hover {
+            background: #1abc9c;
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-shadow: 0 0 5px #3498db;
+        }
+
+        footer a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            header {
+                padding: 50px 10px;
+            }
+
+            .neon-text {
+                font-size: 2em;
+            }
+
+            .neon-subtext {
+                font-size: 1em;
+            }
+
+            .cta-button {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <video id="video-bg" autoplay loop muted>
+        <source src="bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">DailyDoseofBCA</div>
+        <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header>
+        <h1 class="neon-text">Welcome to DailyDoseofBCA</h1>
+        <p class="neon-subtext">Your one-stop platform for high-quality academic resources.</p>
+        <!-- Play a GAME button added below the header -->
+        <h1 class="neon-text">Play a GAME</h1>
+        <iframe src="https://gamesnacks.com/games/omnomrun" allowfullscreen></iframe>
+
+    </header>
+
+    <!-- Main Section -->
+    <main id="notes">
+        <h2>Available Notes</h2>
+        <div class="notes-container">
+            <div class="note-item">
+                <p class="note-title">OAT Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1xCJoUtoyr3zcTbeTdIeaxywraQ4g4361/view?usp=drive_link" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">C Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1slTbToL4l-JXpGJ_N9i1RO5R9etJtzMI/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">DM Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1tlf3raZ-es2PGHBpcStFHYDC4JuNnpHZ/view?usp=drive_link" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">BW Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/154vrkflNUxW8IXIjG2bU_Q9ai2_EHKBb/view?usp=drive_link" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">MS Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1DYxlKeVq-uBzIRLHhHHVSDTsfVaOL2t6/view?usp=drive_link" target="_blank">Open Notes</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
     <footer>
         <p>&copy; 2025 DailyDoseofBCA | Designed with 💡</p>
     </footer>
+</body>
+</html>
+" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">DM Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/14asPUZge5DbnwQWuvsO2YjLxk_pNUJtt/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">BW Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/154vrkflNUxW8IXIjG2bU_Q9ai2_EHKBb/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">MS Notes</p>
+                <a class="note-button" href="https://drive.google.com/file/d/13_UAaIR0BRs4tHeOtaTKunZR1P3BxC7J/view?usp=sharing" target="_blank">Open Notes</a>
+            </div>
+        </div>
+    </main>
 
-    <script>
-        function toggleResources() {
-            var panel = document.getElementById('resources');
-            var menuBtn = document.getElementById('menu-btn');
-            var closeBtn = document.getElementById('close-btn');
-            var content = document.querySelector('.content');
-
-            panel.classList.toggle('open');
-            content.style.marginLeft = panel.classList.contains('open') ? '250px' : '0';
-            menuBtn.style.display = panel.classList.contains('open') ? 'none' : 'block';
-            closeBtn.style.display = panel.classList.contains('open') ? 'block' : 'none';
-        }
-    </script>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 DailyDoseofBCA | Designed with 💡</p>
+    </footer>
 </body>
 </html>
