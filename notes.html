@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore high-quality educational resources on DailyDoseofBCA. A platform for organized and accessible study materials.">
-    <title>DailyDoseofBCA - Professional Notes</title>
+    <meta name="description" content="Explore high-quality handwritten assignments on DailyDoseofBCA. A platform for organized and accessible study materials.">
+    <title>Hand Written Assignments</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* General Styles */
@@ -39,8 +39,8 @@
         nav .logo {
             font-size: 1.5em;
             font-weight: bold;
-            color: #dc53e8;
-            text-shadow: 0 0 5px #ec0dc0;
+            color: #ffffff;
+            text-shadow: 0 0 5px #000000;
         }
 
         nav ul {
@@ -50,7 +50,7 @@
         }
 
         nav ul li a {
-            color: #ba47ae;
+            color: #ffffff;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s;
@@ -69,93 +69,73 @@
         .neon-text {
             font-size: 2.5em;
             font-weight: bold;
-            color: #ff0ed3;
-            text-shadow: 0 0 5px #9c32d5, 0 0 10px #931ca8, 0 0 20px #a30c97, 0 0 30px #1abc9c;
+            color: #ffffff;
+            text-shadow: 0 0 10px #000000;
         }
 
         .neon-subtext {
             font-size: 1.2em;
-            color: #dc0525;
-            text-shadow: 0 0 5px #9c32d5, 0 0 10px #931ca8;
-        }
-
-        .cta-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            color: #fff;
-            background: linear-gradient(90deg, #f39c12, #e74c3c);
-            border-radius: 30px;
-            font-size: 1.1em;
-            font-weight: bold;
-            text-decoration: none;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 0 10px #f39c12;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #e74c3c;
+            color: #ffffff;
+            text-shadow: 0 0 10px #000000;
         }
 
         /* Main Section */
         main {
             padding: 40px 20px;
-            margin: 0 auto;
+            margin: 40px auto;
             max-width: 1200px;
-            background: rgba(1, 0, 0, 0.8);
-            border-radius: 10%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+            text-align: center;
         }
 
         h2 {
-            text-align: center;
-            font-size: 2em;
+            font-size: 2.2em;
             margin-bottom: 20px;
-            color: rgb(252, 0, 172);
-            text-shadow: 0 0 10px #f31282;
+            color: #ffffff;
+            text-shadow: 0 0 12px #000000;
         }
 
         .notes-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
         .note-item {
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 10px #a134b0;
-            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .note-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #a134b0;
+            transform: scale(1.08);
+            box-shadow: 0 0 25px #ffffff;
         }
 
         .note-title {
-            font-size: 1.2em;
+            font-size: 1.4em;
             font-weight: bold;
-            color: #a927eb;
-            margin-bottom: 10px;
+            color: #ffffff;
+            margin-bottom: 12px;
         }
 
         .note-button {
             display: inline-block;
-            padding: 10px 20px;
-            background: #77247a53;
-            color: #efe4f2;
-            border-radius: 5px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #000000, #ffffff);
+            color: #ffffff;
+            border-radius: 8px;
             font-weight: bold;
             text-decoration: none;
             transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .note-button:hover {
-            background: #b63edb;
+            background: linear-gradient(45deg, #ffffff, #000000);
             transform: scale(1.1);
         }
 
@@ -176,36 +156,13 @@
         footer a:hover {
             text-decoration: underline;
         }
-
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-            header {
-                padding: 50px 10px;
-            }
-
-            .neon-text {
-                font-size: 2em;
-            }
-
-            .neon-subtext {
-                font-size: 1em;
-            }
-
-            .cta-button {
-                font-size: 1em;
-                padding: 10px 20px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Background Video -->
     <video id="video-bg" autoplay loop muted>
         <source src="topo.mp4" type="video/mp4">
-        Your browser does not support the video tag.
     </video>
 
-    <!-- Navigation -->
     <nav>
         <div class="logo">DailyDoseofBCA</div>
         <ul>
@@ -214,41 +171,37 @@
         </ul>
     </nav>
 
-    <!-- Hero Section -->
     <header>
         <h1 class="neon-text">Welcome to DailyDoseofBCA</h1>
         <p class="neon-subtext">Your one-stop platform for high-quality academic resources.</p>
-
     </header>
 
-    <!-- Main Section -->
     <main id="notes">
-        <h2>Available Notes</h2>
+        <h2>Available Assignments</h2>
         <div class="notes-container">
             <div class="note-item">
-                <p class="note-title">OAT Notes</p>
-                <a class="note-button" href="https://drive.google.com/file/d/1xCJoUtoyr3zcTbeTdIeaxywraQ4g4361/view?usp=drive_link" target="_blank">Open Notes</a>
+                <p class="note-title">OAT Assignments</p>
+                <a class="note-button" href="https://drive.google.com/file/d/1fFxk3l_QYN0iRGqXSV1dIoGamv3rPn4l/view?usp=sharing" target="_blank">Click Here</a>
             </div>
             <div class="note-item">
-                <p class="note-title">C Notes</p>
-                <a class="note-button" href="https://drive.google.com/file/d/1Qwr06QYCtl_op4wwDlzTqOQI-tz3RUAe/view?usp=drive_link" target="_blank">Open Notes</a>
+                <p class="note-title">C Assignments</p>
+                <a class="note-button" href="" target="_blank">Click Here</a>
             </div>
             <div class="note-item">
-                <p class="note-title">DM Notes</p>
-                <a class="note-button" href="https://drive.google.com/file/d/1tlf3raZ-es2PGHBpcStFHYDC4JuNnpHZ/view?usp=drive_link" target="_blank">Open Notes</a>
+                <p class="note-title">DM Assignments</p>
+                <a class="note-button" href="https://drive.google.com/file/d/11oBY2ZUh3XZLHghnGo1z9AzBApP3SfZF/view?usp=sharing" target="_blank">Click Here</a>
             </div>
             <div class="note-item">
-                <p class="note-title">BW Notes</p>
-                <a class="note-button" href="https://drive.google.com/file/d/154vrkflNUxW8IXIjG2bU_Q9ai2_EHKBb/view?usp=drive_link" target="_blank">Open Notes</a>
+                <p class="note-title">English Assignments</p>
+                <a class="note-button" href="engassi.html" target="_blank">Click Here</a>
             </div>
             <div class="note-item">
-                <p class="note-title">MS Notes</p>
-                <a class="note-button" href="https://drive.google.com/file/d/1DYxlKeVq-uBzIRLHhHHVSDTsfVaOL2t6/view?usp=drive_link" target="_blank">Open Notes</a>
+                <p class="note-title">BW Assignments</p>
+                <a class="note-button" href="" target="_blank">Click Here</a>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2025 DailyDoseofBCA | Designed with 💡</p>
     </footer>
