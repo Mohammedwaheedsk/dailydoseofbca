@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Your Academic Hub!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .container {
+      max-width: 90%;
+      width: 100%;
+      padding: 2.5rem;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(15px);
+      text-align: center;
+      animation: fadeInScale 1s ease-out;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    h1, h2, p {
+      animation: textFadeIn 1.5s ease-out forwards;
+      opacity: 0;
+      color: #ffffff;
+    }
+
+    h1 { animation-delay: 0.2s; }
+    .input-panel { animation-delay: 0.6s; }
+
+    @keyframes textFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .input-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      animation: slideInUp 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .input-panel input {
+      padding: 0.85rem 1.4rem;
+      border-radius: 0.85rem;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #e0e0e0;
+      font-size: 1.15rem;
+      width: 100%;
+      max-width: 320px;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .input-panel input::placeholder {
+      color: #a0a0a0;
+    }
+
+    .input-panel input:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+      transform: scale(1.02);
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .input-panel button {
+      background: linear-gradient(45deg, #4a4a4a 0%, #666666 50%, #888888 100%);
+      color: white;
+      padding: 0.85rem 2.2rem;
+      border-radius: 0.85rem;
+      border: none;
+      font-size: 1.15rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s ease-in-out;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      width: 100%;
+      max-width: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .input-panel button:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(45deg, #666666 0%, #888888 50%, #4a4a4a 100%);
+    }
+
+    .input-panel button:active {
+      transform: translateY(-2px) scale(0.98);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .input-panel button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(1) translate(-50%, -50%);
+      transition: width 0.5s ease-out, height 0.5s ease-out, opacity 0.5s ease-out;
+    }
+
+    .input-panel button:active::after {
+      width: 200%;
+      height: 200%;
+      opacity: 1;
+      transition: 0s;
+    }
+
+    #message-box {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: 3.5rem;
+        max-width: 500px;
+      }
+      .input-panel {
+        flex-direction: row;
+        justify-content: center;
+      }
+      .input-panel input {
+        width: auto;
+        flex-grow: 1;
+      }
+      .input-panel button {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-4xl md:text-5xl font-bold leading-tight">
+      Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-white">DailyDoseofBCA</span>
+    </h1>
+
+    <div class="input-panel">
+      <label for="semester-input" class="sr-only">Enter your semester</label>
+      <input type="text" id="semester-input" placeholder="Which semester are you in?" aria-label="Enter your current semester" />
+      <button id="submit-semester" type="button">Let's Go!</button>
+    </div>
+
+    <div id="message-box" role="alert"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const semesterInput = document.getElementById('semester-input');
+      const submitButton = document.getElementById('submit-semester');
+      const messageBox = document.getElementById('message-box');
+
+      function showMessage(message, type = 'info') {
+        messageBox.textContent = message;
+        let bgColor = '#2196F3'; // default blue
+        if (type === 'success') bgColor = '#4CAF50';
+        if (type === 'error') bgColor = '#D32F2F';
+        messageBox.style.backgroundColor = bgColor;
+        messageBox.style.color = '#FFFFFF';
+        messageBox.style.display = 'block';
+
+        setTimeout(() => {
+          messageBox.style.display = 'none';
+        }, 3000);
+      }
+
+      function normalizeSemester(input) {
+        if (!input) return '';
+        let normalized = input.toLowerCase().trim();
+
+        // Fix ordinal suffixes like 1st, 2nd, 3rd, 4th
+        normalized = normalized.replace(/(\d+)(st|nd|rd|th)/g, '$1');
+
+        const semesterMap = {
+          'first': '1', 'one': '1',
+          'second': '2', 'two': '2',
+          'third': '3', 'three': '3',
+          'fourth': '4', 'four': '4',
+          'fifth': '5', 'five': '5',
+          'sixth': '6', 'six': '6',
+          'seventh': '7', 'seven': '7',
+          'eighth': '8', 'eight': '8',
+          'freshman': '1', 'freshmen': '1',
+          'sophomore': '2',
+          'junior': '3',
+          'senior': '4',
+          'final': 'final-year',
+          'last': 'final-year',
+          'graduate': 'graduate',
+          'postgraduate': 'postgraduate'
+        };
+
+        for (const key in semesterMap) {
+          if (normalized.includes(key)) {
+            normalized = normalized.replace(key, semesterMap[key]);
+            break;
+          }
+        }
+
+        normalized = normalized.replace(/[^a-z0-9-]/g, '');
+
+        if (/^\d+$/.test(normalized)) {
+          normalized = `semester${normalized}`;
+        }
+
+        return normalized || 'unknown';
+      }
+
+      function redirectToSemesterPage() {
+        const semester = semesterInput.value;
+        if (!semester) {
+          showMessage('Please enter your semester to proceed.', 'error');
+          return;
+        }
+
+        const normalizedSemester = normalizeSemester(semester);
+        const redirectUrl = `/semester/${normalizedSemester}`;
+        window.location.href = redirectUrl;
+      }
+
+      submitButton.addEventListener('click', redirectToSemesterPage);
+      semesterInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          redirectToSemesterPage();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
