@@ -228,7 +228,8 @@
         if (!input) return '';
         let normalized = input.toLowerCase().trim();
 
-        normalized = normalized.replace(/(1st|2nd|3rd|(\d+)th)/g, '$2');
+        // Clean suffixes like "1st", "2nd", "3rd", "4th", etc.
+        normalized = normalized.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
 
         const semesterMap = {
           'first': '1', 'one': '1',
@@ -247,7 +248,6 @@
         }
 
         normalized = normalized.replace(/[^0-9]/g, '');
-
         return normalized;
       }
 
@@ -262,17 +262,11 @@
         const normalizedSemester = normalizeSemester(semester);
         const validSemesters = ['1', '2', '3', '4', '5', '6'];
 
-        if (!validSemesters.includes(normalizedSemester)) {
+        if (validSemesters.includes(normalizedSemester)) {
+          window.location.href = `semester${normalizedSemester}.html`;
+        } else {
           showMessage('Please enter a valid semester number (1–6).', 'error');
-          return;
         }
-
-        window.location.href = `semester1.html`;
-        window.location.href = `semester2.html`;
-        window.location.href = `semester3.html`;
-        window.location.href = `semester4.html`;
-        window.location.href = `semester5.html`;
-        window.location.href = `semester6.html`;
       }
 
       submitButton.addEventListener('click', redirectToSemesterPage);
