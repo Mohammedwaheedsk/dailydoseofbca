@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,10 +14,10 @@
     }
 
     body {
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
       background: #0f0f0f;
       color: white;
+      overflow-y: auto;
     }
 
     #bg-video {
@@ -33,55 +31,63 @@
       filter: brightness(60%);
     }
 
+    /* Floating, centered header */
     .menu {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 20px 0;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 20px;
+      margin: 0 auto;
+      width: calc(100% - 40px);
+      max-width: 800px;
+      padding: 20px 30px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
-      z-index: 2;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .menu h1 {
-      font-size: 38px;
+      font-size: 28px;
       font-weight: 600;
-      color: #fff;
+      color: #ffffff;
       margin-bottom: 10px;
     }
 
     .items {
       display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 30px;
     }
 
     .it {
-      color: #fff;
-      font-size: 18px;
+      color: #ffffff;
+      font-size: 16px;
       text-decoration: none;
-      padding: 10px 20px;
+      padding: 8px 16px;
       border-radius: 8px;
       transition: 0.3s;
     }
 
     .it:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(8px);
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
     }
 
     .not {
-      margin-top: 130px;
+      margin-top: 140px;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 40px;
       flex-wrap: wrap;
-      padding: 40px 20px;
+      padding: 60px 20px 100px;
     }
 
     .cont {
@@ -132,6 +138,19 @@
         flex-direction: column;
         align-items: center;
       }
+
+      .menu {
+        width: calc(100% - 20px);
+        padding: 16px;
+      }
+
+      .menu h1 {
+        font-size: 22px;
+      }
+
+      .it {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -140,15 +159,15 @@
     <source src="bg-1.mp4" type="video/mp4" />
   </video>
 
-  <div class="menu">
+  <header class="menu">
     <h1>DailyDoseofBCA</h1>
-    <div class="items">
+    <nav class="items">
       <a class="it" href="about.html">About</a>
       <a class="it" href="contact.html">Contact</a>
-    </div>
-  </div>
+    </nav>
+  </header>
 
-  <div class="not">
+  <main class="not">
     <div class="cont">
       <p class="ip">Notes</p>
       <a class="its" href="2-notes.html">Click Here</a>
@@ -161,6 +180,6 @@
       <p class="ip">Lab Manual</p>
       <a class="its" href="2-labmanual.html">Click Here</a>
     </div>
-  </div>
+  </main>
 </body>
 </html>
