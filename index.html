@@ -80,12 +80,11 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const semesterInput = document.getElementById('semester-input');
-      const branchSelect = document.getElementById('branch-select'); // Changed to branchSelect
+      const branchSelect = document.getElementById('branch-select');
       const submitButton = document.getElementById('submit-semester');
       const messageBox = document.getElementById('message-box');
       
-      // Global variable to store the selected branch, now directly from the select element
-      let selectedBranch = '';
+      let selectedBranch = ''; // Variable to store the selected branch
 
       /**
        * Displays a message in the message box.
@@ -95,21 +94,18 @@
        */
       function showMessage(message, type = 'info', delay = 3000) {
         messageBox.textContent = message;
-        // Remove all previous styling classes to ensure only the new ones apply
         messageBox.classList.remove('hidden', 'bg-blue-100', 'text-blue-800', 'bg-green-500', 'text-white', 'bg-red-500', 'bg-gray-700');
         
-        // Apply new styling based on message type
         if (type === 'success') {
           messageBox.classList.add('bg-green-500', 'text-white');
         } else if (type === 'error') {
           messageBox.classList.add('bg-red-500', 'text-white');
-        } else { // Default info/general
+        } else {
           messageBox.classList.add('bg-gray-700', 'text-white');
         }
         
-        messageBox.classList.remove('hidden'); // Make the message box visible
+        messageBox.classList.remove('hidden');
         
-        // Set a timeout to hide the message if a delay is specified
         if (delay > 0) {
           setTimeout(() => {
             messageBox.classList.add('hidden');
@@ -125,7 +121,6 @@
       function normalizeSemester(input) {
         if (!input) return '';
         let normalized = input.toLowerCase().trim();
-        // Remove "st", "nd", "rd", "th" suffixes
         normalized = normalized.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
         const semesterMap = {
           'first': '1', 'one': '1',
@@ -135,14 +130,12 @@
           'fifth': '5', 'five': '5',
           'sixth': '6', 'six': '6'
         };
-        // Replace word numbers with digits
         for (const key in semesterMap) {
           if (normalized.includes(key)) {
             normalized = semesterMap[key];
             break;
           }
         }
-        // Remove any non-digit characters
         normalized = normalized.replace(/[^0-9]/g, '');
         return normalized;
       }
@@ -157,51 +150,44 @@
         const normalizedSemester = normalizeSemester(semester);
         const validSemesters = ['1', '2', '3', '4', '5', '6'];
 
-        // Ensure a branch is selected (not the disabled default option)
         if (!selectedBranch) {
           showMessage('Please select your branch.', 'error');
           return;
         }
 
-        // Ensure semester input is not empty
         if (!semester) {
           showMessage('Please enter your semester.', 'error');
           return;
         }
         
-        // Validate the normalized semester
         if (validSemesters.includes(normalizedSemester)) {
           console.log(`User selected Branch: ${selectedBranch}, Semester: ${normalizedSemester}`);
-          showMessage(`Redirecting to ${selectedBranch} Semester ${normalizedSemester}...`, 'success', 0); // Display indefinitely until redirect
+          showMessage(`Redirecting to ${selectedBranch} Semester ${normalizedSemester}...`, 'success', 0);
           
-          // Construct the URL based on selected branch and semester
+          // --- MODIFIED REDIRECTION LOGIC HERE ---
           if (selectedBranch === 'BCA') {
-            window.location.href = `bca-semester${normalizedSemester}.html`;
+            window.location.href = `bca-sem${normalizedSemester}.html`; // Changed from -semester to -sem
           } else if (selectedBranch === 'B.Com') {
-            window.location.href = `bcom-semester${normalizedSemester}.html`;
+            window.location.href = `bcom-sem${normalizedSemester}.html`; // Changed from -semester to -sem
           }
+          // ---------------------------------------
           
         } else {
           showMessage('Enter a valid semester number (1–6).', 'error');
         }
       }
 
-      // Event listener for the "Let's Go!" button click
       submitButton.addEventListener('click', proceedToPortal);
 
-      // Event listener for Enter key press in the semester input field
       semesterInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
           proceedToPortal();
         }
       });
 
-      // Event listener for branch selection change (optional, but good for immediate feedback)
+      // No confirmation message here as requested.
       branchSelect.addEventListener('change', () => {
         selectedBranch = branchSelect.value;
-        if (selectedBranch) {
-          showMessage(`You selected: ${selectedBranch}`, 'info', 1500); // Brief confirmation
-        }
       });
     });
   </script>
