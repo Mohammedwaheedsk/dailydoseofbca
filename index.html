@@ -9,7 +9,9 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: url('https://placehold.co/1920x1080/4A235A/FFFFFF?text=Background') no-repeat center center fixed; /* Placeholder background image */
+      /* If 'bg.jpg' is a local file, it needs to be in the same directory as this HTML file
+         or replaced with a publicly accessible URL for it to display in a browser environment. */
+      background: url('bg.jpg') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
       margin: 0;
@@ -34,7 +36,7 @@
       -webkit-appearance: none; /* Remove default browser styling for dropdown */
       -moz-appearance: none;
       appearance: none;
-      background-image: url('bg.jpg') no-repeat center center fixed;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E"); /* Custom arrow */
       background-repeat: no-repeat;
       background-position: right 0.75rem center;
       background-size: 1.5em 1.5em;
