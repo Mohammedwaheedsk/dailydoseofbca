@@ -164,9 +164,10 @@
   </style>
 </head>
 <body>
-  <video autoplay muted loop id="bg-video">
-    <source src="bg-2.mp4" type="video/mp4" />
-  </video>
+  <video id="bg-video" autoplay muted loop playsinline>
+  <source src="bg-2.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
 
   <header class="menu">
     <h1>DailyDoseofBCA</h1>
@@ -310,9 +311,10 @@
     }
 
     if (!found) {
-      document.getElementById("countdown").textContent = "Class completes in : --:--";
-      document.getElementById("label").textContent = "Class : --";
-    }
+  document.getElementById("countdown").textContent = "Countdown: NONE";
+  document.getElementById("label").textContent = "Label: NONE";
+}
+
   }
 
   setInterval(updateTimer, 1000);
