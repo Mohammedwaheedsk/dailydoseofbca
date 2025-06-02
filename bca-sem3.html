@@ -190,6 +190,14 @@
   Your browser does not support the video tag or the video failed to load.
 </video>
 
+<script>
+  window.addEventListener('load', () => {
+    const video = document.getElementById('bg-video');
+    video.play().catch((e) => {
+      console.log("Autoplay blocked:", e);
+    });
+  });
+</script>
 
   <header class="menu">
     <h1>DailyDoseofBCA : Sem-3</h1>
