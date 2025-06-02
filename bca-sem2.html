@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Semester - 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #0f0f0f;
+      color: white;
+      overflow-y: auto;
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(60%);
+    }
+
+    .menu {
+      position: sticky;
+      top: 20px;
+      margin: 0 auto;
+      width: calc(100% - 40px);
+      max-width: 800px;
+      padding: 20px 30px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 10;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .menu h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .timer-section {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .timer-section p {
+      font-size: 16px;
+      margin: 4px 0;
+    }
+
+    .items {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .it {
+      color: #ffffff;
+      font-size: 16px;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .it:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
+    }
+
+    .not {
+      margin-top: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 60px 20px 100px;
+    }
+
+    .cont {
+      width: 280px;
+      padding: 35px 25px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .cont:hover {
+      transform: translateY(-10px) scale(1.05);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 38px rgba(0, 0, 0, 0.5);
+    }
+
+    .ip {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .its {
+      display: inline-block;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(135deg, #6e07f3, #ff4de4);
+      border: none;
+      border-radius: 10px;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .its:hover {
+      background: linear-gradient(135deg, #ff4de4, #6e07f3);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .not {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .menu {
+        width: calc(100% - 20px);
+        padding: 16px;
+      }
+
+      .menu h1 {
+        font-size: 22px;
+      }
+
+      .it {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <video id="bg-video" autoplay muted loop playsinline>
+  <source src="2bg.mp4" type="video/mp4" />
+  Your browser does not support the video tag or the video failed to load.
+</video>
+
+
+  <header class="menu">
+    <h1>DailyDoseofBCA : Sem-2</h1>
+    <nav class="items">
+      <a class="it" href="about.html">About</a>
+      <a class="it" href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Timer Section -->
+    <div class="timer-section">
+      <p id="currentTime">Current Time: --:--:--</p>
+      <p id="countdown">Countdown: --:--:--</p>
+      <p id="label">Label: --</p>
+    </div>
+  </header>
+
+  <main class="not">
+    <div class="cont">
+      <p class="ip">Notes</p>
+      <a class="its" href="2-notes.html">Click Here</a>
+    </div>
+    <div class="cont">
+      <p class="ip">Assignments</p>
+      <a class="its" href="2-assignment.html">Click Here</a>
+    </div>
+    <div class="cont">
+      <p class="ip">Lab Manual</p>
+      <a class="its" href="2-labmanual.html">Click Here</a>
+    </div>
+  </main>
+
+  <script>
+  const weeklySchedule = {
+    1: [ // Monday
+      { start: "09:00", end: "09:50", label: "C" },
+      { start: "09:51", end: "10:40", label: "DM" },
+      { start: "10:40", end: "10:50", label: "BREAK" },
+      { start: "10:50", end: "11:40", label: "SANS" },
+      { start: "11:40", end: "12:30", label: "OAT" },
+      { start: "12:30", end: "13:20", label: "LUNCH" },
+      { start: "13:20", end: "14:10", label: "MS" },
+      { start: "14:10", end: "15:00", label: "GAMES" },
+      { start: "15:00", end: "15:10", label: "BREAK" },
+      { start: "15:10", end: "16:00", label: "ENG" },
+    ],
+    2: [ // Tuesday
+      { start: "09:00", end: "09:50", label: "MS" },
+      { start: "09:51", end: "10:40", label: "C" },
+      { start: "10:40", end: "10:50", label: "BREAK" },
+      { start: "10:50", end: "11:40", label: "DM" },
+      { start: "11:40", end: "12:30", label: "DM" },
+      { start: "12:30", end: "13:20", label: "LUNCH" },
+      { start: "13:20", end: "14:10", label: "OAT" },
+      { start: "14:10", end: "15:00", label: "OAT" },
+      { start: "15:00", end: "15:10", label: "BREAK" },
+      { start: "15:10", end: "16:00", label: "C" },
+    ],
+    3: [ // Wednesday
+      { start: "09:00", end: "09:50", label: "DM" },
+      { start: "09:51", end: "10:40", label: "BW" },
+      { start: "10:40", end: "10:50", label: "BREAK" },
+      { start: "10:50", end: "11:40", label: "C" },
+      { start: "11:40", end: "12:30", label: "ENG" },
+      { start: "12:30", end: "13:20", label: "LUNCH" },
+      { start: "13:20", end: "14:10", label: "OAT" },
+      { start: "14:10", end: "15:00", label: "DM" },
+      { start: "15:00", end: "15:10", label: "BREAK" },
+      { start: "15:10", end: "16:00", label: "COUNCELING" },
+    ],
+    4: [ // Thursday
+      { start: "09:00", end: "09:50", label: "OAT" },
+      { start: "09:51", end: "10:40", label: "BW" },
+      { start: "10:40", end: "10:50", label: "BREAK" },
+      { start: "10:50", end: "11:40", label: "C" },
+      { start: "11:40", end: "12:30", label: "DM" },
+      { start: "12:30", end: "13:20", label: "LUNCH" },
+      { start: "13:20", end: "14:10", label: "SANS" },
+      { start: "14:10", end: "15:00", label: "GAMES" },
+      { start: "15:00", end: "15:10", label: "BREAK" },
+      { start: "15:10", end: "16:00", label: "OAT" },
+    ],
+    5: [ // Friday
+      { start: "09:00", end: "09:50", label: "C" },
+      { start: "09:51", end: "10:40", label: "C" },
+      { start: "10:40", end: "10:50", label: "BREAK" },
+      { start: "10:50", end: "11:40", label: "LIB" },
+      { start: "11:40", end: "12:30", label: "DM" },
+      { start: "12:30", end: "13:20", label: "LUNCH" },
+      { start: "13:20", end: "14:10", label: "ENG" },
+      { start: "14:10", end: "15:00", label: "OAT" },
+      { start: "15:00", end: "15:10", label: "BREAK" },
+      { start: "15:10", end: "16:00", label: "MS" },
+    ],
+    6: [ // Saturday
+      { start: "09:00", end: "09:50", label: "DM" },
+      { start: "09:51", end: "10:40", label: "ENG" },
+      { start: "10:40", end: "10:50", label: "BREAK" },
+      { start: "10:50", end: "11:40", label: "OAT" },
+      { start: "11:40", end: "12:30", label: "COUN" },
+      { start: "12:30", end: "13:20", label: "LUNCH" },
+      { start: "13:20", end: "14:10", label: "BW" },
+      { start: "14:10", end: "15:00", label: "SANS" },
+      { start: "15:00", end: "15:10", label: "BREAK" },
+      { start: "15:10", end: "16:00", label: "C" },
+    ]
+  };
+
+  function updateTimer() {
+    const now = new Date();
+    const currentTime = now.toLocaleTimeString();
+    document.getElementById("currentTime").textContent = "Current Time: " + currentTime;
+
+    const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    
+    if (day === 0 || !weeklySchedule[day]) {
+      document.getElementById("countdown").textContent = "Countdown: --:--";
+      document.getElementById("label").textContent = "Label: Holiday";
+      return;
+    }
+
+    const todaySchedule = weeklySchedule[day];
+    let found = false;
+
+    for (const period of todaySchedule) {
+      const [sh, sm] = period.start.split(":").map(Number);
+      const [eh, em] = period.end.split(":").map(Number);
+      const startMin = sh * 60 + sm;
+      const endMin = eh * 60 + em;
+
+      if (currentMinutes >= startMin && currentMinutes < endMin) {
+        const remainingMin = endMin - currentMinutes;
+        const remainingSec = 60 - now.getSeconds();
+        const minutes = String(remainingMin - 1).padStart(2, '0');
+        const seconds = String(remainingSec % 60).padStart(2, '0');
+        document.getElementById("countdown").textContent = `Countdown: ${minutes}:${seconds}`;
+        document.getElementById("label").textContent = `Label: ${period.label}`;
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+  document.getElementById("countdown").textContent = "Countdown: NONE";
+  document.getElementById("label").textContent = "Label: NONE";
+}
+
+  }
+
+  setInterval(updateTimer, 1000);
+  updateTimer();
+</script>
+
+</body>
+</html>
