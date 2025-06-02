@@ -14,58 +14,38 @@
     }
 
     body {
-  min-height: 100vh;
-  background: #0f0f0f;
-  color: white;
-  overflow-y: auto;
+      min-height: 100vh;
+      background: #0f0f0f;
+      color: white;
+      overflow-y: auto;
+      opacity: 0;
+      animation: fadeInBody 1.2s ease-out forwards;
+    }
 
-  /* 💫 Add this for fade-in animation */
-  opacity: 0;
-  animation: fadeInBody 1.2s ease-out forwards;
-}
+    @keyframes fadeInBody {
+      to {
+        opacity: 1;
+      }
+    }
 
-/* 💫 Keyframes for fade-in */
-@keyframes fadeInBody {
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fadeUp {
-  0% {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.cont:nth-child(1) {
-  animation-delay: 0.2s;
-}
-.cont:nth-child(2) {
-  animation-delay: 0.4s;
-}
-.cont:nth-child(3) {
-  animation-delay: 0.6s;
-}
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.cont {
-  opacity: 0;
-  animation: fadeUp 1s ease-out forwards;
-}
+    .cont {
+      opacity: 0;
+      animation: fadeUp 1s ease-out forwards;
+    }
 
-/* Optional: stagger animations for each panel */
-.cont:nth-child(1) {
-  animation-delay: 0.2s;
-}
-.cont:nth-child(2) {
-  animation-delay: 0.4s;
-}
-.cont:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
+    .cont:nth-child(1) { animation-delay: 0.2s; }
+    .cont:nth-child(2) { animation-delay: 0.4s; }
 
     #bg-video {
       position: fixed;
@@ -87,15 +67,14 @@
       padding: 20px 30px;
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
       border-radius: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       z-index: 10;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
       border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     }
 
     .menu h1 {
@@ -103,16 +82,6 @@
       font-weight: 600;
       color: #ffffff;
       margin-bottom: 10px;
-    }
-
-    .timer-section {
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .timer-section p {
-      font-size: 16px;
-      margin: 4px 0;
     }
 
     .items {
@@ -136,6 +105,16 @@
       backdrop-filter: blur(6px);
     }
 
+    .timer-section {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .timer-section p {
+      font-size: 16px;
+      margin: 4px 0;
+    }
+
     .not {
       margin-top: 140px;
       display: flex;
@@ -152,7 +131,6 @@
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       text-align: center;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -179,7 +157,6 @@
       text-decoration: none;
       color: white;
       background: linear-gradient(135deg, #6e07f3, #ff4de4);
-      border: none;
       border-radius: 10px;
       transition: background 0.3s ease, transform 0.3s ease;
     }
@@ -192,7 +169,6 @@
     @media (max-width: 768px) {
       .not {
         flex-direction: column;
-        align-items: center;
       }
 
       .menu {
@@ -208,35 +184,52 @@
         font-size: 14px;
       }
     }
+
+    /* 🧠 Semester Box Styling */
+    .semester-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 100;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .semester-box input {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .semester-box button {
+      padding: 8px 14px;
+      border: none;
+      background: linear-gradient(135deg, #6e07f3, #ff4de4);
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .semester-box button:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
-    <script>
-function redirectToSemester() {
-  const sem = document.getElementById("semInput").value.trim();
-  const num = parseInt(sem);
-  
-  if (num >= 1 && num <= 6) {
-    window.location.href = `bca-sem${num}.html`;
-  } else {
-    alert("Please enter a valid semester number between 1 and 6.");
-  }
-}
-</script>
-
   <video id="bg-video" autoplay muted loop playsinline>
-  <source src="1bg.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
-
-<script>
-  window.addEventListener('load', () => {
-    const video = document.getElementById('bg-video');
-    video.play().catch((e) => {
-      console.log("Autoplay blocked:", e);
-    });
-  });
-</script>
+    <source src="1bg.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 
   <header class="menu">
     <h1>DailyDoseofBCA : Sem-1</h1>
@@ -245,24 +238,12 @@ function redirectToSemester() {
       <a class="it" href="contact.html">Contact</a>
     </nav>
 
-    <!-- Timer Section -->
     <div class="timer-section">
       <p id="currentTime">Current Time: --:--:--</p>
       <p id="countdown">Countdown: --:--:--</p>
       <p id="label">Label: --</p>
     </div>
   </header>
-<!-- Semester Redirect Box -->
-<div style="margin-top: 20px; text-align: center;">
-  <input id="semInput" type="number" min="1" max="6" placeholder="Enter Semester (1-6)"
-    style="padding: 10px 16px; border-radius: 8px; border: none; font-size: 16px; max-width: 220px; width: 100%;
-           background: rgba(255,255,255,0.08); color: white; text-align: center; backdrop-filter: blur(6px);">
-  <button onclick="redirectTosem()" 
-    style="margin-left: 10px; padding: 10px 16px; border: none; border-radius: 8px; background: linear-gradient(135deg, #ff4de4, #6e07f3); 
-           color: white; font-weight: 600; cursor: pointer; transition: 0.3s;">
-    Go
-  </button>
-</div>
 
   <main class="not">
     <div class="cont">
@@ -275,121 +256,80 @@ function redirectToSemester() {
     </div>
   </main>
 
+  <!-- 🔍 Semester Search Box -->
+  <div class="semester-box">
+    <input type="number" id="semInput" min="1" max="6" placeholder="Sem ?">
+    <button onclick="goToSemester()">Go</button>
+  </div>
+
   <script>
-  const weeklySchedule = {
-    1: [ // Monday
-      { start: "09:00", end: "09:50", label: "FC" },
-      { start: "09:51", end: "10:40", label: "SANS" },
-      { start: "10:40", end: "10:50", label: "BREAK" },
-      { start: "10:50", end: "11:40", label: "BO" },
-      { start: "11:40", end: "12:30", label: "ENG" },
-      { start: "12:30", end: "13:20", label: "LUNCH" },
-      { start: "13:20", end: "14:10", label: "FC" },
-      { start: "14:10", end: "15:00", label: "G.ACT" },
-      { start: "15:00", end: "15:50", label: "G.ACT" },
-    ],
-    2: [ // Tuesday
-      { start: "09:00", end: "09:50", label: "FC" },
-      { start: "09:51", end: "10:40", label: "LIB" },
-      { start: "10:40", end: "10:50", label: "BREAK" },
-      { start: "10:50", end: "11:40", label: "BO" },
-      { start: "11:40", end: "12:30", label: "BO" },
-      { start: "12:30", end: "13:20", label: "LUNCH" },
-      { start: "13:20", end: "14:10", label: "FC" },
-      { start: "14:10", end: "15:00", label: "LS" },
-      { start: "15:00", end: "15:50", label: "IH" },
-    ],
-    3: [ // Wednesday
-      { start: "09:00", end: "09:50", label: "ENG" },
-      { start: "09:51", end: "10:40", label: "BO" },
-      { start: "10:40", end: "10:50", label: "BREAK" },
-      { start: "10:50", end: "11:40", label: "FC" },
-      { start: "11:40", end: "12:30", label: "GAMES" },
-      { start: "12:30", end: "13:20", label: "LUNCH" },
-      { start: "13:20", end: "14:10", label: "FC" },
-      { start: "14:10", end: "15:00", label: "FC" },
-      { start: "15:00", end: "15:50", label: "GAMES" },
-    ],
-    4: [ // Thursday
-      { start: "09:00", end: "09:50", label: "BO" },
-      { start: "09:51", end: "10:40", label: "COUNCELING" },
-      { start: "10:40", end: "10:50", label: "BREAK" },
-      { start: "10:50", end: "11:40", label: "FC" },
-      { start: "11:40", end: "12:30", label: "IH" },
-      { start: "12:30", end: "13:20", label: "LUNCH" },
-      { start: "13:20", end: "14:10", label: "BO" },
-      { start: "14:10", end: "15:00", label: "CS" },
-      { start: "15:00", end: "15:50", label: "LIB" },
-    ],
-    5: [ // Friday
-      { start: "09:00", end: "09:50", label: "BO" },
-      { start: "09:51", end: "10:40", label: "ENG" },
-      { start: "10:40", end: "10:50", label: "BREAK" },
-      { start: "10:50", end: "11:40", label: "COUNCELING" },
-      { start: "11:40", end: "12:30", label: "BO" },
-      { start: "12:30", end: "13:20", label: "LUNCH" },
-      { start: "13:20", end: "14:10", label: "SANS" },
-      { start: "14:10", end: "15:00", label: "FC" },
-      { start: "15:00", end: "15:50", label: "GAMES" },
-    ],
-    6: [ // Saturday
-      { start: "09:00", end: "09:50", label: "SANS" },
-      { start: "09:51", end: "10:40", label: "LS" },
-      { start: "10:40", end: "10:50", label: "BREAK" },
-      { start: "10:50", end: "11:40", label: "BO" },
-      { start: "11:40", end: "12:30", label: "ENG" },
-      { start: "12:30", end: "13:20", label: "LUNCH" },
-      { start: "13:20", end: "14:10", label: "CS" },
-      { start: "14:10", end: "15:00", label: "BO" },
-      { start: "15:00", end: "15:50", label: "FC" },
-    ]
-  };
+    window.addEventListener('load', () => {
+      const video = document.getElementById('bg-video');
+      video.play().catch((e) => {
+        console.log("Autoplay blocked:", e);
+      });
+    });
 
-  function updateTimer() {
-    const now = new Date();
-    const currentTime = now.toLocaleTimeString();
-    document.getElementById("currentTime").textContent = "Current Time: " + currentTime;
-
-    const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    
-    if (day === 0 || !weeklySchedule[day]) {
-      document.getElementById("countdown").textContent = "Countdown: --:--";
-      document.getElementById("label").textContent = "Label: Holiday";
-      return;
-    }
-
-    const todaySchedule = weeklySchedule[day];
-    let found = false;
-
-    for (const period of todaySchedule) {
-      const [sh, sm] = period.start.split(":").map(Number);
-      const [eh, em] = period.end.split(":").map(Number);
-      const startMin = sh * 60 + sm;
-      const endMin = eh * 60 + em;
-
-      if (currentMinutes >= startMin && currentMinutes < endMin) {
-        const remainingMin = endMin - currentMinutes;
-        const remainingSec = 60 - now.getSeconds();
-        const minutes = String(remainingMin - 1).padStart(2, '0');
-        const seconds = String(remainingSec % 60).padStart(2, '0');
-        document.getElementById("countdown").textContent = `Countdown: ${minutes}:${seconds}`;
-        document.getElementById("label").textContent = `Label: ${period.label}`;
-        found = true;
-        break;
+    function goToSemester() {
+      const sem = document.getElementById("semInput").value;
+      if (sem >= 1 && sem <= 6) {
+        window.location.href = `bca-semester${sem}.html`;
+      } else {
+        alert("Please enter a valid semester number between 1 and 6!");
       }
     }
 
-    if (!found) {
-  document.getElementById("countdown").textContent = "Countdown: NONE";
-  document.getElementById("label").textContent = "Label: NONE";
-}
+    const weeklySchedule = {
+      1: [ { start: "09:00", end: "09:50", label: "FC" }, { start: "09:51", end: "10:40", label: "SANS" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "BO" }, { start: "11:40", end: "12:30", label: "ENG" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "FC" }, { start: "14:10", end: "15:00", label: "G.ACT" }, { start: "15:00", end: "15:50", label: "G.ACT" } ],
+      2: [ { start: "09:00", end: "09:50", label: "FC" }, { start: "09:51", end: "10:40", label: "LIB" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "BO" }, { start: "11:40", end: "12:30", label: "BO" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "FC" }, { start: "14:10", end: "15:00", label: "LS" }, { start: "15:00", end: "15:50", label: "IH" } ],
+      3: [ { start: "09:00", end: "09:50", label: "ENG" }, { start: "09:51", end: "10:40", label: "BO" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "FC" }, { start: "11:40", end: "12:30", label: "GAMES" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "FC" }, { start: "14:10", end: "15:00", label: "FC" }, { start: "15:00", end: "15:50", label: "GAMES" } ],
+      4: [ { start: "09:00", end: "09:50", label: "BO" }, { start: "09:51", end: "10:40", label: "COUNCELING" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "FC" }, { start: "11:40", end: "12:30", label: "IH" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "BO" }, { start: "14:10", end: "15:00", label: "CS" }, { start: "15:00", end: "15:50", label: "LIB" } ],
+      5: [ { start: "09:00", end: "09:50", label: "BO" }, { start: "09:51", end: "10:40", label: "ENG" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "COUNCELING" }, { start: "11:40", end: "12:30", label: "BO" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "SANS" }, { start: "14:10", end: "15:00", label: "FC" }, { start: "15:00", end: "15:50", label: "GAMES" } ],
+      6: [ { start: "09:00", end: "09:50", label: "SANS" }, { start: "09:51", end: "10:40", label: "LS" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "BO" }, { start: "11:40", end: "12:30", label: "ENG" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "CS" }, { start: "14:10", end: "15:00", label: "BO" }, { start: "15:00", end: "15:50", label: "FC" } ]
+    };
 
-  }
+    function updateTimer() {
+      const now = new Date();
+      const currentTime = now.toLocaleTimeString();
+      document.getElementById("currentTime").textContent = "Current Time: " + currentTime;
+      const day = now.getDay();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-  setInterval(updateTimer, 1000);
-  updateTimer();
-</script>
+      if (day === 0 || !weeklySchedule[day]) {
+        document.getElementById("countdown").textContent = "Countdown: --:--";
+        document.getElementById("label").textContent = "Label: Holiday";
+        return;
+      }
 
+      const todaySchedule = weeklySchedule[day];
+      let found = false;
+
+      for (const period of todaySchedule) {
+        const [sh, sm] = period.start.split(":").map(Number);
+        const [eh, em] = period.end.split(":").map(Number);
+        const startMin = sh * 60 + sm;
+        const endMin = eh * 60 + em;
+
+        if (currentMinutes >= startMin && currentMinutes < endMin) {
+          const remainingMin = endMin - currentMinutes;
+          const remainingSec = 60 - now.getSeconds();
+          const minutes = String(remainingMin - 1).padStart(2, '0');
+          const seconds = String(remainingSec % 60).padStart(2, '0');
+          document.getElementById("countdown").textContent = `Countdown: ${minutes}:${seconds}`;
+          document.getElementById("label").textContent = `Label: ${period.label}`;
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        document.getElementById("countdown").textContent = "Countdown: NONE";
+        document.getElementById("label").textContent = "Label: NONE";
+      }
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
 </body>
 </html>
