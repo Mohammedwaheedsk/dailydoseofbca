@@ -211,6 +211,19 @@
   </style>
 </head>
 <body>
+    <script>
+function redirectToSemester() {
+  const sem = document.getElementById("semInput").value.trim();
+  const num = parseInt(sem);
+  
+  if (num >= 1 && num <= 6) {
+    window.location.href = `bca-semester${num}.html`;
+  } else {
+    alert("Please enter a valid semester number between 1 and 6.");
+  }
+}
+</script>
+
   <video id="bg-video" autoplay muted loop playsinline>
   <source src="1bg.mp4" type="video/mp4" />
   Your browser does not support the video tag.
@@ -239,6 +252,17 @@
       <p id="label">Label: --</p>
     </div>
   </header>
+<!-- Semester Redirect Box -->
+<div style="margin-top: 20px; text-align: center;">
+  <input id="semInput" type="number" min="1" max="6" placeholder="Enter Semester (1-6)"
+    style="padding: 10px 16px; border-radius: 8px; border: none; font-size: 16px; max-width: 220px; width: 100%;
+           background: rgba(255,255,255,0.08); color: white; text-align: center; backdrop-filter: blur(6px);">
+  <button onclick="redirectToSemester()" 
+    style="margin-left: 10px; padding: 10px 16px; border: none; border-radius: 8px; background: linear-gradient(135deg, #ff4de4, #6e07f3); 
+           color: white; font-weight: 600; cursor: pointer; transition: 0.3s;">
+    Go
+  </button>
+</div>
 
   <main class="not">
     <div class="cont">
