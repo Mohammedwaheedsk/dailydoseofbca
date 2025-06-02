@@ -30,11 +30,6 @@
   }
 }
 
-.cont {
-  opacity: 0;
-  animation: fadeInUp 1s ease forwards;
-}
-
 /* 🎯 Optional: Add delay for a staggered fade-in (looks magical!) */
 .cont:nth-child(1) {
   animation-delay: 0.2s;
@@ -192,8 +187,9 @@
 <body>
   <video id="bg-video" autoplay muted loop playsinline>
   <source src="3bg.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
+  Your browser does not support the video tag or the video failed to load.
 </video>
+
 
   <header class="menu">
     <h1>DailyDoseofBCA : Sem-3</h1>
@@ -345,6 +341,25 @@
 
   setInterval(updateTimer, 1000);
   updateTimer();
+</script>
+<script>
+  function revealOnScroll() {
+    const reveals = document.querySelectorAll('.cont');
+    const windowHeight = window.innerHeight;
+
+    reveals.forEach((element) => {
+      const elementTop = element.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - 50) {
+        element.classList.add('show');
+      } else {
+        element.classList.remove('show'); // Optional: remove to re-animate on scroll up
+      }
+    });
+  }
+
+  window.addEventListener('scroll', revealOnScroll);
+  window.addEventListener('load', revealOnScroll);
 </script>
 
 </body>
