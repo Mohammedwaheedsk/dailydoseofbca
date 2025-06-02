@@ -185,10 +185,10 @@
   </style>
 </head>
 <body>
-  <video id="bg-video" autoplay muted loop playsinline>
-  <source src="3bg.mp4" type="video/mp4" />
-  Your browser does not support the video tag or the video failed to load.
+  <video id="bg-video" autoplay muted loop playsinline preload="auto">
+  <source src="3bg.mp4" type="video/mp4" muted />
 </video>
+
 
 <script>
   window.addEventListener('load', () => {
