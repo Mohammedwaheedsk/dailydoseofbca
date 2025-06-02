@@ -19,6 +19,32 @@
       color: white;
       overflow-y: auto;
     }
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cont {
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+}
+
+/* 🎯 Optional: Add delay for a staggered fade-in (looks magical!) */
+.cont:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.cont:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.cont:nth-child(3) {
+  animation-delay: 0.6s;
+}
 
     #bg-video {
       position: fixed;
@@ -131,14 +157,14 @@
       font-weight: 600;
       text-decoration: none;
       color: white;
-      background: linear-gradient(135deg, #6e07f3, #ff4de4);
+      background: linear-gradient(135deg, #6f6f70, #141314);
       border: none;
       border-radius: 10px;
       transition: background 0.3s ease, transform 0.3s ease;
     }
 
     .its:hover {
-      background: linear-gradient(135deg, #ff4de4, #6e07f3);
+      background: linear-gradient(135deg, #141314, #6f6f70);
       transform: scale(1.05);
     }
 
@@ -189,14 +215,14 @@
       <p class="ip">Notes</p>
       <a class="its" href="3-notes.html">Click Here</a>
     </div>
-    <div class="cont">
+    <!-- <div class="cont">
       <p class="ip">Assignments</p>
       <a class="its" href="3-assignment.html">Click Here</a>
     </div>
     <div class="cont">
       <p class="ip">Lab Manual</p>
       <a class="its" href="3-labmanual.html">Click Here</a>
-    </div>
+    </div> -->
   </main>
 
   <script>
