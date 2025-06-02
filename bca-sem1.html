@@ -1,135 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semester 1</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            position: relative;
-            height: 100vh;
-            overflow: hidden;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            filter: brightness(60%);
-        }
-        .menu {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            z-index: 2;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        .menu h1 {
-            font-size: 36px;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-        .items {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .it {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            transition: 0.3s;
-            padding: 8px 16px;
-            border-radius: 5px;
-        }
-        .it:hover {
-            background: rgba(255, 77, 234, 0.7);
-            color: #fff;
-        }
-        .not {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 100px 40px 40px;
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 80px;
-        }
-        .cont {
-            width: 270px;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            transition: transform 0.3s, background 0.3s;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-        .cont:hover {
-            transform: scale(1.07);
-            background: rgba(255, 255, 255, 0.3);
-        }
-        .ip {
-            font-size: 22px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        .its {
-            display: inline-block;
-            padding: 12px 25px;
-            background: linear-gradient(135deg, #000000, #ffffff);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .its:hover {
-            background: linear-gradient(135deg, #ffffff, #000000);
-            transform: scale(1.05);
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Semester 1</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    html, body {
+      min-height: 100%;
+      overflow-x: hidden;
+      background: #0c0c0c;
+      color: white;
+    }
+
+    body {
+      position: relative;
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      filter: brightness(55%) blur(3px);
+    }
+
+    .menu {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.07);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 25px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 10;
+      text-align: center;
+      animation: fadeInDown 1s ease forwards;
+    }
+
+    .menu h1 {
+      font-size: 36px;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      color: #f5f5f5;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .items {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .it {
+      text-decoration: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .it:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: black;
+      font-weight: bold;
+      transform: scale(1.05);
+    }
+
+    .not {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 160px 40px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .cont {
+      width: 280px;
+      padding: 35px;
+      border-radius: 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .cont:hover {
+      transform: translateY(-8px) scale(1.04);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2);
+    }
+
+    .ip {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .its {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #171618, #4d4e4f);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .its:hover {
+      background: linear-gradient(135deg, #4d4e4f, #171618);
+      transform: scale(1.07);
+    }
+
+    /* Smooth animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <video autoplay muted loop id="bg-video">
-        <source src="topo(1).mp4" type="video/mp4">
-    </video>
-    
-    <div class="menu">
-        <h1>DailyDoseofBCA : Sem-1</h1>
-        <div class="items">
-            <a class="it" href="about.html">About</a>
-            <a class="it" href="contact.html">Contact</a>
-        </div>
+  <video autoplay muted loop id="bg-video">
+    <source src="1bg.mp4" type="video/mp4">
+  </video>
+
+  <div class="menu">
+    <h1>DailyDoseofBCA : Sem-1</h1>
+    <div class="items">
+      <a class="it" href="about.html">About</a>
+      <a class="it" href="contact.html">Contact</a>
     </div>
-    <div class="not">
-        <div class="cont">
-            <p class="ip">Notes</p>
-            <a class="its" href="notes1.html">Click Here</a>
-        </div>
-        <div class="cont">
-            <p class="ip">Assignments</p>
-            <a class="its" href="assignment1.html">Click Here</a>
-        </div>
+  </div>
+
+  <div class="not">
+    <div class="cont">
+      <p class="ip">Notes</p>
+      <a class="its" href="notes1.html">Click Here</a>
     </div>
+    <div class="cont">
+      <p class="ip">Assignments</p>
+      <a class="its" href="assignment1.html">Click Here</a>
+    </div>
+  </div>
 </body>
 </html>
