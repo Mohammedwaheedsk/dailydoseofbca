@@ -273,7 +273,7 @@
     function goToSemester() {
       const sem = document.getElementById("semInput").value;
       if (sem >= 1 && sem <= 6) {
-        window.location.href = `bca-semester${sem}.html`;
+        window.location.href = `bca-sem${sem}.html`;
       } else {
         alert("Please enter a valid semester number between 1 and 6!");
       }
@@ -332,4 +332,5 @@
     updateTimer();
   </script>
 </body>
+
 </html>
