@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Semester Portal</title>
+  <title>Roll Number Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      /* If 'bg.jpg' is a local file, it needs to be in the same directory as this HTML file
-         or replaced with a publicly accessible URL for it to display in a browser environment. */
       background: url('bg.jpg') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
@@ -31,17 +29,6 @@
       border-color: #fff;
       box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
     }
-    /* Style for the select dropdown to match the input field */
-    .select-input {
-      -webkit-appearance: none; /* Remove default browser styling for dropdown */
-      -moz-appearance: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E"); /* Custom arrow */
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      background-size: 1.5em 1.5em;
-      padding-right: 2.5rem; /* Make space for the custom arrow */
-    }
   </style>
 </head>
 <body class="flex items-center justify-center">
@@ -50,24 +37,15 @@
     <h1 class="text-3xl font-semibold mb-6">Welcome to <span class="text-purple-300">DailyDoseofBCA</span></h1>
     
     <div class="space-y-4">
-      <select
-        id="branch-select"
-        class="input select-input w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/70 transition"
-      >
-        <option value="" disabled selected class="bg-gray-800 text-white/70">Which branch?</option>
-        <option value="BCA" class="bg-gray-800 text-white">BCA</option>
-        <option value="B.Com" class="bg-gray-800 text-white">B.Com</option>
-      </select>
-
       <input
-        id="semester-input"
+        id="roll-number"
         type="text"
-        placeholder="Which semester?"
+        placeholder="Enter your hall ticke number"
         class="input w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/70 transition"
       />
 
       <button
-        id="submit-semester"
+        id="submit-roll"
         class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold py-3 rounded-xl transition"
       >
         Let's Go!
@@ -79,23 +57,108 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const semesterInput = document.getElementById('semester-input');
-      const branchSelect = document.getElementById('branch-select');
-      const submitButton = document.getElementById('submit-semester');
+      const rollInput = document.getElementById('roll-number');
+      const submitButton = document.getElementById('submit-roll');
       const messageBox = document.getElementById('message-box');
-      
-      let selectedBranch = ''; // Variable to store the selected branch
 
-      /**
-       * Displays a message in the message box.
-       * @param {string} message - The text content of the message.
-       * @param {string} type - The type of message ('info', 'success', 'error').
-       * @param {number} delay - The delay in milliseconds before the message hides. Use 0 for no auto-hide.
-       */
-      function showMessage(message, type = 'info', delay = 3000) {
+      const studentNames = {
+        "Y245082001": "Abhi Ram",
+        "Y245082002": "Veera Babu",
+        "Y245082003": "Sasidhar",
+        "Y245082004": "Sai Krishna",
+        "Y245082005": "Samba",
+        "Y245082006": "B. Venkata Sri Lakshmi",
+        "Y245082007": "Syam",
+        "Y245082008": "Santhi Raju",
+        "Y245082009": "Lakshmi Prasanna",
+        "Y245082010": "B. Sri Lakshmi",
+        "Y245082011": "Praveen",
+        "Y245082012": "Mohan",
+        "Y245082013": "Chandra Sekhar",
+        "Y245082014": "Koti Reddy",
+        "Y245082015": "Kalyan",
+        "Y245082016": "Phanindra",
+        "Y245082017": "Sunshine",
+        "Y245082018": "Anil",
+        "Y245082019": "Narasimha Naidu",
+        "Y245082020": "Gowtham",
+        "Y245082021": "Narasimha Rao",
+        "Y245082022": "Koteswar Rao",
+        "Y245082023": "Harsha",
+        "Y245082024": "Mahesh",
+        "Y245082025": "Subramanyam",
+        "Y245082026": "Meenakshi",
+        "Y245082027": "Sharmila",
+        "Y245082028": "Pavan Kalyan",
+        "Y245082029": "K. Priyanka",
+        "Y245082030": "Mohini",
+        "Y245082031": "Parimala",
+        "Y245082032": "Rishika",
+        "Y245082033": "Baji Babu",
+        "Y245082034": "Thirupathamma",
+        "Y245082035": "K. Sasidhar",
+        "Y245082036": "Jasmine",
+        "Y245082037": "Khaja",
+        "Y245082038": "Thalaiva 😎",
+        "Y245082039": "Lavanya",
+        "Y245082040": "Pradeep",
+        "Y245082041": "Dileesha",
+        "Y245082042": "Lalith",
+        "Y245082043": "Hari Babu",
+        "Y245082044": "Nagula",
+        "Y245082045": "P. Narasimha",
+        "Y245082046": "Aswitha",
+        "Y245082047": "Harshitha",
+        "Y245082048": "Megnana",
+        "Y245082049": "Vijusha",
+        "Y245082050": "Sidhardha",
+        "Y245082051": "Nava Lakshmi",
+        "Y245082052": "Asma",
+        "Y245082053": "Haseena",
+        "Y245082054": "Rafia Ruhi",
+        "Y245082055": "Riyaz",
+        "Y245082056": "Sabina Kousar",
+        "Y245082057": "Sharukh",
+        "Y245082058": "Sheena",
+        "Y245082059": "Yaseen",
+        "Y245082060": "Naga Sankar",
+        "Y245082061": "Noorjahan",
+        "Y245082062": "T. Priyanka",
+        "Y245082063": "Yasaswini",
+        "Y245082064": "Sravami",
+        "Y245082065": "Lokesh",
+        "Y245082066": "Ramani",
+        "Y245082067": "Tarun",
+        "Y247082001": "Kailash",
+        "Y247082002": "Nagarjuna",
+        "Y247082003": "Ganapathi",
+        "Y247082004": "Vennela",
+        "Y247082005": "Raakumar",
+        "Y247082006": "Gowthami",
+        "Y247082007": "Anil Kumar",
+        "Y247082008": "Harish",
+        "Y247082009": "Bhanu Prakash",
+        "Y247082010": "Navya",
+        "Y247082011": "Syamala",
+        "Y247082012": "Sujatha",
+        "Y247082013": "Ephraim",
+        "Y247082014": "Varsha",
+        "Y247082015": "Vasanth",
+        "Y247082016": "Mahesh",
+        "Y247082017": "Karthik",
+        "Y247082018": "Sohel Mansoor",
+        "Y247082019": "Solomoom Raj",
+        "Y247082020": "Komaliiii",
+        "Y247066010": "John",
+        "Y247066011": "Bhumik Shankar",
+        "Y247066014": "Ansar",
+        "Y247066017": "Keerthana"
+      };
+
+      const showMessage = (message, type = 'info', delay = 3000, callback = null) => {
         messageBox.textContent = message;
-        messageBox.classList.remove('hidden', 'bg-blue-100', 'text-blue-800', 'bg-green-500', 'text-white', 'bg-red-500', 'bg-gray-700');
-        
+        messageBox.className = 'mt-4 text-sm px-4 py-2 rounded-lg';
+
         if (type === 'success') {
           messageBox.classList.add('bg-green-500', 'text-white');
         } else if (type === 'error') {
@@ -103,91 +166,52 @@
         } else {
           messageBox.classList.add('bg-gray-700', 'text-white');
         }
-        
+
         messageBox.classList.remove('hidden');
-        
+
         if (delay > 0) {
           setTimeout(() => {
             messageBox.classList.add('hidden');
+            if (callback) callback();
           }, delay);
-        }
-      }
-
-      /**
-       * Normalizes the semester input (e.g., "1st", "first" to "1").
-       * @param {string} input - The raw semester input.
-       * @returns {string} The normalized semester number.
-       */
-      function normalizeSemester(input) {
-        if (!input) return '';
-        let normalized = input.toLowerCase().trim();
-        normalized = normalized.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
-        const semesterMap = {
-          'first': '1', 'one': '1',
-          'second': '2', 'two': '2',
-          'third': '3', 'three': '3',
-          'fourth': '4', 'four': '4',
-          'fifth': '5', 'five': '5',
-          'sixth': '6', 'six': '6'
-        };
-        for (const key in semesterMap) {
-          if (normalized.includes(key)) {
-            normalized = semesterMap[key];
-            break;
-          }
-        }
-        normalized = normalized.replace(/[^0-9]/g, '');
-        return normalized;
-      }
-
-      /**
-       * Handles the final redirection to the appropriate portal page based on
-       * selected branch and semester.
-       */
-      function proceedToPortal() {
-        selectedBranch = branchSelect.value; // Get the current value from the dropdown
-        const semester = semesterInput.value.trim();
-        const normalizedSemester = normalizeSemester(semester);
-        const validSemesters = ['1', '2', '3', '4', '5', '6'];
-
-        if (!selectedBranch) {
-          showMessage('Please select your branch.', 'error');
-          return;
-        }
-
-        if (!semester) {
-          showMessage('Please enter your semester.', 'error');
-          return;
-        }
-        
-        if (validSemesters.includes(normalizedSemester)) {
-          console.log(`User selected Branch: ${selectedBranch}, Semester: ${normalizedSemester}`);
-          showMessage(`Redirecting to ${selectedBranch} Semester ${normalizedSemester}...`, 'success', 0);
-          
-          // --- MODIFIED REDIRECTION LOGIC HERE ---
-          if (selectedBranch === 'BCA') {
-            window.location.href = `bca-sem${normalizedSemester}.html`; // Changed from -semester to -sem
-          } else if (selectedBranch === 'B.Com') {
-            window.location.href = `bcom-sem${normalizedSemester}.html`; // Changed from -semester to -sem
-          }
-          // ---------------------------------------
-          
         } else {
-          showMessage('Enter a valid semester number (1–6).', 'error');
+          if (callback) callback();
         }
-      }
+      };
+
+      const isBcaRoll = roll => /^Y2450820(0[1-9]|[1-5][0-9]|6[0-7])$/.test(roll);
+      const isBcomRoll = roll => /^Y2470820(0[1-9]|1[0-9]|20)$/.test(roll) ||
+        ['Y247066010', 'Y247066011', 'Y247066014', 'Y247066017'].includes(roll);
+
+      const proceedToPortal = () => {
+        const roll = rollInput.value.trim().toUpperCase();
+        const name = studentNames[roll];
+
+        if (!roll.startsWith("Y24")) {
+          showMessage("Please enter a valid roll number starting with Y24.", 'error');
+          return;
+        }
+
+        if (name) {
+          if (isBcaRoll(roll)) {
+            showMessage(`Welcome ${name}!`, 'success', 2000, () => {
+              window.location.href = 'bca-sem3.html';
+            });
+          } else if (isBcomRoll(roll)) {
+            showMessage(`Welcome ${name}!`, 'success', 2000, () => {
+              window.location.href = 'bcom-sem3.html';
+            });
+          } else {
+            showMessage("Roll number found, but no course match!", 'error');
+          }
+        } else {
+          showMessage("Invalid or unregistered roll number.", 'error');
+        }
+      };
 
       submitButton.addEventListener('click', proceedToPortal);
-
-      semesterInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-          proceedToPortal();
-        }
-      });
-
-      // No confirmation message here as requested.
-      branchSelect.addEventListener('change', () => {
-        selectedBranch = branchSelect.value;
+      rollInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') proceedToPortal();
       });
     });
   </script>
