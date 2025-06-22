@@ -35,14 +35,17 @@
 
   <div class="glass w-[90%] max-w-md p-8 text-white text-center">
     <h1 class="text-3xl font-semibold mb-6">Welcome to <span class="text-purple-300">DailyDoseofBCA</span></h1>
-    
+
     <div class="space-y-4">
-      <input
-        id="roll-number"
-        type="text"
-        placeholder="Enter your hall ticke number"
-        class="input w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/70 transition"
-      />
+      <div class="flex">
+        <span class="px-4 py-3 bg-white/10 border border-white/20 rounded-l-xl text-white">Y24</span>
+        <input
+          id="roll-number"
+          type="text"
+          placeholder="Enter rest of hall ticket number"
+          class="input w-full px-4 py-3 bg-white/10 border border-white/20 rounded-r-xl text-white placeholder:text-white/70 transition"
+        />
+      </div>
 
       <button
         id="submit-roll"
@@ -184,20 +187,21 @@
         ['Y247066010', 'Y247066011', 'Y247066014', 'Y247066017'].includes(roll);
 
       const proceedToPortal = () => {
-        const roll = rollInput.value.trim().toUpperCase();
-        const name = studentNames[roll];
+        const partial = rollInput.value.trim();
+        const fullRoll = partial.startsWith("Y24") ? partial : `Y24${partial}`;
+        const name = studentNames[fullRoll];
 
-        if (!roll.startsWith("Y24")) {
+        if (!/^Y24\d+$/.test(fullRoll)) {
           showMessage("Please enter a valid roll number starting with Y24.", 'error');
           return;
         }
 
         if (name) {
-          if (isBcaRoll(roll)) {
+          if (isBcaRoll(fullRoll)) {
             showMessage(`Welcome ${name}!`, 'success', 2000, () => {
               window.location.href = 'bca-sem3.html';
             });
-          } else if (isBcomRoll(roll)) {
+          } else if (isBcomRoll(fullRoll)) {
             showMessage(`Welcome ${name}!`, 'success', 2000, () => {
               window.location.href = 'bcom-sem3.html';
             });
