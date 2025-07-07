@@ -132,31 +132,7 @@
         "Y245082064": "Sravami",
         "Y245082065": "Lokesh",
         "Y245082066": "Ramani",
-        "Y245082067": "Tarun",
-        "Y247082001": "Kailash",
-        "Y247082002": "Nagarjuna",
-        "Y247082003": "Ganapathi",
-        "Y247082004": "Vennela",
-        "Y247082005": "Raakumar",
-        "Y247082006": "Gowthami",
-        "Y247082007": "Anil Kumar",
-        "Y247082008": "Harish",
-        "Y247082009": "Bhanu Prakash",
-        "Y247082010": "Navya",
-        "Y247082011": "Syamala",
-        "Y247082012": "Sujatha",
-        "Y247082013": "Ephraim",
-        "Y247082014": "Varsha",
-        "Y247082015": "Vasanth",
-        "Y247082016": "Mahesh",
-        "Y247082017": "Karthik",
-        "Y247082018": "Sohel Mansoor",
-        "Y247082019": "Solomoom Raj",
-        "Y247082020": "Komaliiii",
-        "Y247066010": "John",
-        "Y247066011": "Bhumik Shankar",
-        "Y247066014": "Ansar",
-        "Y247066017": "Keerthana"
+        "Y245082067": "Tarun"
       };
 
       const showMessage = (message, type = 'info', delay = 3000, callback = null) => {
@@ -183,4 +159,25 @@
         }
       };
 
-      const isBcaRoll = roll
+      const isBcaRoll = roll => /^Y2450820(0[1-9]|[1-5][0-9]|6[0-7])$/.test(roll);
+      const isBcomRoll = roll => /^Y2470820(0[1-9]|1[0-9]|20)$/.test(roll) ||
+        ['Y247066010', 'Y247066011', 'Y247066014', 'Y247066017'].includes(roll);
+
+      const proceedToPortal = () => {
+        const partial = rollInput.value.trim();
+        const fullRoll = partial.startsWith("Y24") ? `Y2450820${partial}` : `Y2450820${partial}`;
+
+        const name = studentNames[fullRoll];
+
+        if (!/^Y24\d+$/.test(fullRoll)) {
+          showMessage("Please enter a valid roll number starting with Y24.", 'error');
+          return;
+        }
+
+        if (name) {
+          if (isBcaRoll(fullRoll)) {
+            showMessage(`Welcome ${name}!`, 'success', 2000, () => {
+              window.location.href = '3-notes.html';
+            });
+          } else if (isBcomRoll(fullRoll)) {
+            showMessage(`Welcome ${name}!`, '
