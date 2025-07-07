@@ -191,7 +191,7 @@
         const fullRoll = partial.startsWith("Y2450820") ? partial : `Y2450820${partial}`;
         const name = studentNames[fullRoll];
 
-        if (!/^Y24\d+$/.test(fullRoll)) {
+        if (!/^Y2450820\d+$/.test(fullRoll)) {
           showMessage("Please enter a valid roll number starting with Y24.", 'error');
           return;
         }
