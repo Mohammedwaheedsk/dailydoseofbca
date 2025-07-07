@@ -42,8 +42,9 @@
         <input
           id="roll-number"
           type="text"
-          placeholder="Enter rest of hall ticket number"
+          placeholder="Enter last 2 digits of roll number"
           class="input w-full px-4 py-3 bg-white/10 border border-white/20 rounded-r-xl text-white placeholder:text-white/70 transition"
+          maxlength="2" 
         />
       </div>
 
@@ -182,42 +183,4 @@
         }
       };
 
-      const isBcaRoll = roll => /^Y2450820(0[1-9]|[1-5][0-9]|6[0-7])$/.test(roll);
-      const isBcomRoll = roll => /^Y2470820(0[1-9]|1[0-9]|20)$/.test(roll) ||
-        ['Y247066010', 'Y247066011', 'Y247066014', 'Y247066017'].includes(roll);
-
-      const proceedToPortal = () => {
-        const partial = rollInput.value.trim();
-        const fullRoll = partial.startsWith("Y2450820") ? partial : `Y2450820${partial}`;
-        const name = studentNames[fullRoll];
-
-        if (!/^Y2450820\d+$/.test(fullRoll)) {
-          showMessage("Please enter a valid roll number starting with Y24.", 'error');
-          return;
-        }
-
-        if (name) {
-          if (isBcaRoll(fullRoll)) {
-            showMessage(`Welcome ${name}!`, 'success', 2000, () => {
-              window.location.href = 'bca-sem3.html';
-            });
-          } else if (isBcomRoll(fullRoll)) {
-            showMessage(`Welcome ${name}!`, 'success', 2000, () => {
-              window.location.href = 'bcom-sem3.html';
-            });
-          } else {
-            showMessage("Roll number found, but no course match!", 'error');
-          }
-        } else {
-          showMessage("Invalid or unregistered roll number.", 'error');
-        }
-      };
-
-      submitButton.addEventListener('click', proceedToPortal);
-      rollInput.addEventListener('keypress', e => {
-        if (e.key === 'Enter') proceedToPortal();
-      });
-    });
-  </script>
-</body>
-</html>
+      const isBcaRoll = roll
