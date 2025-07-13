@@ -60,124 +60,60 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const rollInput = document.getElementById('roll-number');
-      const submitButton = document.getElementById('submit-roll');
+    const studentNames = {
+      "01": "Abhi Ram", "02": "Veera Babu", "03": "Sasidhar", "04": "Sai Krishna", "05": "Samba",
+      "06": "B. Venkata Sri Lakshmi", "07": "Syam", "08": "Santhi Raju", "09": "Lakshmi Prasanna", "10": "B. Sri Lakshmi",
+      "11": "Praveen", "12": "Mohan", "13": "Chandra Sekhar", "14": "Koti Reddy", "15": "Kalyan",
+      "16": "Phanindra", "17": "Sunshine", "18": "Anil", "19": "Narasimha Naidu", "20": "Gowtham",
+      "21": "Narasimha Rao", "22": "Koteswar Rao", "23": "Harsha", "24": "Mahesh", "25": "Subramanyam",
+      "26": "Meenakshi", "27": "Sharmila", "28": "Pavan Kalyan", "29": "K. Priyanka", "30": "Mohini",
+      "31": "Parimala", "32": "Rishika", "33": "Baji Babu", "34": "Thirupathamma", "35": "K. Sasidhar",
+      "36": "Jasmine", "37": "Khaja", "38": "Thalaiva 😎", "39": "Lavanya", "40": "Pradeep",
+      "41": "Dileesha", "42": "Lalith", "43": "Hari Babu", "44": "Nagula", "45": "P. Narasimha",
+      "46": "Aswitha", "47": "Harshitha", "48": "Megnana", "49": "Vijusha", "50": "Sidhardha",
+      "51": "Nava Lakshmi", "52": "Asma", "53": "Haseena", "54": "Rafia Ruhi", "55": "Riyaz",
+      "56": "Sabina Kousar", "57": "Sharukh", "58": "Sheena", "59": "Yaseen", "60": "Naga Sankar",
+      "61": "Noorjahan", "62": "T. Priyanka", "63": "Yasaswini", "64": "Sravami", "65": "Lokesh",
+      "66": "Ramani", "67": "Tarun"
+    };
+
+    document.getElementById('submit-roll').addEventListener('click', () => {
+      const input = document.getElementById('roll-number').value.trim().padStart(2, '0');
       const messageBox = document.getElementById('message-box');
 
-      const studentNames = {
-        "Y245082001": "Abhi Ram",
-        "Y245082002": "Veera Babu",
-        "Y245082003": "Sasidhar",
-        "Y245082004": "Sai Krishna",
-        "Y245082005": "Samba",
-        "Y245082006": "B. Venkata Sri Lakshmi",
-        "Y245082007": "Syam",
-        "Y245082008": "Santhi Raju",
-        "Y245082009": "Lakshmi Prasanna",
-        "Y245082010": "B. Sri Lakshmi",
-        "Y245082011": "Praveen",
-        "Y245082012": "Mohan",
-        "Y245082013": "Chandra Sekhar",
-        "Y245082014": "Koti Reddy",
-        "Y245082015": "Kalyan",
-        "Y245082016": "Phanindra",
-        "Y245082017": "Sunshine",
-        "Y245082018": "Anil",
-        "Y245082019": "Narasimha Naidu",
-        "Y245082020": "Gowtham",
-        "Y245082021": "Narasimha Rao",
-        "Y245082022": "Koteswar Rao",
-        "Y245082023": "Harsha",
-        "Y245082024": "Mahesh",
-        "Y245082025": "Subramanyam",
-        "Y245082026": "Meenakshi",
-        "Y245082027": "Sharmila",
-        "Y245082028": "Pavan Kalyan",
-        "Y245082029": "K. Priyanka",
-        "Y245082030": "Mohini",
-        "Y245082031": "Parimala",
-        "Y245082032": "Rishika",
-        "Y245082033": "Baji Babu",
-        "Y245082034": "Thirupathamma",
-        "Y245082035": "K. Sasidhar",
-        "Y245082036": "Jasmine",
-        "Y245082037": "Khaja",
-        "Y245082038": "Thalaiva 😎",
-        "Y245082039": "Lavanya",
-        "Y245082040": "Pradeep",
-        "Y245082041": "Dileesha",
-        "Y245082042": "Lalith",
-        "Y245082043": "Hari Babu",
-        "Y245082044": "Nagula",
-        "Y245082045": "P. Narasimha",
-        "Y245082046": "Aswitha",
-        "Y245082047": "Harshitha",
-        "Y245082048": "Megnana",
-        "Y245082049": "Vijusha",
-        "Y245082050": "Sidhardha",
-        "Y245082051": "Nava Lakshmi",
-        "Y245082052": "Asma",
-        "Y245082053": "Haseena",
-        "Y245082054": "Rafia Ruhi",
-        "Y245082055": "Riyaz",
-        "Y245082056": "Sabina Kousar",
-        "Y245082057": "Sharukh",
-        "Y245082058": "Sheena",
-        "Y245082059": "Yaseen",
-        "Y245082060": "Naga Sankar",
-        "Y245082061": "Noorjahan",
-        "Y245082062": "T. Priyanka",
-        "Y245082063": "Yasaswini",
-        "Y245082064": "Sravami",
-        "Y245082065": "Lokesh",
-        "Y245082066": "Ramani",
-        "Y245082067": "Tarun"
-      };
-
-      const showMessage = (message, type = 'info', delay = 3000, callback = null) => {
+      const showMessage = (message, type = 'info') => {
         messageBox.textContent = message;
         messageBox.className = 'mt-4 text-sm px-4 py-2 rounded-lg';
 
         if (type === 'success') {
           messageBox.classList.add('bg-green-500', 'text-white');
-        } else if (type === 'error') {
-          messageBox.classList.add('bg-red-500', 'text-white');
         } else {
-          messageBox.classList.add('bg-gray-700', 'text-white');
+          messageBox.classList.add('bg-red-500', 'text-white');
         }
 
         messageBox.classList.remove('hidden');
 
-        if (delay > 0) {
-          setTimeout(() => {
-            messageBox.classList.add('hidden');
-            if (callback) callback();
-          }, delay);
-        } else {
-          if (callback) callback();
-        }
+        setTimeout(() => {
+          messageBox.classList.add('hidden');
+        }, 2500);
       };
 
-      const isBcaRoll = roll => /^Y2450820(0[1-9]|[1-5][0-9]|6[0-7])$/.test(roll);
-      const isBcomRoll = roll => /^Y2470820(0[1-9]|1[0-9]|20)$/.test(roll) ||
-        ['Y247066010', 'Y247066011', 'Y247066014', 'Y247066017'].includes(roll);
+      if (!/^\d{2}$/.test(input)) {
+        showMessage("Please enter valid last 2 digits.", 'error');
+        return;
+      }
 
-      const proceedToPortal = () => {
-        const partial = rollInput.value.trim();
-        const fullRoll = partial.startsWith("Y24") ? `Y2450820${partial}` : `Y2450820${partial}`;
+      const name = studentNames[input];
 
-        const name = studentNames[fullRoll];
-
-        if (!/^Y24\d+$/.test(fullRoll)) {
-          showMessage("Please enter a valid roll number starting with Y24.", 'error');
-          return;
-        }
-
-        if (name) {
-          if (isBcaRoll(fullRoll)) {
-            showMessage(`Welcome ${name}!`, 'success', 2000, () => {
-              window.location.href = '3-notes.html';
-            });
-          } else if (isBcomRoll(fullRoll)) {
-            showMessage(`Welcome ${name}!`, '
+      if (name) {
+        showMessage(`Welcome ${name}!`, 'success');
+        setTimeout(() => {
+          window.location.href = 'bca-sem3.html';
+        }, 1800);
+      } else {
+        showMessage("Roll number not found. Try again.", 'error');
+      }
+    });
+  </script>
+</body>
+</html>
