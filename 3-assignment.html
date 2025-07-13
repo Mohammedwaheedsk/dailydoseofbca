@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="favicon.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore high-quality handwritten assignments on DailyDoseofBCA. A platform for organized and accessible study materials.">
+    <title>Hand Written Assignments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Background Video */
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 5px #000000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f2f2f2;
+        }
+
+        /* Hero Section */
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .neon-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 10px #000000;
+        }
+
+        .neon-subtext {
+            font-size: 1.2em;
+            color: #ffffff;
+            text-shadow: 0 0 10px #000000;
+        }
+
+        /* Main Section */
+        main {
+            padding: 40px 20px;
+            margin: 40px auto;
+            max-width: 1200px;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 12px #000000;
+        }
+
+        .notes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .note-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .note-item:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 25px #ffffff;
+        }
+
+        .note-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .note-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #000000, #ffffff);
+            color: #ffffff;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .note-button:hover {
+            background: linear-gradient(45deg, #ffffff, #000000);
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            text-shadow: 0 0 5px #8d18f5;
+        }
+
+        footer a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <video id="video-bg" autoplay loop muted>
+        <source src="topo.mp4" type="video/mp4">
+    </video>
+
+    <nav>
+        <div class="logo">DailyDoseofBCA</div>
+        <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1 class="neon-text">Welcome to DailyDoseofBCA</h1>
+        <p class="neon-subtext">Your one-stop platform for high-quality academic resources.</p>
+    </header>
+
+    <main id="notes">
+        <h2>Available Assignments</h2>
+        <div class="notes-container">
+            <div class="note-item">
+                <p class="note-title">BM Assignments</p>
+                <a class="note-button" href="bmassi.html" target="_blank">Click Here</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">C Assignments</p>
+                <a class="note-button" href="cassi.html" target="_blank">Click Here</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">DM Assignments</p>
+                <a class="note-button" href="dmassi.html" target="_blank">Click Here</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">English Assignments</p>
+                <a class="note-button" href="engassi.html" target="_blank">Click Here</a>
+            </div>
+            <div class="note-item">
+                <p class="note-title">BW Assignments</p>
+                <a class="note-button" href="bwassi.html" target="_blank">Click Here</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 DailyDoseofBCA | Designed with 💡</p>
+    </footer>
+</body>
+</html>
