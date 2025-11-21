@@ -2,530 +2,290 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Daily Dose of BCA</title>
 
   <!-- Favicons -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="icon" href="mylogo-32x32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="mylogo-64x64.png" sizes="64x64" type="image/png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
   <meta name="theme-color" content="#0f172a">
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind (utility) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Fonts & small libs -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  </script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 
   <style>
-    :root {
-      --bg: #0f172a;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --glass: rgba(15,23,42,0.6);
-    }
+    :root{--bg:#0b1220;--card:#071025;--muted:#9fb0c8;--accent:#38bdf8}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:linear-gradient(180deg,var(--bg) 0%, #071026 100%);color:#e6eef8;margin:0;-webkit-font-smoothing:antialiased}
 
-    html,body { height:100%; }
-    body{
-      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      margin:0;
-      background: var(--bg);
-      color:#e6eef8;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-y: auto;
-    }
+    /* Mobile-first, cozy card layout */
+    .container{max-width:980px;margin:0 auto;padding:0 16px}
+    header{position:sticky;top:0;background:rgba(6,10,18,0.55);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.03);z-index:40}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
 
-    .container { padding-left:1rem; padding-right:1rem; max-width:1100px; margin:0 auto; }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo-img{width:44px;height:44px;border-radius:10px;object-fit:cover;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .brand-title{line-height:1}
+    .brand-title h1{font-size:16px;margin:0;font-weight:800}
+    .brand-title p{margin:0;font-size:12px;color:var(--muted)}
 
-    /* Header - nav always visible and obvious */
-    header.site-header {
-      position: fixed;
-      top:0; left:0; right:0;
-      z-index:60;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      background: linear-gradient(180deg, rgba(15,23,42,0.75), rgba(15,23,42,0.55));
-      border-bottom:1px solid rgba(255,255,255,0.04);
-    }
-    .header-inner { display:flex; align-items:center; justify-content:space-between; height:72px; max-width:1100px; margin:0 auto; padding:0 1rem; gap:0.75rem; }
-    .brand { display:flex; align-items:center; gap:0.75rem; font-weight:800; letter-spacing:-0.5px; min-width:0; }
-    .brand .logo-img { width:40px; height:40px; border-radius:8px; object-fit:cover; display:inline-block; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+    /* Primary nav visible, wrapped on small screens */
+    nav.primary{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .nav-item{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.02);color:var(--muted);text-decoration:none;font-weight:700;font-size:13px}
+    .nav-item:hover{background:rgba(56,189,248,0.06);color:#eaf6ff}
+    .nav-cta{background:linear-gradient(90deg,var(--accent),#2563eb);color:white;border:none}
 
-    /* Nav container visible always */
-    .top-nav {
-      display:flex;
-      gap:0.5rem;
-      align-items:center;
-      flex-wrap:nowrap;
-      overflow-x:auto; /* allow horizontal scroll on very small screens */
-      -webkit-overflow-scrolling: touch;
-      padding-bottom:4px;
-    }
+    main{padding:18px 0 64px}
+    .hero{padding:18px 0;text-align:center}
+    .hero h2{font-size:clamp(20px,6vw,36px);margin:0 0 6px 0;font-weight:800;background:linear-gradient(90deg,#fff,#aee8ff,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{margin:0;color:var(--muted);max-width:46ch;margin-left:auto;margin-right:auto}
 
-    .nav-link {
-      display:inline-flex;
-      align-items:center;
-      gap:0.6rem;
-      padding:10px 12px;
-      border-radius:12px;
-      background:rgba(255,255,255,0.02);
-      border:1px solid rgba(255,255,255,0.03);
-      color:var(--muted);
-      font-weight:700;
-      text-decoration:none;
-      white-space:nowrap;
-      transition:transform .15s ease, background .15s ease;
-    }
-    .nav-link:hover,
-    .nav-link:focus {
-      transform:translateY(-3px);
-      background:rgba(56,189,248,0.06);
-      color:#eaf6ff;
-      outline: none;
-    }
-    .nav-link .icon { width:18px; height:18px; display:inline-grid; place-items:center; opacity:0.95; }
+    /* Card grid: single column mobile, two on tablet, four on large */
+    .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));border:1px solid rgba(255,255,255,0.04);padding:14px;border-radius:14px;display:flex;flex-direction:column;gap:8px}
+    .card .meta{display:flex;align-items:center;gap:12px}
+    .card .meta .icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:rgba(56,189,248,0.06)}
+    .card h3{margin:0;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:13px}
+    .card a.visit{margin-top:10px;align-self:flex-start;padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);font-weight:700;text-decoration:none}
 
-    @media(min-width:860px){
-      .nav-link { padding:12px 14px; }
-    }
+    @media(min-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(min-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
 
-    .blob-cont { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
-    .blob { position:absolute; border-radius:50%; filter:blur(72px); opacity:0.35; transform-origin:center; }
-    .blob-1{ width:420px; height:420px; top:-8%; left:-8%; background:#0ea5e9; }
-    .blob-2{ width:520px; height:520px; bottom:-10%; right:-6%; background:#6366f1; }
-    .blob-3{ width:360px; height:360px; top:38%; left:38%; background:#0f172a; opacity:0.7; }
+    /* Companion card — compact on mobile */
+    .companion{margin-top:16px;border-radius:14px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04)}
+    .companion .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .companion .controls{display:flex;gap:8px}
+    .quick-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
+    @media(min-width:640px){.quick-actions{grid-template-columns:repeat(3,1fr)}}
 
-    @media (max-width:640px){
-      .blob-1{ width:280px; height:280px; top:-14%; left:-12%; filter:blur(56px); opacity:0.25; }
-      .blob-2{ width:320px; height:320px; bottom:-18%; right:-18%; filter:blur(56px); opacity:0.22; }
-      .blob-3{ display:none; }
-    }
+    /* chat */
+    .chat-area{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .messages{max-height:44vh;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:8px}
+    .msg{padding:10px 12px;border-radius:12px;max-width:86%}
+    .msg.ai{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+    .msg.user{background:linear-gradient(90deg,var(--accent),#2563eb);color:white;align-self:flex-end}
 
-    .hero { padding-top:96px; padding-bottom:18px; text-align:center; }
-    .hero h1 {
-      font-weight:800;
-      line-height:1.02;
-      font-size:clamp(1.5rem, 6vw, 2.8rem);
-      margin:0 0 0.5rem 0;
-      background: linear-gradient(90deg,#fff,#bfe9ff,#38bdf8);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-      -webkit-text-fill-color:transparent;
-    }
-    .hero p { color: #cbd5e1; margin:0 auto; max-width:46ch; font-size:0.95rem; }
+    footer{margin-top:18px;padding:20px 0;color:var(--muted);text-align:center;font-size:13px}
 
-    .cards { display:grid; gap:0.75rem; grid-template-columns:1fr; margin-top:1rem; }
-    .card {
-      display:block;
-      padding:1rem;
-      border-radius:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.04);
-      transition:transform .22s ease, box-shadow .22s ease;
-      text-decoration:none;
-      color:inherit;
-    }
-    .card:hover{ transform:translateY(-6px); box-shadow:0 10px 30px rgba(2,6,23,0.6); }
-
-    .card .icon { width:44px; height:44px; border-radius:10px; display:inline-grid; place-items:center; background: rgba(56,189,248,0.08); margin-bottom:0.5rem; }
-    .card h3{ margin:0; font-weight:700; font-size:1rem; }
-    .card p{ margin:0.5rem 0 0 0; font-size:0.9rem; color:#9fb0c8; }
-
-    @media(min-width:768px){
-      .cards { grid-template-columns: repeat(2,1fr); }
-    }
-    @media(min-width:1024px){
-      .cards { grid-template-columns: repeat(4,1fr); gap:1rem; }
-      .header-inner{ height:88px; }
-      .hero{ padding-top:140px; }
-    }
-
-    .companion { margin-top:1.25rem; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.7)); border:1px solid rgba(56,189,248,0.06); }
-    .companion .top { display:flex; gap:0.75rem; align-items:center; justify-content:space-between; padding:1rem; border-bottom:1px solid rgba(255,255,255,0.03); }
-    .companion .tabs { display:flex; gap:0.5rem; background:rgba(255,255,255,0.02); padding:0.25rem; border-radius:999px; }
-    .companion .tabs button { padding:8px 12px; border-radius:10px; background:transparent; border:none; color:#bcdff6; font-weight:700; }
-    .companion .tabs button.active { background:linear-gradient(90deg, rgba(56,189,248,0.12), rgba(37,99,235,0.08)); color:white; box-shadow:0 6px 18px rgba(2,6,23,0.5); }
-
-    .quick-tools { padding:1rem; }
-    .quick-input { width:100%; padding:0.9rem 1rem; border-radius:999px; border:1px solid rgba(255,255,255,0.06); background:rgba(0,0,0,0.25); color:white; font-size:1rem; }
-    .quick-actions { display:grid; gap:0.6rem; grid-template-columns:1fr; margin-top:0.8rem; }
-    .quick-btn {
-      display:flex; gap:0.8rem; align-items:center; padding:0.9rem; border-radius:14px; background:rgba(255,255,255,0.02);
-      border:1px solid rgba(255,255,255,0.04); text-align:left; cursor:pointer; font-weight:700;
-    }
-    .quick-btn .emoji { width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background:rgba(56,189,248,0.08); }
-    @media(min-width:640px){ .quick-actions { grid-template-columns: repeat(3,1fr); } }
-
-    .chat { padding:1rem; min-height:320px; display:flex; flex-direction:column; gap:0.75rem; }
-    .chat-history { flex:1; overflow:auto; padding:0.5rem 0; display:flex; flex-direction:column; gap:0.5rem; max-height:50vh; }
-    .bubble { max-width:86%; padding:0.75rem 1rem; border-radius:14px; font-size:0.95rem; }
-    .bubble.ai { background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); color:#e6eef8; align-self:flex-start; }
-    .bubble.user { background:linear-gradient(90deg,#38bdf8,#2563eb); color:white; align-self:flex-end; box-shadow:0 12px 30px rgba(2,6,23,0.5); }
-    .chat-controls { display:flex; gap:0.5rem; align-items:center; }
-    .file-btn{ padding:10px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); display:inline-grid; place-items:center; }
-    .text-input { flex:1; padding:10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,0.06); background:rgba(0,0,0,0.24); color:white; font-size:1rem; }
-
-    footer { padding:1.2rem 0 2.4rem; text-align:center; color:#9fb0c8; font-size:0.9rem; }
-
-    @media (prefers-reduced-motion:reduce){
-      * { animation:none !important; transition:none !important; }
-    }
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   </style>
 </head>
 <body>
-
-  <div class="blob-cont" aria-hidden="true">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
-
-  <!-- Header — nav links always visible -->
-  <header class="site-header" role="banner" aria-label="Main header">
-    <div class="header-inner container">
-      <div class="brand" aria-hidden="false">
-        <!-- LOGO IMAGE -->
-        <img src="mylogo.jpg"
-             srcset="mylogo-1x.jpg 1x, mylogo-2x.jpg 2x"
-             alt="Daily Dose of BCA logo"
-             class="logo-img"
-             decoding="async" />
-        <div style="min-width:0;">
-          <div style="font-weight:800; font-size:0.98rem; color:#fff;">Daily Dose of <span style="color:var(--accent)">BCA</span></div>
-          <div style="font-size:11px;color:#93b5d8;margin-top:2px;">Notes • Prep • Companion</div>
-        </div>
-      </div>
-
-      <!-- Visible navigation: clear, large tap targets -->
-      <nav class="top-nav" role="navigation" aria-label="Primary navigation">
-        <a class="nav-link" href="4assign.html" aria-label="Assignments">
-          <span class="icon" aria-hidden="true">📂</span>
-          <span>Assignments</span>
-        </a>
-
-        <a class="nav-link" href="4record.html" aria-label="Record Work">
-          <span class="icon" aria-hidden="true">📝</span>
-          <span>Record Work</span>
-        </a>
-
-        <a class="nav-link" href="python.html" aria-label="Python Notes">
-          <span class="icon" aria-hidden="true">🐍</span>
-          <span>Python</span>
-        </a>
-
-        <a class="nav-link" href="os.html" aria-label="Operating System Notes">
-          <span class="icon" aria-hidden="true">💽</span>
-          <span>Operating System</span>
-        </a>
-
-        <a class="nav-link" href="exclusive.html" aria-label="Premium Content" style="background:linear-gradient(90deg,#38bdf8,#2563eb); color:white; border: none;">
-          <span class="icon" aria-hidden="true">⭐</span>
-          <span>Premium</span>
-        </a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container" role="main">
-    <section class="hero">
-      <h1>Master your subjects — efficiently.</h1>
-      <p>Get focused notes, quick quizzes and one-week study plans — optimised for mobile learning and quick revision.</p>
-    </section>
-
-    <section class="cards" aria-label="Subject cards" id="subject-cards-container">
-      <a class="card" href="python.html" aria-label="Open Python notes">
-        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--accent)"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
-        <h3>Python</h3>
-        <p>Data structures, algorithms, and practical projects — concise notes and examples.</p>
-      </a>
-
-      <a class="card" href="os.html" aria-label="Open Operating System notes">
-        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--accent)"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg></div>
-        <h3>Operating System</h3>
-        <p>Concurrency, memory management and file systems — simplified for revision.</p>
-      </a>
-
-      <a class="card" href="mad.html" aria-label="Open MAD notes">
-        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--accent)"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path></svg></div>
-        <h3>MAD</h3>
-        <p>Mobile app dev concepts and code examples for quick practice.</p>
-      </a>
-
-      <a class="card" href="afm.html" aria-label="Open AFM notes">
-        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--accent)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
-        <h3>AFM</h3>
-        <p>Accounting fundamentals and shortcuts for exams.</p>
-      </a>
-
-      <!-- add other cards similarly -->
-    </section>
-
-    <section class="companion" aria-labelledby="companion-heading">
-      <div class="top">
-        <div style="display:flex; gap:0.75rem; align-items:center;">
-          <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(90deg,#38bdf8,#2563eb);display:grid;place-items:center;font-weight:700;">✨</div>
-          <div>
-            <div id="companion-heading" style="font-weight:800;font-size:1.05rem;">AI Study Companion</div>
-            <div style="font-size:12px;color:#9fb0c8;">Powered by Waheed</div>
+  <div class="container">
+    <!-- Header with always-visible nav -->
+    <header>
+      <div class="header-inner">
+        <!-- Left: logo and title stacked on mobile for clarity -->
+        <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+          <img src="mylogo.jpg" alt="Daily Dose of BCA" class="logo-img" decoding="async" style="width:48px;height:48px;border-radius:12px;" />
+          <div class="brand-title" style="display:flex;flex-direction:column;min-width:0;">
+            <h1 style="font-size:15px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Daily Dose of <span style="color:var(--accent)">BCA</span></h1>
+            <p class="muted" style="font-size:12px;margin-top:2px;">Notes · Revision · Companion</p>
           </div>
         </div>
 
-        <div class="tabs" role="tablist" aria-label="Companion tabs">
-          <button id="tab-quick" class="active" role="tab" aria-selected="true">Quick Tools</button>
-          <button id="tab-chat" role="tab" aria-selected="false">Chat</button>
-        </div>
+        <!-- Right: clear, evenly spaced nav — wraps below on very small screens -->
+        <nav class="primary" aria-label="Primary navigation" style="gap:10px;display:flex;align-items:center;justify-content:flex-end;flex:1">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;width:100%;">
+            <a class="nav-item" href="4assign.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">📂 Assignments</a>
+            <a class="nav-item" href="4record.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">📝 Record</a>
+            <a class="nav-item" href="python.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">🐍 Python</a>
+            <a class="nav-item" href="os.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">💽 OS</a>
+            <a class="nav-item nav-cta" href="exclusive.html" style="flex-shrink:0;padding:10px 14px;border-radius:12px;">⭐ Premium</a>
+          </div>
+        </nav>
       </div>
+    </header>
 
-      <div id="companion-body">
-        <div id="view-quick" class="quick-tools" aria-hidden="false">
-          <label for="quick-topic" class="sr-only">Topic</label>
-          <input id="quick-topic" class="quick-input" placeholder="Topic — e.g. Python, Sorting algorithm, How to make a website..." />
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <h2 id="hero-title">Master your subjects — clearly and cozy.</h2>
+        <p>Quick notes, short quizzes and small study plans tuned for phone use. Tap any card to open detailed notes.</p>
+      </section>
 
-          <div class="quick-actions" role="toolbar" aria-label="Quick actions">
-            <button class="quick-btn" onclick="triggerQuickTask('explain')" type="button" aria-label="Explain">
-              <div class="emoji">📝</div>
-              <div>
-                <div style="font-weight:800;">Explain</div>
-                <div style="font-size:12px;color:#9fb0c8;">Clear, concise notes</div>
-              </div>
+      <section class="grid" aria-label="Subjects">
+        <!-- repeatable cards -->
+        <article class="card">
+          <div class="meta">
+            <div class="icon">🐍</div>
+            <div>
+              <h3>Python</h3>
+              <p class="muted">Data structures, algorithms & small projects.</p>
+            </div>
+          </div>
+          <p class="muted">Short explanations, example code, and quick MCQs to test understanding.</p>
+          <a class="visit" href="python.html">Open Notes →</a>
+        </article>
+
+        <article class="card">
+          <div class="meta">
+            <div class="icon">💽</div>
+            <div>
+              <h3>Operating System</h3>
+              <p class="muted">Concurrency, memory, file systems.</p>
+            </div>
+          </div>
+          <p class="muted">Concise summaries focused on exam essentials.</p>
+          <a class="visit" href="os.html">Open Notes →</a>
+        </article>
+
+        <article class="card">
+          <div class="meta">
+            <div class="icon">📱</div>
+            <div>
+              <h3>MAD</h3>
+              <p class="muted">Mobile app development concepts.</p>
+            </div>
+          </div>
+          <p class="muted">Examples, mini-project ideas and practice questions.</p>
+          <a class="visit" href="mad.html">Open Notes →</a>
+        </article>
+
+        <article class="card">
+          <div class="meta">
+            <div class="icon">📊</div>
+            <div>
+              <h3>AFM</h3>
+              <p class="muted">Accounting & finance basics.</p>
+            </div>
+          </div>
+          <p class="muted">Formula sheets and solved examples.</p>
+          <a class="visit" href="afm.html">Open Notes →</a>
+        </article>
+      </section>
+
+      <!-- Companion card: quick tools + chat -->
+      <section class="companion" aria-labelledby="companion-heading">
+        <div class="top">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#2563eb);display:grid;place-items:center;font-weight:800">✨</div>
+            <div>
+              <div id="companion-heading" style="font-weight:800">AI Study Companion</div>
+              <div class="muted" style="font-size:13px">Ask questions, upload notes (PDF), or use the quick tools below.</div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="tab-quick" class="nav-item" aria-pressed="true">Quick Tools</button>
+            <button id="tab-chat" class="nav-item">Chat</button>
+          </div>
+        </div>
+
+        <div id="view-quick">
+          <div style="margin-top:12px">
+            <input id="quick-topic" type="text" placeholder="Enter topic (e.g. Binary search)" class="w-full rounded-xl px-4 py-3 bg-transparent border border-white/6 placeholder:muted text-white" />
+          </div>
+
+          <div class="quick-actions">
+            <button class="card" onclick="triggerQuickTask('explain')">
+              <div style="font-weight:800">Explain</div>
+              <div class="muted">Short, bolded key terms and simple examples.</div>
             </button>
 
-            <button class="quick-btn" onclick="triggerQuickTask('quiz')" type="button" aria-label="Quiz me">
-              <div class="emoji">❓</div>
-              <div>
-                <div style="font-weight:800;">Quiz Me</div>
-                <div style="font-size:12px;color:#9fb0c8;">3 quick MCQs</div>
-              </div>
+            <button class="card" onclick="triggerQuickTask('quiz')">
+              <div style="font-weight:800">Quiz Me</div>
+              <div class="muted">3 quick MCQs — answers after questions.</div>
             </button>
 
-            <button class="quick-btn" onclick="triggerQuickTask('plan')" type="button" aria-label="Study plan">
-              <div class="emoji">📅</div>
-              <div>
-                <div style="font-weight:800;">Study Plan</div>
-                <div style="font-size:12px;color:#9fb0c8;">1-week roadmap</div>
-              </div>
+            <button class="card" onclick="triggerQuickTask('plan')">
+              <div style="font-weight:800">Study Plan</div>
+              <div class="muted">1-week roadmap with daily targets.</div>
             </button>
           </div>
 
-          <div id="quick-result-area" class="mt-4" style="display:none;">
-            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); padding:0.9rem; border-radius:12px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-                <div id="quick-result-title" style="font-weight:800;">Result</div>
-                <button onclick="closeQuickResult()" aria-label="Close results" style="background:none;border:none;color:#9fb0c8;font-weight:700;">✕</button>
-              </div>
-              <div id="quick-loading" style="display:none;padding:1rem;text-align:center;color:var(--muted);">Loading…</div>
-              <div id="quick-response" style="color:#dbeafe;"></div>
+          <div id="quick-result-area" style="display:none;margin-top:12px">
+            <div class="card">
+              <div id="quick-result-title" style="font-weight:800">Result</div>
+              <div id="quick-loading" class="muted" style="display:none">Loading…</div>
+              <div id="quick-response" class="muted"></div>
             </div>
           </div>
         </div>
 
-        <div id="view-chat" style="display:none; padding:0.75rem;">
-          <div class="chat" role="region" aria-label="Chat with AI">
-            <div id="chat-history" class="chat-history" aria-live="polite">
-              <div class="bubble ai">Hi — I'm your AI tutor. Upload a PDF or ask a question to get started.</div>
+        <div id="view-chat" style="display:none">
+          <div class="chat-area">
+            <div class="messages" id="chat-history" aria-live="polite">
+              <div class="msg ai">Hi — I'm your tutor. Upload a PDF or ask anything.</div>
             </div>
 
-            <div style="display:flex; gap:0.5rem; align-items:center;">
+            <div style="display:flex;gap:8px;align-items:center">
               <input id="file-upload" type="file" accept=".pdf,.txt,.md" style="display:none" onchange="handleFileUpload(this)" />
-              <button class="file-btn" onclick="document.getElementById('file-upload').click()" aria-label="Upload document">
-                <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M12 3v12" stroke="#cfeefd" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="#cfeefd" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-
-              <input id="chat-input" class="text-input" placeholder="Type your message and press Send" onkeydown="if(event.key==='Enter') handleChatSend()" aria-label="Chat message" />
-              <button onclick="handleChatSend()" aria-label="Send message" style="padding:10px 12px;border-radius:12px;background:linear-gradient(90deg,#38bdf8,#2563eb);color:white;border:none;font-weight:700;">Send</button>
+              <button onclick="document.getElementById('file-upload').click()" class="nav-item">📁 Upload</button>
+              <input id="chat-input" type="text" placeholder="Type a question..." class="flex-1 rounded-xl px-4 py-3 bg-transparent border border-white/6 text-white" onkeydown="if(event.key==='Enter') handleChatSend()" />
+              <button onclick="handleChatSend()" class="nav-cta px-4 py-2 rounded-xl">Send</button>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-    </section>
+    </main>
 
-    <footer id="footer">
-      <div style="margin-top:1rem;">
-        <p style="color:#9fb0c8;">Get personalised class chatbot, class materials crafted especially for you.</p>
-        <a href="exclusive.html" style="display:inline-block;margin-top:0.6rem;padding:10px 18px;border-radius:999px;background:linear-gradient(90deg,#38bdf8,#2563eb);color:white;font-weight:700;text-decoration:none;">Premium Content</a>
-        <p style="margin-top:0.9rem;font-size:12px;color:#7b8798;">&copy; 2024 Learning Hub. All rights reserved.</p>
-      </div>
+    <footer>
+      <div>Get personalised notes and a class chatbot tailored for you.</div>
+      <div style="margin-top:8px"><a href="exclusive.html" class="nav-cta px-4 py-2 rounded-xl">Premium Content</a></div>
+      <div style="margin-top:12px" class="muted">© 2024 Learning Hub</div>
     </footer>
-  </main>
-
-  <!-- Small modal -->
-  <div id="message-modal" role="dialog" aria-modal="true" style="display:none;position:fixed;inset:0;z-index:70;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);backdrop-filter:blur(4px);">
-    <div style="max-width:420px;background:var(--glass);padding:1rem;border-radius:14px;border:1px solid rgba(255,255,255,0.04);color:#e6eef8;">
-      <div id="modal-text" style="margin-bottom:0.6rem;"></div>
-      <div style="text-align:right;"><button onclick="closeModal()" style="background:linear-gradient(90deg,#38bdf8,#2563eb);padding:8px 12px;border-radius:10px;border:none;color:white;font-weight:700;">OK</button></div>
-    </div>
   </div>
 
   <script>
-    // ============ Config ============
-    let API_KEY = ""; // keep keys out of client. Use server-side proxy in production.
+    // simple tab behavior
+    const tQuick = document.getElementById('tab-quick');
+    const tChat = document.getElementById('tab-chat');
+    const vQuick = document.getElementById('view-quick');
+    const vChat = document.getElementById('view-chat');
+    tQuick.addEventListener('click', ()=>{tQuick.classList.add('nav-cta');tChat.classList.remove('nav-cta');vQuick.style.display='';vChat.style.display='none'});
+    tChat.addEventListener('click', ()=>{tChat.classList.add('nav-cta');tQuick.classList.remove('nav-cta');vChat.style.display='';vQuick.style.display='none'});
 
-    // ============ Tabs (quick/chat) ============
-    const tabQuick = document.getElementById('tab-quick');
-    const tabChat = document.getElementById('tab-chat');
-    const viewQuick = document.getElementById('view-quick');
-    const viewChat = document.getElementById('view-chat');
-    tabQuick.addEventListener('click', () => {
-      tabQuick.classList.add('active'); tabQuick.setAttribute('aria-selected','true');
-      tabChat.classList.remove('active'); tabChat.setAttribute('aria-selected','false');
-      viewQuick.style.display = ''; viewChat.style.display = 'none';
-    });
-    tabChat.addEventListener('click', () => {
-      tabChat.classList.add('active'); tabChat.setAttribute('aria-selected','true');
-      tabQuick.classList.remove('active'); tabQuick.setAttribute('aria-selected','false');
-      viewChat.style.display = ''; viewQuick.style.display = 'none';
-      scrollChatToBottom();
-    });
+    // lightweight utilities from previous version (kept concise)
+    function show(el){el.style.display=''}
+    function hide(el){el.style.display='none'}
 
-    // ============ Modal ============
-    const modal = document.getElementById('message-modal');
-    const modalText = document.getElementById('modal-text');
-    function showModal(txt){
-      modalText.textContent = txt;
-      modal.style.display = 'flex';
-    }
-    function closeModal(){
-      modal.style.display = 'none';
+    // quick tools & chat placeholders
+    function triggerQuickTask(type){
+      const topic = document.getElementById('quick-topic').value.trim();
+      if(!topic){alert('Please enter a topic');return}
+      const resArea = document.getElementById('quick-result-area');
+      document.getElementById('quick-loading').style.display = '';
+      resArea.style.display = ''; document.getElementById('quick-response').innerHTML = '';
+
+      // mock response for UI — replace with real API call
+      setTimeout(()=>{
+        document.getElementById('quick-loading').style.display = 'none';
+        document.getElementById('quick-response').innerHTML = '<strong>'+ type.toUpperCase() +'</strong>: Sample result for "'+topic+'". Replace with real API call.';
+      },700);
     }
 
-    // ============ File upload (PDF read) ============
-    async function handleFileUpload(input) {
-      const file = input.files?.[0];
-      if(!file) return;
-      showModal(`Processing ${file.name}...`);
-      try {
-        let text = "";
-        if(file.type === "application/pdf"){
-          const arrayBuffer = await file.arrayBuffer();
-          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-          for(let p=1; p<=pdf.numPages; p++){
-            const page = await pdf.getPage(p);
-            const content = await page.getTextContent();
-            text += content.items.map(it => it.str).join(' ') + "\n";
-            if(text.length > 120000){ text = text.slice(0,120000) + "\n...[truncated]"; break; }
-          }
-        } else {
-          text = await file.text();
-        }
-        closeModal();
-        appendMessage('ai', `I've processed "${file.name}". Ask me questions about it.`);
-        window.currentDoc = text.slice(0, 120000);
-      } catch(err){
-        console.error(err); closeModal(); showModal("Failed to read file.");
-      } finally {
-        input.value = "";
-      }
+    // file -> extract text (pdf.js) then store small window of content
+    async function handleFileUpload(input){
+      const file = input.files?.[0]; if(!file)return; alert('Processing '+file.name+' — this may take a few seconds');
+      try{
+        if(file.type==='application/pdf'){
+          const data = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({data}).promise; let text='';
+          for(let p=1;p<=Math.min(pdf.numPages,6);p++){ const page = await pdf.getPage(p); const content = await page.getTextContent(); text += content.items.map(i=>i.str).join(' ')+"\n"; }
+          window.currentDoc = text.slice(0,120000);
+        } else { window.currentDoc = await file.text(); }
+        const h = document.getElementById('chat-history'); h.insertAdjacentHTML('beforeend', '<div class="msg ai">Document uploaded — ask about it now.</div>');
+      }catch(e){console.error(e);alert('Failed to read file');}
+      input.value = '';
     }
 
-    // ============ Chat / local history ============
-    let chatHistory = JSON.parse(localStorage.getItem('dd_bca_chat_v1')||'[]');
-    const chatContainer = document.getElementById('chat-history');
-
-    function appendMessage(role, html){
-      const div = document.createElement('div');
-      div.className = 'bubble ' + (role === 'user' ? 'user' : 'ai');
-      div.innerHTML = (role === 'ai') ? marked.parse(html) : html;
-      chatContainer.appendChild(div);
-      scrollChatToBottom();
-      if(role === 'user' || role === 'ai') {
-        chatHistory.push({role, text: html, t: Date.now()});
-        localStorage.setItem('dd_bca_chat_v1', JSON.stringify(chatHistory.slice(-200)));
-      }
-    }
-
-    function scrollChatToBottom(){
-      setTimeout(()=>{ chatContainer.scrollTop = chatContainer.scrollHeight; }, 60);
+    function appendChat(role, text){
+      const h = document.getElementById('chat-history');
+      const div = document.createElement('div'); div.className = 'msg '+(role==='user'?'user':'ai'); div.textContent = text; h.appendChild(div); h.scrollTop = h.scrollHeight;
     }
 
     function handleChatSend(){
-      const input = document.getElementById('chat-input');
-      const text = input.value.trim();
-      if(!text) return;
-      appendMessage('user', text);
-      input.value = '';
-      const loading = document.createElement('div');
-      loading.className = 'bubble ai';
-      loading.innerHTML = '<em style="color:var(--muted)">Thinking…</em>';
-      chatContainer.appendChild(loading);
-      scrollChatToBottom();
-
-      const payloadText = (window.currentDoc ? `CONTEXT:\n${window.currentDoc}\n\nQUESTION:\n${text}` : text);
-
-      callGemini([{ role:'user', parts:[{text: payloadText}] }])
-        .then(resp => {
-          loading.remove();
-          appendMessage('ai', resp);
-        })
-        .catch(err => {
-          loading.remove();
-          appendMessage('ai', 'Connection error — try again.');
-          console.error(err);
-        });
+      const input = document.getElementById('chat-input'); if(!input) return;
+      const text = input.value.trim(); if(!text) return; appendChat('user', text); input.value=''; appendChat('ai','Thinking...');
+      setTimeout(()=>{ appendChat('ai','Demo answer for: '+text+' (replace with real model call).'); },700);
     }
-
-    // ============ Quick tools ============
-    function triggerQuickTask(type){
-      const topic = document.getElementById('quick-topic').value.trim();
-      if(!topic){ showModal('Please enter a topic.'); return; }
-      document.getElementById('quick-result-area').style.display = '';
-      document.getElementById('quick-loading').style.display = 'block';
-      document.getElementById('quick-response').innerHTML = '';
-      let prompt = '';
-      if(type === 'explain') prompt = `Explain "${topic}" simply. Bold key terms.`;
-      else if(type === 'quiz') prompt = `3 multiple choice questions on "${topic}". Answers at bottom.`;
-      else prompt = `1-week study plan for "${topic}". Bullet points.`;
-
-      callGemini([{ role:'user', parts:[{text: prompt}] }])
-        .then(res => {
-          document.getElementById('quick-loading').style.display = 'none';
-          document.getElementById('quick-response').innerHTML = marked.parse(res);
-        })
-        .catch(err => {
-          document.getElementById('quick-loading').style.display = 'none';
-          document.getElementById('quick-response').textContent = 'Error fetching result.';
-          console.error(err);
-        });
-    }
-    function closeQuickResult(){ document.getElementById('quick-result-area').style.display = 'none'; }
-
-    // ============ API call (example) ============
-    async function callGemini(payload){
-      if(!API_KEY){
-        return Promise.resolve("Demo response (no API key configured). Replace API_KEY with a runtime secret or call your backend proxy that holds the key.");
-      }
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
-      const res = await fetch(url, {
-        method:'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ contents: payload })
-      });
-      if(!res.ok) throw new Error('status:'+res.status);
-      const data = await res.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response.';
-    }
-
-    // initialize chat from storage
-    (function loadChat(){
-      if(chatHistory && chatHistory.length){
-        chatContainer.innerHTML = '';
-        chatHistory.forEach(m => {
-          const div = document.createElement('div');
-          div.className = 'bubble ' + (m.role === 'user' ? 'user' : 'ai');
-          div.innerHTML = (m.role === 'ai') ? marked.parse(m.text) : m.text;
-          chatContainer.appendChild(div);
-        });
-        scrollChatToBottom();
-      }
-    })();
   </script>
 </body>
 </html>
