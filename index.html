@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Daily Dose of BCA</title>
 
-  <!-- Favicons (keep as you had them) -->
+  <!-- Favicons -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="icon" href="mylogo-32x32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="mylogo-64x64.png" sizes="64x64" type="image/png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
   <meta name="theme-color" content="#0f172a">
 
-  <!-- Tailwind CDN (you used it already) -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts & small libs -->
@@ -31,7 +31,6 @@
       --glass: rgba(15,23,42,0.6);
     }
 
-    /* Base */
     html,body { height:100%; }
     body{
       font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -43,10 +42,9 @@
       overflow-y: auto;
     }
 
-    /* Mobile-first layout tweaks */
     .container { padding-left:1rem; padding-right:1rem; max-width:1100px; margin:0 auto; }
 
-    /* Header (compact mobile) */
+    /* Header */
     header.site-header {
       position: fixed;
       top:0; left:0; right:0;
@@ -58,16 +56,13 @@
     }
     .header-inner { display:flex; align-items:center; justify-content:space-between; height:64px; max-width:1100px; margin:0 auto; padding:0 1rem; gap:0.5rem; }
     .brand { display:flex; align-items:center; gap:0.75rem; font-weight:800; letter-spacing:-0.5px; }
-    .brand .logo { width:36px; height:36px; border-radius:8px; display:inline-grid; place-items:center; background:linear-gradient(135deg,#38bdf8,#2563eb); color:white; font-weight:700; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-    .brand .title { font-size:1rem; color:white; display:block; line-height:1; }
+    .brand .logo-img { width:36px; height:36px; border-radius:8px; object-fit:cover; display:inline-block; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 
-    /* Hamburger & nav */
     .nav-toggle { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
     .nav-drawer { position: fixed; left:0; right:0; top:64px; background:linear-gradient(180deg, rgba(7,11,20,0.95), rgba(7,11,20,0.9)); border-bottom:1px solid rgba(255,255,255,0.03); padding:0.75rem; display:none; z-index:55; }
     .nav-drawer a { display:block; padding:0.75rem 1rem; border-radius:10px; color:var(--muted); text-decoration:none; margin-bottom:0.5rem; font-weight:600; }
     .nav-drawer a.active, .nav-drawer a:hover { color:var(--accent); background:rgba(56,189,248,0.04); border:1px solid rgba(56,189,248,0.06); }
 
-    /* Background blobs — reduced on small screens */
     .blob-cont { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
     .blob { position:absolute; border-radius:50%; filter:blur(72px); opacity:0.35; transform-origin:center; }
     .blob-1{ width:420px; height:420px; top:-8%; left:-8%; background:#0ea5e9; }
@@ -80,7 +75,6 @@
       .blob-3{ display:none; }
     }
 
-    /* Hero */
     .hero { padding-top:92px; padding-bottom:20px; text-align:center; }
     .hero h1 {
       font-weight:800;
@@ -95,7 +89,6 @@
     }
     .hero p { color: #cbd5e1; margin:0 auto; max-width:46ch; font-size:0.95rem; }
 
-    /* Subject cards grid */
     .cards { display:grid; gap:0.75rem; grid-template-columns:1fr; margin-top:1rem; }
     .card {
       display:block;
@@ -122,14 +115,12 @@
       .hero{ padding-top:120px; }
     }
 
-    /* AI Study Companion card */
     .companion { margin-top:1.25rem; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.7)); border:1px solid rgba(56,189,248,0.06); }
     .companion .top { display:flex; gap:0.75rem; align-items:center; justify-content:space-between; padding:1rem; border-bottom:1px solid rgba(255,255,255,0.03); }
     .companion .tabs { display:flex; gap:0.5rem; background:rgba(255,255,255,0.02); padding:0.25rem; border-radius:999px; }
     .companion .tabs button { padding:8px 12px; border-radius:10px; background:transparent; border:none; color:#bcdff6; font-weight:700; }
     .companion .tabs button.active { background:linear-gradient(90deg, rgba(56,189,248,0.12), rgba(37,99,235,0.08)); color:white; box-shadow:0 6px 18px rgba(2,6,23,0.5); }
 
-    /* Quick tools layout */
     .quick-tools { padding:1rem; }
     .quick-input { width:100%; padding:0.9rem 1rem; border-radius:999px; border:1px solid rgba(255,255,255,0.06); background:rgba(0,0,0,0.25); color:white; font-size:1rem; }
     .quick-actions { display:grid; gap:0.6rem; grid-template-columns:1fr; margin-top:0.8rem; }
@@ -140,7 +131,6 @@
     .quick-btn .emoji { width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background:rgba(56,189,248,0.08); }
     @media(min-width:640px){ .quick-actions { grid-template-columns: repeat(3,1fr); } }
 
-    /* Chat area */
     .chat { padding:1rem; min-height:320px; display:flex; flex-direction:column; gap:0.75rem; }
     .chat-history { flex:1; overflow:auto; padding:0.5rem 0; display:flex; flex-direction:column; gap:0.5rem; max-height:50vh; }
     .bubble { max-width:86%; padding:0.75rem 1rem; border-radius:14px; font-size:0.95rem; }
@@ -150,10 +140,8 @@
     .file-btn{ padding:10px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); display:inline-grid; place-items:center; }
     .text-input { flex:1; padding:10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,0.06); background:rgba(0,0,0,0.24); color:white; font-size:1rem; }
 
-    /* Footer */
     footer { padding:1.2rem 0 2.4rem; text-align:center; color:#9fb0c8; font-size:0.9rem; }
 
-    /* Small accessibility + motion preferences */
     @media (prefers-reduced-motion:reduce){
       * { animation:none !important; transition:none !important; }
     }
@@ -171,23 +159,20 @@
   <header class="site-header" role="banner" aria-label="Main header">
     <div class="header-inner container">
       <div class="brand" aria-hidden="false">
-        
-<img src="icon-512.jpg"
-     srcset="icon-512-1x.jpg 1x, icon-512-2x.jpg 2x"
-     alt="Daily Dose of BCA logo"
-     class="w-9 h-9 rounded-lg object-cover shadow-md"
-     decoding="async" />
-
+        <!-- UPDATED LOGO (image) -->
+        <img src="mylogo.jpg"
+             srcset="mylogo-1x.jpg 1x, mylogo-2x.jpg 2x"
+             alt="Daily Dose of BCA logo"
+             class="logo-img"
+             decoding="async" />
         <div>
           <div class="title">Daily Dose of <span style="color:var(--accent)">BCA</span></div>
           <div style="font-size:11px;color:#93b5d8;margin-top:2px;">Notes • Prep • Companion</div>
         </div>
       </div>
 
-      <!-- Right-side: compact navigation -->
       <div style="display:flex; align-items:center; gap:0.5rem;">
         <button id="open-drawer" class="nav-toggle" aria-expanded="false" aria-controls="main-drawer" title="Open menu">
-          <!-- hamburger -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16" stroke="#dbeafe" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </button>
       </div>
@@ -202,15 +187,12 @@
   </header>
 
   <main class="container" role="main">
-    <!-- Hero -->
     <section class="hero">
       <h1>Master your subjects — efficiently.</h1>
       <p>Get focused notes, quick quizzes and one-week study plans — optimised for mobile learning and quick revision.</p>
     </section>
 
-    <!-- Subjects -->
     <section class="cards" aria-label="Subject cards" id="subject-cards-container">
-      <!-- Example card; copy for each subject -->
       <a class="card" href="python.html" aria-label="Open Python notes">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--accent)"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
         <h3>Python</h3>
@@ -238,7 +220,6 @@
       <!-- add other cards similarly -->
     </section>
 
-    <!-- Companion / AI -->
     <section class="companion" aria-labelledby="companion-heading">
       <div class="top">
         <div style="display:flex; gap:0.75rem; align-items:center;">
@@ -256,7 +237,6 @@
       </div>
 
       <div id="companion-body">
-        <!-- Quick view (default) -->
         <div id="view-quick" class="quick-tools" aria-hidden="false">
           <label for="quick-topic" class="sr-only">Topic</label>
           <input id="quick-topic" class="quick-input" placeholder="Topic — e.g. Python, Sorting algorithm, How to make a website..." />
@@ -299,7 +279,6 @@
           </div>
         </div>
 
-        <!-- Chat view (hidden by default) -->
         <div id="view-chat" style="display:none; padding:0.75rem;">
           <div class="chat" role="region" aria-label="Chat with AI">
             <div id="chat-history" class="chat-history" aria-live="polite">
@@ -330,7 +309,6 @@
     </footer>
   </main>
 
-  <!-- Lightweight modal for status -->
   <div id="message-modal" role="dialog" aria-modal="true" style="display:none;position:fixed;inset:0;z-index:70;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);backdrop-filter:blur(4px);">
     <div style="max-width:420px;background:var(--glass);padding:1rem;border-radius:14px;border:1px solid rgba(255,255,255,0.04);color:#e6eef8;">
       <div id="modal-text" style="margin-bottom:0.6rem;"></div>
@@ -340,20 +318,19 @@
 
   <script>
     // ============ Config ============
-    // remove any hard-coded api key in public files — use runtime injection instead
-    let API_KEY = "AIzaSyAUdAKZk8LrXjcalIFnNYoK28uzJJ9OvEM"; // <-- set at runtime, never commit a real key to source control
+    let API_KEY = ""; // keep keys out of client. Use server-side proxy in production.
 
     // ============ Header Drawer ============
     const openBtn = document.getElementById('open-drawer');
     const drawer = document.getElementById('main-drawer');
-    openBtn.addEventListener('click', () => {
+    openBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const expanded = openBtn.getAttribute('aria-expanded') === 'true';
       openBtn.setAttribute('aria-expanded', String(!expanded));
       if(!expanded) { drawer.style.display = 'block'; drawer.setAttribute('aria-hidden','false'); }
       else { drawer.style.display = 'none'; drawer.setAttribute('aria-hidden','true'); }
     });
 
-    // Close drawer when clicking outside (mobile)
     document.addEventListener('click', (e) => {
       if(!drawer.contains(e.target) && !openBtn.contains(e.target)) {
         drawer.style.display = 'none';
@@ -404,15 +381,13 @@
             const page = await pdf.getPage(p);
             const content = await page.getTextContent();
             text += content.items.map(it => it.str).join(' ') + "\n";
-            // stop early if huge
             if(text.length > 120000){ text = text.slice(0,120000) + "\n...[truncated]"; break; }
           }
         } else {
           text = await file.text();
         }
         closeModal();
-        appendMessage('ai', `I've processed "${file.name}". Ask me questions about it.`); // friendly confirmation
-        // store parsed context briefly
+        appendMessage('ai', `I've processed "${file.name}". Ask me questions about it.`);
         window.currentDoc = text.slice(0, 120000);
       } catch(err){
         console.error(err); closeModal(); showModal("Failed to read file.");
@@ -428,7 +403,6 @@
     function appendMessage(role, html){
       const div = document.createElement('div');
       div.className = 'bubble ' + (role === 'user' ? 'user' : 'ai');
-      // for AI messages we support markdown (quick tools use marked)
       div.innerHTML = (role === 'ai') ? marked.parse(html) : html;
       chatContainer.appendChild(div);
       scrollChatToBottom();
@@ -448,17 +422,14 @@
       if(!text) return;
       appendMessage('user', text);
       input.value = '';
-      // show loading bubble
       const loading = document.createElement('div');
       loading.className = 'bubble ai';
       loading.innerHTML = '<em style="color:var(--muted)">Thinking…</em>';
       chatContainer.appendChild(loading);
       scrollChatToBottom();
 
-      // Prepare payload with optional doc context
       const payloadText = (window.currentDoc ? `CONTEXT:\n${window.currentDoc}\n\nQUESTION:\n${text}` : text);
 
-      // callGemini (example, replace with your server-side proxy)
       callGemini([{ role:'user', parts:[{text: payloadText}] }])
         .then(resp => {
           loading.remove();
@@ -497,10 +468,8 @@
     function closeQuickResult(){ document.getElementById('quick-result-area').style.display = 'none'; }
 
     // ============ API call (example) ============
-    // IMPORTANT: do not put a real API key in the client. Use a server-side proxy that injects the key.
     async function callGemini(payload){
       if(!API_KEY){
-        // fallback mock response for local development
         return Promise.resolve("Demo response (no API key configured). Replace API_KEY with a runtime secret or call your backend proxy that holds the key.");
       }
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
