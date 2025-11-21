@@ -1,291 +1,640 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Daily Dose of BCA</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Dose of BCA</title>
+    <!-- Main Favicon (Legacy + Browser Tab) -->
+<link rel="icon" href="favicon.ico" type="image/x-icon">
 
-  <!-- Favicons -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <meta name="theme-color" content="#0f172a">
+<!-- PNG Favicons -->
+<link rel="icon" href="mylogo-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="mylogo-64x64.png" sizes="64x64" type="image/png">
 
-  <!-- Tailwind (utility) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+<!-- iOS Home Screen Icon -->
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
 
-  <style>
-    :root{--bg:#0b1220;--card:#071025;--muted:#9fb0c8;--accent:#38bdf8}
-    html,body{height:100%}
-    body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:linear-gradient(180deg,var(--bg) 0%, #071026 100%);color:#e6eef8;margin:0;-webkit-font-smoothing:antialiased}
+<!-- Android Home Screen Icons -->
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="icon" href="icon-512.png" sizes="512x512" type="image/png">
 
-    /* Mobile-first, cozy card layout */
-    .container{max-width:980px;margin:0 auto;padding:0 16px}
-    header{position:sticky;top:0;background:rgba(6,10,18,0.55);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.03);z-index:40}
-    .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+<!-- Theme Color for Mobile Browsers -->
+<meta name="theme-color" content="#0f172a">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sky-blue-accent: #38bdf8;
+            --bg-dark: #0f172a; /* Deep slate */
+        }
 
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo-img{width:44px;height:44px;border-radius:10px;object-fit:cover;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
-    .brand-title{line-height:1}
-    .brand-title h1{font-size:16px;margin:0;font-weight:800}
-    .brand-title p{margin:0;font-size:12px;color:var(--muted)}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent scrollbar from blobs */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-    /* Primary nav visible, wrapped on small screens */
-    nav.primary{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .nav-item{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.02);color:var(--muted);text-decoration:none;font-weight:700;font-size:13px}
-    .nav-item:hover{background:rgba(56,189,248,0.06);color:#eaf6ff}
-    .nav-cta{background:linear-gradient(90deg,var(--accent),#2563eb);color:white;border:none}
+        /* --- Glassmorphism Utilities --- */
+        .glass {
+            background: rgba(15, 23, 42, 0.6); /* Dark semi-transparent */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle white edge */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
 
-    main{padding:18px 0 64px}
-    .hero{padding:18px 0;text-align:center}
-    .hero h2{font-size:clamp(20px,6vw,36px);margin:0 0 6px 0;font-weight:800;background:linear-gradient(90deg,#fff,#aee8ff,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .hero p{margin:0;color:var(--muted);max-width:46ch;margin-left:auto;margin-right:auto}
+        .glass-strong {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(56, 189, 248, 0.1); /* Subtle blue edge */
+        }
 
-    /* Card grid: single column mobile, two on tablet, four on large */
-    .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));border:1px solid rgba(255,255,255,0.04);padding:14px;border-radius:14px;display:flex;flex-direction:column;gap:8px}
-    .card .meta{display:flex;align-items:center;gap:12px}
-    .card .meta .icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:rgba(56,189,248,0.06)}
-    .card h3{margin:0;font-size:16px}
-    .card p{margin:0;color:var(--muted);font-size:13px}
-    .card a.visit{margin-top:10px;align-self:flex-start;padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);font-weight:700;text-decoration:none}
+        /* --- Ambient Background Blobs --- */
+        .blob-cont {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 10s infinite ease-in-out alternate;
+        }
 
-    @media(min-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(min-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #0ea5e9; animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #6366f1; animation-delay: 2s; }
+        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #0f172a; opacity: 0.8; animation-delay: 4s; } /* Dark void in middle */
 
-    /* Companion card — compact on mobile */
-    .companion{margin-top:16px;border-radius:14px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04)}
-    .companion .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .companion .controls{display:flex;gap:8px}
-    .quick-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
-    @media(min-width:640px){.quick-actions{grid-template-columns:repeat(3,1fr)}}
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
 
-    /* chat */
-    .chat-area{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-    .messages{max-height:44vh;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:8px}
-    .msg{padding:10px 12px;border-radius:12px;max-width:86%}
-    .msg.ai{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
-    .msg.user{background:linear-gradient(90deg,var(--accent),#2563eb);color:white;align-self:flex-end}
+        /* --- Other Animations --- */
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px var(--sky-blue-accent), 0 0 10px var(--sky-blue-accent); }
+            50% { box-shadow: 0 0 20px var(--sky-blue-accent), 0 0 30px rgba(56, 189, 248, 0.6); }
+        }
+        .glow-button { animation: glow 3s infinite ease-in-out; }
 
-    footer{margin-top:18px;padding:20px 0;color:var(--muted);text-align:center;font-size:13px}
+        .content-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .content-section.is-visible { opacity: 1; transform: translateY(0); }
 
-    /* small helpers */
-    .muted{color:var(--muted)}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-  </style>
+        /* Markdown & Scrollbars */
+        .prose h3 { color: #38bdf8; font-weight: 700; margin-top: 1em; }
+        .prose ul { list-style-type: disc; padding-left: 1.5em; }
+        .prose strong { color: #fff; }
+        .prose code { background: rgba(0,0,0,0.3); padding: 2px 5px; rounded: 4px; color: #7dd3fc; font-family: monospace; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+
+        .tab-active { border-bottom: 2px solid #38bdf8; color: #38bdf8; text-shadow: 0 0 10px rgba(56,189,248,0.4); }
+        .tab-inactive { border-bottom: 2px solid transparent; color: #94a3b8; }
+        .tab-inactive:hover { color: #e2e8f0; }
+
+        /* --- Mobile-first improvements (overrides only for small screens) --- */
+        @media (max-width: 640px) {
+            /* Reduce background noise to improve contrast and performance */
+            .blob-1 { width: 280px; height: 280px; top: -20%; left: -20%; filter: blur(60px); opacity: 0.28; }
+            .blob-2 { width: 340px; height: 340px; bottom: -20%; right: -20%; filter: blur(60px); opacity: 0.28; }
+            .blob-3 { display: none; }
+
+            header { padding: 0.4rem 0; }
+            header .max-w-7xl { padding-left: 1rem; padding-right: 1rem; }
+            header .text-2xl { font-size: 1.05rem; } /* Slightly smaller title on phones */
+
+            /* Make navigation labels visible on mobile (keep the desktop behaviour intact) */
+            nav a span { display: inline !important; } /* overrides the hidden sm:inline so users can see text labels */
+            nav a { padding: 0.65rem 0.9rem; font-size: 0.95rem; }
+
+            /* Give header items more vertical spacing and allow wrapping */
+            header .max-w-7xl { height: auto; gap: 0.5rem; display: flex; align-items: center; justify-content: space-between; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+
+            /* Heading scaling for mobile */
+            .content-section.text-center h1 { font-size: 1.6rem; line-height: 1.15; margin-bottom: 0.6rem; }
+            .content-section.text-center p { font-size: 0.95rem; }
+
+            /* Cards: make them larger, single column, comfortable touch targets */
+            #subject-cards-container { grid-template-columns: 1fr !important; gap: 14px !important; }
+            #subject-cards-container a { padding: 1rem !important; border-radius: 1rem !important; }
+            #subject-cards-container h2 { font-size: 1.05rem !important; }
+            #subject-cards-container p { font-size: 0.92rem !important; }
+
+            /* AI Study Companion compact view */
+            .glass-strong .p-6 { padding: 0.9rem !important; }
+            .glass-strong .border-b { padding-bottom: 0.6rem; }
+
+            /* Tabs become full-width pill buttons for clearer touch targets */
+            .glass-strong .flex.bg-black\/20 { padding: 0.25rem; gap: 0.25rem; }
+            #tab-quick, #tab-chat { padding: 0.5rem 0.75rem; font-size: 0.86rem; border-radius: 0.75rem; }
+
+            /* Quick tools stack vertically for mobile */
+            #view-quick .grid { grid-template-columns: 1fr !important; }
+            #view-quick .grid button { padding: 1rem !important; }
+
+            #quick-topic { font-size: 1rem; padding: 0.9rem; }
+
+            /* Quick result area: make it easier to dismiss and read */
+            #quick-result-area { padding: 0.9rem !important; }
+
+            /* Chat area: reduce min-height and increase input targets */
+            #view-chat { min-height: 360px !important; }
+            #chat-history { padding-top: 6rem !important; }
+            #chat-input { padding: 0.75rem 3rem 0.75rem 1rem !important; font-size: 0.98rem; }
+            #chat-history .glass, #chat-history .bg-gradient-to-br { max-width: 92% !important; }
+
+            /* File upload and buttons: slightly bigger */
+            .mt-auto .p-3 { padding: 0.6rem !important; }
+
+            footer { padding: 1.25rem 1rem; }
+            footer p { font-size: 0.88rem; }
+            footer a { padding: 0.7rem 1.25rem; font-size: 0.95rem; }
+
+            /* Modal sizing */
+            #message-modal .glass-strong { padding: 1rem; }
+
+            /* Improve focus outlines for mobile keyboard users */
+            input:focus, button:focus { outline: 3px solid rgba(56,189,248,0.12); outline-offset: 2px; }
+        }
+
+        /* Small adjustments for slightly larger phones or small tablets */
+        @media (min-width: 641px) and (max-width: 900px) {
+            .blob-1, .blob-2 { filter: blur(70px); }
+            .content-section.text-center h1 { font-size: 2.2rem; }
+            #view-chat { min-height: 420px; }
+        }
+
+        /* keep other desktop rules intact */
+    </style>
 </head>
-<body>
-  <div class="container">
-    <!-- Header with always-visible nav -->
-    <header>
-      <div class="header-inner">
-        <!-- Left: logo and title stacked on mobile for clarity -->
-        <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-          <img src="mylogo.jpg" alt="Daily Dose of BCA" class="logo-img" decoding="async" style="width:48px;height:48px;border-radius:12px;" />
-          <div class="brand-title" style="display:flex;flex-direction:column;min-width:0;">
-            <h1 style="font-size:15px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Daily Dose of <span style="color:var(--accent)">BCA</span></h1>
-            <p class="muted" style="font-size:12px;margin-top:2px;">Notes · Revision · Companion</p>
-          </div>
-        </div>
+<body class="min-h-screen antialiased">
 
-        <!-- Right: clear, evenly spaced nav — wraps below on very small screens -->
-        <nav class="primary" aria-label="Primary navigation" style="gap:10px;display:flex;align-items:center;justify-content:flex-end;flex:1">
-          <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;width:100%;">
-            <a class="nav-item" href="4assign.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">📂 Assignments</a>
-            <a class="nav-item" href="4record.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">📝 Record</a>
-            <a class="nav-item" href="python.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">🐍 Python</a>
-            <a class="nav-item" href="os.html" style="flex-shrink:0;padding:10px 12px;border-radius:12px;">💽 OS</a>
-            <a class="nav-item nav-cta" href="exclusive.html" style="flex-shrink:0;padding:10px 14px;border-radius:12px;">⭐ Premium</a>
-          </div>
-        </nav>
-      </div>
+    <div class="blob-cont">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div id="loading-overlay" class="fixed inset-0 flex items-center justify-center z-50 bg-[#0f172a] transition-opacity duration-500">
+        <svg class="animate-spin w-16 h-16 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+    </div>
+
+    <header class="fixed top-0 left-0 right-0 z-40 glass transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-center">
+            <div class="flex items-center gap-3">
+                <!-- Responsive logo with 1x/2x options -->
+                <img src="mylogo.png" srcset="mylogo-1x.png 1x, mylogo-2x.png 2x" alt="Daily Dose of BCA logo" class="w-10 h-10 rounded-md object-contain shadow-md">
+                <div class="text-2xl font-black tracking-tight text-white drop-shadow-lg text-center">
+                    <div><span class="text-sky-400">Daily Dose of </span>BCA</div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <h2 id="hero-title">Master your subjects — clearly and cozy.</h2>
-        <p>Quick notes, short quizzes and small study plans tuned for phone use. Tap any card to open detailed notes.</p>
-      </section>
-
-      <section class="grid" aria-label="Subjects">
-        <!-- repeatable cards -->
-        <article class="card">
-          <div class="meta">
-            <div class="icon">🐍</div>
-            <div>
-              <h3>Python</h3>
-              <p class="muted">Data structures, algorithms & small projects.</p>
-            </div>
-          </div>
-          <p class="muted">Short explanations, example code, and quick MCQs to test understanding.</p>
-          <a class="visit" href="python.html">Open Notes →</a>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <div class="icon">💽</div>
-            <div>
-              <h3>Operating System</h3>
-              <p class="muted">Concurrency, memory, file systems.</p>
-            </div>
-          </div>
-          <p class="muted">Concise summaries focused on exam essentials.</p>
-          <a class="visit" href="os.html">Open Notes →</a>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <div class="icon">📱</div>
-            <div>
-              <h3>MAD</h3>
-              <p class="muted">Mobile app development concepts.</p>
-            </div>
-          </div>
-          <p class="muted">Examples, mini-project ideas and practice questions.</p>
-          <a class="visit" href="mad.html">Open Notes →</a>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <div class="icon">📊</div>
-            <div>
-              <h3>AFM</h3>
-              <p class="muted">Accounting & finance basics.</p>
-            </div>
-          </div>
-          <p class="muted">Formula sheets and solved examples.</p>
-          <a class="visit" href="afm.html">Open Notes →</a>
-        </article>
-      </section>
-
-      <!-- Companion card: quick tools + chat -->
-      <section class="companion" aria-labelledby="companion-heading">
-        <div class="top">
-          <div style="display:flex;gap:12px;align-items:center">
-            <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#2563eb);display:grid;place-items:center;font-weight:800">✨</div>
-            <div>
-              <div id="companion-heading" style="font-weight:800">AI Study Companion</div>
-              <div class="muted" style="font-size:13px">Ask questions, upload notes (PDF), or use the quick tools below.</div>
-            </div>
-          </div>
-
-          <div class="controls">
-            <button id="tab-quick" class="nav-item" aria-pressed="true">Quick Tools</button>
-            <button id="tab-chat" class="nav-item">Chat</button>
-          </div>
+    <div class="pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex flex-col">
+        
+        <div class="content-section text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-100 to-sky-400 mb-6 drop-shadow-sm">
+                Master Your SUBJECTS
+            </h1>
+            <p class="text-lg text-gray-300 max-w-2xl mx-auto font-light">
+                Just get enough attandance, the rest I will takecare of the notes and Exam prepration.
+            </p>
         </div>
 
-        <div id="view-quick">
-          <div style="margin-top:12px">
-            <input id="quick-topic" type="text" placeholder="Enter topic (e.g. Binary search)" class="w-full rounded-xl px-4 py-3 bg-transparent border border-white/6 placeholder:muted text-white" />
-          </div>
+        <div class="content-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20" id="subject-cards-container">
+            <!-- Cards kept same, spacing and padding adjusted by CSS for mobile -->
+            <a href="python.html" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+                <div class="flex flex-col h-full">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
+                        <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-2">Python</h2>
+                    <p class="text-gray-400 text-sm flex-grow font-light leading-relaxed">Data structures, algorithms, and practical projects.</p>
+                    <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
+                </div>
+            </a>
 
-          <div class="quick-actions">
-            <button class="card" onclick="triggerQuickTask('explain')">
-              <div style="font-weight:800">Explain</div>
-              <div class="muted">Short, bolded key terms and simple examples.</div>
-            </button>
+            <a href="os.html" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+                <div class="flex flex-col h-full">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
+                        <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-2">Operating System</h2>
+                    <p class="text-gray-400 text-sm flex-grow font-light leading-relaxed">Concurrency, memory management, and file systems.</p>
+                    <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
+                </div>
+            </a>
 
-            <button class="card" onclick="triggerQuickTask('quiz')">
-              <div style="font-weight:800">Quiz Me</div>
-              <div class="muted">3 quick MCQs — answers after questions.</div>
-            </button>
+            <a href="mad.html" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+                <div class="flex flex-col h-full">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
+                        <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-2">MAD</h2>
+                    <p class="text-gray-400 text-sm flex-grow font-light leading-relaxed">.--.</p>
+                    <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
+                </div>
+            </a>
 
-            <button class="card" onclick="triggerQuickTask('plan')">
-              <div style="font-weight:800">Study Plan</div>
-              <div class="muted">1-week roadmap with daily targets.</div>
-            </button>
-          </div>
-
-          <div id="quick-result-area" style="display:none;margin-top:12px">
-            <div class="card">
-              <div id="quick-result-title" style="font-weight:800">Result</div>
-              <div id="quick-loading" class="muted" style="display:none">Loading…</div>
-              <div id="quick-response" class="muted"></div>
-            </div>
-          </div>
+            <a href="afm.html" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+                <div class="flex flex-col h-full">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
+                        <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-2">AFM</h2>
+                    <p class="text-gray-400 text-sm flex-grow font-light leading-relaxed">.--.</p>
+                    <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
+                </div>
+            </a>
+            <a href="seo.html" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+                <div class="flex flex-col h-full">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
+                        <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-2">SEO</h2>
+                    <p class="text-gray-400 text-sm flex-grow font-light leading-relaxed">.--.</p>
+                    <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
+                </div>
+            </a>
+            <a href="tc.html" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+                <div class="flex flex-col h-full">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
+                        <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-2">TC</h2>
+                    <p class="text-gray-400 text-sm flex-grow font-light leading-relaxed">.--.</p>
+                    <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
+                </div>
+            </a>
+            <a href="nano.html" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+                <div class="flex flex-col h-full">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
+                        <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-2">Nano</h2>
+                    <p class="text-gray-400 text-sm flex-grow font-light leading-relaxed">.--.</p>
+                    <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
+                </div>
+            </a>
         </div>
 
-        <div id="view-chat" style="display:none">
-          <div class="chat-area">
-            <div class="messages" id="chat-history" aria-live="polite">
-              <div class="msg ai">Hi — I'm your tutor. Upload a PDF or ask anything.</div>
+        <div class="content-section max-w-5xl mx-auto glass-strong rounded-3xl shadow-2xl relative overflow-hidden mb-20">
+            <div class="p-6 border-b border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-900/50">
+                        <span class="text-2xl">✨</span>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">AI Study Companion</h2>
+                        <p class="text-xs text-sky-300 font-medium">Powered by Waheed</p>
+                    </div>
+                </div>
+                <div class="flex bg-black/20 p-1 rounded-xl">
+                    <button onclick="switchTab('quick')" id="tab-quick" class="px-6 py-2 rounded-lg text-sm font-bold transition-all duration-300 bg-white/10 text-white shadow-sm">Quick Tools</button>
+                    <button onclick="switchTab('chat')" id="tab-chat" class="px-6 py-2 rounded-lg text-sm font-bold transition-all duration-300 text-gray-400 hover:text-white">Chat</button>
+                </div>
             </div>
 
-            <div style="display:flex;gap:8px;align-items:center">
-              <input id="file-upload" type="file" accept=".pdf,.txt,.md" style="display:none" onchange="handleFileUpload(this)" />
-              <button onclick="document.getElementById('file-upload').click()" class="nav-item">📁 Upload</button>
-              <input id="chat-input" type="text" placeholder="Type a question..." class="flex-1 rounded-xl px-4 py-3 bg-transparent border border-white/6 text-white" onkeydown="if(event.key==='Enter') handleChatSend()" />
-              <button onclick="handleChatSend()" class="nav-cta px-4 py-2 rounded-xl">Send</button>
+            <div class="p-6 min-h-[400px]">
+                
+                <div id="view-quick" class="animate-fade-in">
+                    <div class="max-w-3xl mx-auto">
+                        <label class="block text-sm font-medium text-sky-100 mb-3 ml-1">Type anything below and click any of 3 buttons below.</label>
+                        <input type="text" id="quick-topic" placeholder="e.g. Python, How to make a website..." 
+                            class="w-full p-4 bg-black/30 border border-white/10 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50 transition-all text-lg mb-8 backdrop-blur-sm">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                            <button onclick="triggerQuickTask('explain')" class="p-5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-sky-400/30 rounded-2xl text-left group transition-all duration-300 hover:-translate-y-1">
+                                <div class="text-2xl mb-2 p-2 bg-sky-500/10 rounded-lg w-fit">📝</div>
+                                <h3 class="font-bold text-white">Explain</h3>
+                                <p class="text-xs text-gray-400 mt-1 group-hover:text-sky-200">Clear, concise notes.</p>
+                            </button>
+                            <button onclick="triggerQuickTask('quiz')" class="p-5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-sky-400/30 rounded-2xl text-left group transition-all duration-300 hover:-translate-y-1">
+                                <div class="text-2xl mb-2 p-2 bg-sky-500/10 rounded-lg w-fit">❓</div>
+                                <h3 class="font-bold text-white">Quiz Me</h3>
+                                <p class="text-xs text-gray-400 mt-1 group-hover:text-sky-200">Test your knowledge.</p>
+                            </button>
+                            <button onclick="triggerQuickTask('plan')" class="p-5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-sky-400/30 rounded-2xl text-left group transition-all duration-300 hover:-translate-y-1">
+                                <div class="text-2xl mb-2 p-2 bg-sky-500/10 rounded-lg w-fit">📅</div>
+                                <h3 class="font-bold text-white">Study Plan</h3>
+                                <p class="text-xs text-gray-400 mt-1 group-hover:text-sky-200">1-week roadmap.</p>
+                            </button>
+                        </div>
+
+                        <div id="quick-result-area" class="hidden bg-black/40 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
+                            <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+                                <h3 id="quick-result-title" class="font-bold text-white">Result</h3>
+                                <button onclick="closeQuickResult()" class="text-gray-400 hover:text-white text-sm">&times;</button>
+                            </div>
+                            <div id="quick-loading" class="hidden flex items-center justify-center py-8">
+                                <svg class="animate-spin h-6 w-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle class="opacity-25" cx="12" cy="12" r="10"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            </div>
+                            <div id="quick-response" class="prose prose-invert prose-sm max-w-none text-gray-200"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-chat" class="hidden h-[500px] flex flex-col relative animate-fade-in">
+                    <div class="absolute top-0 right-0 z-10">
+                         <button onclick="clearChatHistory()" class="text-[10px] uppercase tracking-wider text-red-300 hover:text-white bg-red-500/10 px-2 py-1 rounded hover:bg-red-500/30 transition">Clear History</button>
+                    </div>
+                    
+                    <div id="doc-indicator" class="hidden absolute top-0 left-0 right-0 z-20 bg-sky-600/20 border border-sky-500/30 rounded-lg px-4 py-2 flex justify-between items-center backdrop-blur-md mx-1 mt-1">
+                        <div class="flex items-center gap-2 text-xs text-sky-100">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span id="doc-name" class="font-bold truncate max-w-[150px]">Document.pdf</span>
+                            <span class="text-sky-300 opacity-75 text-[10px] tracking-wide uppercase">Reading active</span>
+                        </div>
+                        <button onclick="clearDocument()" class="text-sky-300 hover:text-white hover:bg-sky-500/20 rounded p-1 transition">&times;</button>
+                    </div>
+
+                    <div id="chat-history" class="flex-grow overflow-y-auto custom-scrollbar pr-2 mb-4 space-y-4 pt-10">
+                        <div class="flex justify-start">
+                            <div class="glass text-gray-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm border-white/5 text-sm">
+                                Hi! I'm your AI Tutor. Upload a PDF to analyze it, or just ask me anything!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-auto relative flex items-center gap-3 p-1">
+                        <input type="file" id="file-upload" class="hidden" accept=".txt,.pdf,.md" onchange="handleFileUpload(this)">
+                        <button onclick="document.getElementById('file-upload').click()" class="p-3 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-sky-300 transition border border-white/5" title="Upload Document">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                        </button>
+                        <div class="relative flex-grow">
+                            <input type="text" id="chat-input" placeholder="Type your message..." 
+                                class="w-full pl-5 pr-12 py-3 bg-black/30 border border-white/10 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 backdrop-blur-sm transition shadow-inner"
+                                onkeydown="if(event.key === 'Enter') handleChatSend()">
+                            <button onclick="handleChatSend()" class="absolute right-2 top-2 p-1.5 bg-sky-500 hover:bg-sky-400 text-white rounded-full transition shadow-lg shadow-sky-900/50">
+                                <svg class="w-5 h-5 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 0l-7 7m7-7l7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </section>
 
-    </main>
+        <!-- Action buttons (moved from header) placed between AI Study Companion and Footer -->
+        <div class="max-w-5xl mx-auto my-6 flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
+            <a href="4assign.html" class="w-full sm:w-auto flex items-center gap-3 justify-center py-3 px-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition shadow-sm">
+                <svg class="w-5 h-5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                <span class="text-sm font-semibold text-white">Assignments</span>
+            </a>
 
-    <footer>
-      <div>Get personalised notes and a class chatbot tailored for you.</div>
-      <div style="margin-top:8px"><a href="exclusive.html" class="nav-cta px-4 py-2 rounded-xl">Premium Content</a></div>
-      <div style="margin-top:12px" class="muted">© 2024 Learning Hub</div>
-    </footer>
-  </div>
+            <a href="4record.html" class="w-full sm:w-auto flex items-center gap-3 justify-center py-3 px-6 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold rounded-2xl hover:scale-[1.02] transition shadow-lg">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span class="text-sm font-semibold">Record Work</span>
+            </a>
+        </div>
 
-  <script>
-    // simple tab behavior
-    const tQuick = document.getElementById('tab-quick');
-    const tChat = document.getElementById('tab-chat');
-    const vQuick = document.getElementById('view-quick');
-    const vChat = document.getElementById('view-chat');
-    tQuick.addEventListener('click', ()=>{tQuick.classList.add('nav-cta');tChat.classList.remove('nav-cta');vQuick.style.display='';vChat.style.display='none'});
-    tChat.addEventListener('click', ()=>{tChat.classList.add('nav-cta');tQuick.classList.remove('nav-cta');vChat.style.display='';vQuick.style.display='none'});
+        <footer" class="mt-auto py-8 border-t border-white/10 text-center relative z-10">
+            <p class="text-gray-400 mb-6 text-sm font-light">Get personalised class chatbot, class materials encrafted espically for you.</p>
+            <a href="exclusive.html" class="inline-block py-3 px-10 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold rounded-full shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 hover:scale-105 transition-all duration-300">
+                Premium Content
+            </a>
+            <p class="text-gray-600 mt-8 text-xs">&copy; 2024 Learning Hub. All rights reserved(Maybe).</p>
+        </footer>
+    </div>
 
-    // lightweight utilities from previous version (kept concise)
-    function show(el){el.style.display=''}
-    function hide(el){el.style.display='none'}
+    <div id="message-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/80 backdrop-blur-sm">
+        <div class="glass-strong p-6 rounded-2xl max-w-sm w-full mx-4 shadow-2xl border border-white/10">
+            <h3 class="text-xl font-bold text-white mb-2">Notice</h3>
+            <p id="modal-text" class="text-gray-300 mb-6 text-sm"></p>
+            <button onclick="closeModal()" class="w-full py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-semibold transition">Okay</button>
+        </div>
+    </div>
 
-    // quick tools & chat placeholders
-    function triggerQuickTask(type){
-      const topic = document.getElementById('quick-topic').value.trim();
-      if(!topic){alert('Please enter a topic');return}
-      const resArea = document.getElementById('quick-result-area');
-      document.getElementById('quick-loading').style.display = '';
-      resArea.style.display = ''; document.getElementById('quick-response').innerHTML = '';
+    <script>
+        // === CONFIG ===
+        const apiKey = "AIzaSyAUdAKZk8LrXjcalIFnNYoK28uzJJ9OvEM"; // PASTE GEMINI API KEY HERE
 
-      // mock response for UI — replace with real API call
-      setTimeout(()=>{
-        document.getElementById('quick-loading').style.display = 'none';
-        document.getElementById('quick-response').innerHTML = '<strong>'+ type.toUpperCase() +'</strong>: Sample result for "'+topic+'". Replace with real API call.';
-      },700);
-    }
+        // === ANIMATIONS ===
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-overlay');
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; initScroll(); }, 500);
+            }, 800);
+            loadChatHistory();
 
-    // file -> extract text (pdf.js) then store small window of content
-    async function handleFileUpload(input){
-      const file = input.files?.[0]; if(!file)return; alert('Processing '+file.name+' — this may take a few seconds');
-      try{
-        if(file.type==='application/pdf'){
-          const data = await file.arrayBuffer();
-          const pdf = await pdfjsLib.getDocument({data}).promise; let text='';
-          for(let p=1;p<=Math.min(pdf.numPages,6);p++){ const page = await pdf.getPage(p); const content = await page.getTextContent(); text += content.items.map(i=>i.str).join(' ')+"\n"; }
-          window.currentDoc = text.slice(0,120000);
-        } else { window.currentDoc = await file.text(); }
-        const h = document.getElementById('chat-history'); h.insertAdjacentHTML('beforeend', '<div class="msg ai">Document uploaded — ask about it now.</div>');
-      }catch(e){console.error(e);alert('Failed to read file');}
-      input.value = '';
-    }
+            // Accessibility: ensure quick tab is default on small screens
+            if(window.innerWidth <= 640) switchTab('quick');
+        });
 
-    function appendChat(role, text){
-      const h = document.getElementById('chat-history');
-      const div = document.createElement('div'); div.className = 'msg '+(role==='user'?'user':'ai'); div.textContent = text; h.appendChild(div); h.scrollTop = h.scrollHeight;
-    }
+        function initScroll() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) entry.target.classList.add('is-visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.content-section').forEach(s => observer.observe(s));
+        }
 
-    function handleChatSend(){
-      const input = document.getElementById('chat-input'); if(!input) return;
-      const text = input.value.trim(); if(!text) return; appendChat('user', text); input.value=''; appendChat('ai','Thinking...');
-      setTimeout(()=>{ appendChat('ai','Demo answer for: '+text+' (replace with real model call).'); },700);
-    }
-  </script>
+        // === TABS ===
+        function switchTab(tab) {
+            const quick = document.getElementById('view-quick');
+            const chat = document.getElementById('view-chat');
+            const bQuick = document.getElementById('tab-quick');
+            const bChat = document.getElementById('tab-chat');
+
+            if (tab === 'quick') {
+                quick.classList.remove('hidden');
+                chat.classList.add('hidden');
+                bQuick.classList.add('bg-white/10', 'text-white', 'shadow-sm'); bQuick.classList.remove('text-gray-400');
+                bChat.classList.remove('bg-white/10', 'text-white', 'shadow-sm'); bChat.classList.add('text-gray-400');
+            } else {
+                quick.classList.add('hidden');
+                chat.classList.remove('hidden');
+                bChat.classList.add('bg-white/10', 'text-white', 'shadow-sm'); bChat.classList.remove('text-gray-400');
+                bQuick.classList.remove('bg-white/10', 'text-white', 'shadow-sm'); bQuick.classList.add('text-gray-400');
+                document.getElementById('chat-history').scrollTop = document.getElementById('chat-history').scrollHeight;
+            }
+        }
+
+        // === MODAL ===
+        const modal = document.getElementById('message-modal');
+        const mText = document.getElementById('modal-text');
+        function showModal(txt) { mText.textContent = txt; modal.classList.remove('hidden'); }
+        function closeModal() { modal.classList.add('hidden'); }
+
+        // === FILE UPLOAD ===
+        let currentDocContext = "";
+        async function handleFileUpload(input) {
+            const file = input.files[0];
+            if(!file) return;
+            showModal(`Processing ${file.name}...`);
+            
+            try {
+                let text = "";
+                if(file.type === "application/pdf") text = await readPDF(file);
+                else text = await file.text();
+                
+                if(text.length > 50000) text = text.substring(0, 50000) + "...[truncated]";
+                currentDocContext = text;
+                
+                document.getElementById('doc-indicator').classList.remove('hidden');
+                document.getElementById('doc-name').textContent = file.name;
+                closeModal();
+                appendMessage('ai', `I've analyzed **${file.name}**. Ask me anything about it!`, false);
+            } catch(e) {
+                console.error(e);
+                closeModal();
+                showModal("Error reading file.");
+            }
+            input.value = '';
+        }
+
+        async function readPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            let fullText = "";
+            for(let i=1; i<=pdf.numPages; i++){
+                const page = await pdf.getPage(i);
+                const content = await page.getTextContent();
+                fullText += content.items.map(item => item.str).join(' ') + "\n";
+            }
+            return fullText;
+        }
+        
+        function clearDocument() {
+            currentDocContext = "";
+            document.getElementById('doc-indicator').classList.add('hidden');
+        }
+
+        // === CHAT & AI ===
+        let chatHistory = [];
+        
+        function loadChatHistory() {
+            const saved = localStorage.getItem('glass_chat_v1');
+            if(saved) {
+                chatHistory = JSON.parse(saved);
+                const container = document.getElementById('chat-history');
+                if(chatHistory.length) container.innerHTML = '';
+                chatHistory.forEach(m => appendMessage(m.role, m.text, false));
+            }
+        }
+
+        function clearChatHistory() {
+            localStorage.removeItem('glass_chat_v1');
+            chatHistory = [];
+            document.getElementById('chat-history').innerHTML = `<div class="flex justify-start"><div class="glass text-gray-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm border-white/5 text-sm">History cleared.</div></div>`;
+        }
+
+        async function handleChatSend() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if(!msg) return;
+            
+            appendMessage('user', msg, true);
+            input.value = '';
+
+            // Loading bubble
+            const container = document.getElementById('chat-history');
+            const loaderId = 'load-'+Date.now();
+            container.insertAdjacentHTML('beforeend', `<div id="${loaderId}" class="flex justify-start"><div class="glass p-4 rounded-2xl rounded-tl-none text-gray-400 text-sm"><span class="animate-pulse">Thinking...</span></div></div>`);
+            container.scrollTop = container.scrollHeight;
+
+            try {
+                let apiMsgs = chatHistory.map(m => ({ role: m.role==='user'?'user':'model', parts:[{text: m.text}] }));
+                
+                if(currentDocContext) {
+                    const last = apiMsgs[apiMsgs.length-1];
+                    if(last && last.role === 'user') {
+                        last.parts[0].text = `CONTEXT:\n${currentDocContext}\n\nQUESTION:\n${last.parts[0].text}`;
+                    }
+                }
+                
+                const reply = await callGemini(apiMsgs);
+                document.getElementById(loaderId).remove();
+                appendMessage('ai', reply, true);
+            } catch(e) {
+                document.getElementById(loaderId).remove();
+                appendMessage('ai', "Connection error.", false);
+            }
+        }
+
+        function appendMessage(role, text, save) {
+            const container = document.getElementById('chat-history');
+            const div = document.createElement('div');
+            div.className = `flex ${role==='user' ? 'justify-end' : 'justify-start'}`;
+            
+            // User: Blue Gradient, AI: Glass
+            const bubbleClass = role === 'user' 
+                ? 'bg-gradient-to-br from-sky-500 to-blue-600 text-white p-4 rounded-2xl rounded-tr-none max-w-[85%] shadow-lg text-sm' 
+                : 'glass text-gray-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm border-white/5 text-sm prose prose-invert prose-sm';
+
+            div.innerHTML = `<div class="${bubbleClass}">${role==='user' ? text : marked.parse(text)}</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+
+            if(save) {
+                chatHistory.push({role, text});
+                localStorage.setItem('glass_chat_v1', JSON.stringify(chatHistory));
+            }
+        }
+
+        // === QUICK TOOLS ===
+        async function triggerQuickTask(type) {
+            const topic = document.getElementById('quick-topic').value.trim();
+            if(!topic) { showModal("Please enter a topic."); return; }
+            
+            document.getElementById('quick-result-area').classList.remove('hidden');
+            document.getElementById('quick-loading').classList.remove('hidden');
+            document.getElementById('quick-loading').classList.add('flex');
+            document.getElementById('quick-response').innerHTML = '';
+
+            let prompt = "";
+            if(type === 'explain') prompt = `Explain "${topic}" simply. Bold key terms.`;
+            else if(type === 'quiz') prompt = `3 multiple choice questions on "${topic}". Answers at bottom.`;
+            else prompt = `1-week study plan for "${topic}". Bullet points.`;
+
+            try {
+                const res = await callGemini([{ role:'user', parts:[{text: prompt}] }]);
+                document.getElementById('quick-loading').classList.add('hidden');
+                document.getElementById('quick-loading').classList.remove('flex');
+                document.getElementById('quick-response').innerHTML = marked.parse(res);
+            } catch(e) {
+                document.getElementById('quick-loading').classList.add('hidden');
+                document.getElementById('quick-response').innerHTML = "Error.";
+            }
+        }
+        function closeQuickResult() { document.getElementById('quick-result-area').classList.add('hidden'); }
+
+        // === API CALL ===
+        async function callGemini(payload) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({contents:payload}) });
+            if(!res.ok) throw new Error(res.status);
+            const data = await res.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+        }
+    </script>
 </body>
 </html>
