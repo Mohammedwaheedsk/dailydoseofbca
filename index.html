@@ -1,143 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Daily Dose of BCA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Daily Dose of BCA</title>
 
-    <!-- Favicons -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="mylogo-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="mylogo-64x64.png" sizes="64x64" type="image/png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
-    <link rel="icon" href="icon-512.png" sizes="512x512" type="image/png">
-    <meta name="theme-color" content="#0f172a">
+  <!-- Favicons (keep your own files) -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="mylogo-32x32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="mylogo-64x64.png" sizes="64x64" type="image/png">
+  <meta name="theme-color" content="#0f172a">
 
-    <!-- Tailwind (CDN) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind for layout -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Loader overlay */
+#loading-overlay{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172ae6;   /* dark with slight transparency */
+  z-index: 9999;
+  transition: opacity .45s ease;
+}
+#loading-overlay.hidden{
+  opacity: 0;
+  pointer-events: none;
+}
 
-    <style>
-        :root{
-            --sky-blue-accent: #38bdf8;
-            --bg-dark: #0f172a;
-        }
-        body{
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: #f8fafc;
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+/* Sticker loader */
+.sticker-wrap{
+  width: 140px;
+  height: 140px;
+  display: grid;
+  place-items: center;
+}
 
-        /* Glass */
-        .glass{
-            background: rgba(15,23,42,0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-        }
-        .glass-strong{
-            background: rgba(30,41,59,0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(56,189,248,0.1);
-        }
+.sticker{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: spin 1.4s linear infinite;
+}
 
-        /* Ambient blobs */
-        .blob-cont{ position: fixed; top:0; left:0; width:100%; height:100vh; z-index:-1; overflow:hidden; pointer-events:none; }
-        .blob{ position:absolute; border-radius:50%; filter: blur(80px); opacity:0.4; animation: float 10s infinite ease-in-out alternate; }
-        .blob-1{ top:-10%; left:-10%; width:500px; height:500px; background:#0ea5e9; }
-        .blob-2{ bottom:-10%; right:-10%; width:600px; height:600px; background:#6366f1; }
-        .blob-3{ top:40%; left:40%; width:400px; height:400px; background:#0f172a; opacity:0.8; }
+/* Rotation animation */
+@keyframes spin{
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
 
-        @keyframes float{ 0%{ transform: translate(0,0) scale(1);} 100%{ transform: translate(30px,50px) scale(1.1);} }
+@media (max-width:640px){
+  .sticker-wrap{ width: 100px; height: 100px; }
+}
 
-        /* Content fade-in */
-        .content-section{ opacity:0; transform: translateY(20px); transition: opacity .8s ease-out, transform .8s ease-out; }
-        .content-section.is-visible{ opacity:1; transform: translateY(0); }
+    :root{
+      --bg-dark: #0f172a;
+      --overlay-bg: rgba(15,23,42,0.95);
+    }
+    body{
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: #f8fafc;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-        /* Prose tweaks */
-        .prose h3{ color:#38bdf8; font-weight:700; margin-top:1em; }
-        .custom-scrollbar::-webkit-scrollbar{ width:6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.2); border-radius:10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover{ background: rgba(255,255,255,0.4); }
+    /* Loader overlay */
+    #loading-overlay{
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--overlay-bg);
+      z-index: 9999;
+      transition: opacity .45s ease;
+      will-change: opacity;
+    }
+    #loading-overlay.hidden{
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        /* Tabs (kept minimal in case used elsewhere) */
-        .tab-active{ border-bottom:2px solid #38bdf8; color:#38bdf8; text-shadow:0 0 10px rgba(56,189,248,0.4); }
-        .tab-inactive{ border-bottom:2px solid transparent; color:#94a3b8; }
-        .tab-inactive:hover{ color:#e2e8f0; }
+    /* Sticker (rotating) */
+    .sticker-wrap{
+      display: grid;
+      place-items: center;
+      width: 140px;
+      height: 140px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      box-shadow: 0 18px 40px rgba(2,6,23,0.75);
+      padding: 10px;
+      transform-origin: center center;
+    }
 
-        /* Mobile-first improvements */
-        @media (max-width: 640px) {
-            /* center header on mobile */
-            header .max-w-7xl { justify-content: center !important; text-align: center !important; }
-            header .flex.items-center { justify-content: center !important; width: 100%; }
+    .sticker{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transform-origin: center center;
+      /* continuous rotation */
+      animation: spin 1400ms linear infinite, pulseScale 2000ms ease-in-out infinite;
+      will-change: transform;
+      border-radius: 12px; /* optional; remove if you want exact cutout */
+      background: transparent;
+    }
 
-            /* reduce blob intensity */
-            .blob-1{ width:280px; height:280px; top:-20%; left:-20%; filter:blur(60px); opacity:0.28; }
-            .blob-2{ width:340px; height:340px; bottom:-20%; right:-20%; filter:blur(60px); opacity:0.28; }
-            .blob-3{ display:none; }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes pulseScale {
+      0%   { transform: rotate(0deg) scale(0.98); }
+      50%  { transform: rotate(180deg) scale(1.02); }
+      100% { transform: rotate(360deg) scale(0.98); }
+    }
 
-            header{ padding:0.4rem 0; }
-            header .text-2xl{ font-size:1.05rem; }
+    /* Small accessible text (hidden visually but available to screen readers) */
+    .sr-only{
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
 
-            /* cards stack and spacing */
-            #subject-cards-container{ grid-template-columns: 1fr !important; gap:14px !important; }
-            #subject-cards-container a{ padding:1rem !important; border-radius:1rem !important; }
-            #subject-cards-container h2{ font-size:1.05rem !important; }
+    /* Page baseline styles (kept minimal) */
+    .glass{
+      background: rgba(15,23,42,0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    }
+    .content-section{ opacity:0; transform: translateY(20px); transition: opacity .8s ease-out, transform .8s ease-out; }
+    .content-section.is-visible{ opacity:1; transform: translateY(0); }
 
-            footer{ padding:1.25rem 1rem; }
-            footer p{ font-size:0.88rem; }
-            footer a{ padding:0.7rem 1.25rem; font-size:0.95rem; }
-
-            input:focus, button:focus { outline: 3px solid rgba(56,189,248,0.12); outline-offset:2px; }
-        }
-
-        @media (min-width:641px) and (max-width:900px){
-            .blob-1, .blob-2{ filter: blur(70px); }
-            .content-section.text-center h1{ font-size:2.2rem; }
-        }
-    </style>
+    /* Responsive tweaks */
+    @media (max-width:640px){
+      .sticker-wrap{ width: 96px; height: 96px; border-radius: 14px; padding: 8px; }
+      .sticker{ animation-duration: 1200ms, 1800ms; }
+    }
+  </style>
+  
 </head>
-<body class="min-h-screen antialiased">
-
-    <div class="blob-cont">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+<body>
+    <div id="loading-overlay">
+    <div class="sticker-wrap">
+        <img src="sticker.png" class="sticker" alt="Loading...">
     </div>
+</div>
 
-    <div id="loading-overlay" class="fixed inset-0 flex items-center justify-center z-50 bg-[#0f172a] transition-opacity duration-500">
-        <svg class="animate-spin w-16 h-16 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+
+  <!-- Loader overlay with rotating sticker.
+       Replace src with your sticker file (PNG/WebP/GIF). Use srcset for retina if available. -->
+  <div id="loading-overlay" role="status" aria-live="polite" aria-label="Loading content">
+    <div class="sticker-wrap" aria-hidden="false">
+      <img
+        class="sticker"
+        id="sticker-img"
+        src="sticker.png"
+        srcset="sticker.png 1x, sticker@2x.png 2x"
+        alt="Loading"
+        decoding="async"
+        loading="eager"
+      >
+      <span class="sr-only">Loading…</span>
     </div>
+  </div>
 
-    <!-- Header: centered, logo left of text -->
-    <header class="fixed top-0 left-0 right-0 z-40 glass transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-center">
-            <div class="flex items-center gap-3">
-                <img src="mylogo.png" srcset="mylogo-1x.png 1x, mylogo-2x.png 2x" alt="Daily Dose logo" class="w-10 h-10 rounded-md object-contain shadow-md">
-                <div class="text-2xl font-black tracking-tight text-white drop-shadow-lg text-center">
-                    <div><span class="text-sky-400">Daily Dose of </span>BCA</div>
-                </div>
-            </div>
+  <!-- Page header + content (example, keep your existing structure) -->
+  <header class="fixed top-0 left-0 right-0 z-40 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-center">
+      <div class="flex items-center gap-3">
+        <img src="mylogo.png" alt="logo" class="w-10 h-10 rounded-md object-contain shadow-md">
+        <div class="text-2xl font-black tracking-tight">
+          <span class="text-sky-400">Daily Dose of </span>BCA
         </div>
-    </header>
+      </div>
+    </div>
+  </header>
 
-    <div class="pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex flex-col">
-        <!-- Hero -->
-        <div class="content-section text-center mb-16">
-            <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-100 to-sky-400 mb-6 drop-shadow-sm">
-                Master Your SUBJECTS
-            </h1>
-            <p class="text-lg text-gray-300 max-w-2xl mx-auto font-light">
-                Just get enough attendance; the rest I will take care of — notes and exam preparation.
-            </p>
+  <main class="pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex flex-col">
+    <section class="content-section text-center mb-16">
+      <h1 class="text-4xl md:text-6xl font-extrabold">Master Your SUBJECTS</h1>
+      <p class="text-gray-300 max-w-2xl mx-auto mt-4">Just get enough attendance; the rest I will take care of — notes and exam preparation.</p>
+    </p>
         </div>
 
         <!-- Subject cards -->
@@ -151,8 +210,7 @@
                     <div class="mt-6 text-sky-400 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">Open Notes <span>&rarr;</span></div>
                 </div>
             </a>
-
-            <a href="https://drive.google.com/file/d/1E98zYYEERfjGXAeFPMcoLDhvVQN5i_It/view?usp=sharing" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
+      <a href="https://drive.google.com/file/d/1E98zYYEERfjGXAeFPMcoLDhvVQN5i_It/view?usp=sharing" class="glass group block p-6 rounded-2xl transition-all duration-500 hover:bg-white/5 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:-translate-y-2">
                 <div class="flex flex-col h-full items-center">
                     <div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4 group-hover:bg-sky-500/20 transition">
                         <svg class="w-6 h-6 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
@@ -227,33 +285,70 @@
                 <span class="text-sm font-semibold">Record Work</span>
             </a>
         </div>
+      <!-- repeat other cards... -->
+    </section>
 
-        <!-- Footer -->
-        <footer class="mt-auto py-8 border-t border-white/10 text-center relative z-10">
-            <p class="text-gray-400 mb-6 text-sm font-light">Get personalised class chatbot, class materials encrafted especially for you.</p>
-            <!-- Premium Content button removed -->
-            <p class="text-gray-600 mt-8 text-xs">&copy; 2024 Learning Hub. All rights reserved (Maybe).</p>
-        </footer>
-    </div>
+    <footer class="mt-auto py-8 border-t border-white/10 text-center">
+      <p class="text-gray-400 mb-6">Get personalised class chatbot, class materials encrafted especially for you.</p>
+      <p class="text-gray-600 text-xs">&copy; 2024 Learning Hub.</p>
+    </footer>
+  </main>
 
-    <script>
-    // Minimal startup script retained for the page animation/scroll effects.
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            const loader = document.getElementById('loading-overlay');
-            if (loader) {
-                loader.style.opacity = '0';
-                setTimeout(() => { loader.style.display = 'none'; initScroll(); }, 500);
-            }
-        }, 600);
-    });
-
-    function initScroll(){
-        const observer = new IntersectionObserver((entries)=>{
-            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('is-visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.content-section').forEach(s => observer.observe(s));
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    function hideLoader(){
+        const loader = document.getElementById("loading-overlay");
+        if(!loader) return;
+        loader.classList.add("hidden");
+        setTimeout(() => loader.remove(), 600);
     }
-    </script>
+
+    // remove on full page load
+    window.addEventListener("load", hideLoader);
+
+    // fallback timeout (in case resources load slowly)
+    setTimeout(hideLoader, 7000);
+});
+
+    (function () {
+      const overlayId = 'loading-overlay';
+      const overlay = document.getElementById(overlayId);
+
+      function removeOverlay() {
+        if (!overlay) return;
+        // add hidden class for fade-out
+        overlay.classList.add('hidden');
+        // remove from DOM after transition
+        setTimeout(() => {
+          if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        }, 600);
+      }
+
+      // If page already fully loaded, remove immediately
+      if (document.readyState === 'complete') {
+        removeOverlay();
+      } else {
+        // Hide overlay when all resources loaded
+        window.addEventListener('load', removeOverlay, { once: true });
+        // Also add a fallback timeout to avoid stuck loaders (optional)
+        setTimeout(() => {
+          // If overlay still present after 8s, remove it
+          if (document.getElementById(overlayId)) removeOverlay();
+        }, 8000);
+      }
+
+      // Intersection observer for content fade-in
+      function initScroll(){
+        const observer = new IntersectionObserver((entries)=>{
+          entries.forEach(entry => {
+            if(entry.isIntersecting) entry.target.classList.add('is-visible');
+          });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.content-section').forEach(s => observer.observe(s));
+      }
+
+      document.addEventListener('DOMContentLoaded', initScroll);
+    })();
+  </script>
 </body>
 </html>
