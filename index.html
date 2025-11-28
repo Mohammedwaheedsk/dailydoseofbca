@@ -5,62 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Daily Dose of BCA</title>
 
-  <!-- Favicons (keep your own files) -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="icon" href="mylogo-32x32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="mylogo-64x64.png" sizes="64x64" type="image/png">
   <meta name="theme-color" content="#0f172a">
 
-  <!-- Tailwind for layout -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* Loader overlay */
-#loading-overlay{
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #0f172ae6;   /* dark with slight transparency */
-  z-index: 9999;
-  transition: opacity .45s ease;
-}
-#loading-overlay.hidden{
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Sticker loader */
-.sticker-wrap{
-  width: 140px;
-  height: 140px;
-  display: grid;
-  place-items: center;
-}
-
-.sticker{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  animation: spin 1.4s linear infinite;
-}
-
-/* Rotation animation */
-@keyframes spin{
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@media (max-width:640px){
-  .sticker-wrap{ width: 100px; height: 100px; }
-}
-
     :root{
       --bg-dark: #0f172a;
       --overlay-bg: rgba(15,23,42,0.95);
     }
+    html,body{height:100%}
     body{
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-dark);
@@ -70,7 +26,7 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Loader overlay */
+    /* SINGLE overlay, top-most */
     #loading-overlay{
       position: fixed;
       inset: 0;
@@ -78,7 +34,7 @@
       align-items: center;
       justify-content: center;
       background: var(--overlay-bg);
-      z-index: 9999;
+      z-index: 99999;            /* ensure it's above everything */
       transition: opacity .45s ease;
       will-change: opacity;
     }
@@ -87,43 +43,42 @@
       pointer-events: none;
     }
 
-    /* Sticker (rotating) */
+    /* sticker container */
     .sticker-wrap{
-      display: grid;
-      place-items: center;
       width: 140px;
       height: 140px;
+      display: grid;
+      place-items: center;
       border-radius: 20px;
       background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
       box-shadow: 0 18px 40px rgba(2,6,23,0.75);
       padding: 10px;
-      transform-origin: center center;
     }
 
+    /* sticker image — visible, block */
     .sticker{
       width: 100%;
       height: 100%;
       object-fit: contain;
       display: block;
       transform-origin: center center;
-      /* continuous rotation */
-      animation: spin 1400ms linear infinite, pulseScale 2000ms ease-in-out infinite;
-      will-change: transform;
-      border-radius: 12px; /* optional; remove if you want exact cutout */
+      border-radius: 12px;
       background: transparent;
     }
 
-    @keyframes spin {
+    /* 3-rotation keyframes (0 → 1080deg = 3 * 360) */
+    @keyframes spin-3 {
       from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    @keyframes pulseScale {
-      0%   { transform: rotate(0deg) scale(0.98); }
-      50%  { transform: rotate(180deg) scale(1.02); }
-      100% { transform: rotate(360deg) scale(0.98); }
+      to   { transform: rotate(1080deg); }
     }
 
-    /* Small accessible text (hidden visually but available to screen readers) */
+    /* class that performs exactly 3 rotations and holds final state */
+    .spin-3 {
+      animation: spin-3 3s cubic-bezier(.22,.98,.29,.99) forwards;
+      will-change: transform;
+    }
+
+    /* accessible text (screen-readers) */
     .sr-only{
       position: absolute;
       width: 1px;
@@ -136,7 +91,7 @@
       border: 0;
     }
 
-    /* Page baseline styles (kept minimal) */
+    /* page baseline & content reveal */
     .glass{
       background: rgba(15,23,42,0.6);
       backdrop-filter: blur(16px);
@@ -147,24 +102,13 @@
     .content-section{ opacity:0; transform: translateY(20px); transition: opacity .8s ease-out, transform .8s ease-out; }
     .content-section.is-visible{ opacity:1; transform: translateY(0); }
 
-    /* Responsive tweaks */
     @media (max-width:640px){
       .sticker-wrap{ width: 96px; height: 96px; border-radius: 14px; padding: 8px; }
-      .sticker{ animation-duration: 1200ms, 1800ms; }
     }
   </style>
-  
 </head>
 <body>
-    <div id="loading-overlay">
-    <div class="sticker-wrap">
-        <img src="narsi.png" class="sticker" alt="Loading...">
-    </div>
-</div>
-
-
-  <!-- Loader overlay with rotating sticker.
-       Replace src with your sticker file (PNG/WebP/GIF). Use srcset for retina if available. -->
+  <!-- Single loader overlay -->
   <div id="loading-overlay" role="status" aria-live="polite" aria-label="Loading content">
     <div class="sticker-wrap" aria-hidden="false">
       <img
@@ -180,7 +124,7 @@
     </div>
   </div>
 
-  <!-- Page header + content (example, keep your existing structure) -->
+  <!-- Page header + content (kept same as your structure) -->
   <header class="fixed top-0 left-0 right-0 z-40 glass">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-center">
       <div class="flex items-center gap-3">
@@ -288,6 +232,8 @@
       <!-- repeat other cards... -->
     </section>
 
+    <!-- (your subject cards and rest of page here — unchanged) -->
+    <!-- ... -->
     <footer class="mt-auto py-8 border-t border-white/10 text-center">
       <p class="text-gray-400 mb-6">Get personalised class chatbot, class materials encrafted especially for you.</p>
       <p class="text-gray-600 text-xs">&copy; 2024 Learning Hub.</p>
@@ -295,49 +241,60 @@
   </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-    function hideLoader(){
-        const loader = document.getElementById("loading-overlay");
-        if(!loader) return;
-        loader.classList.add("hidden");
-        setTimeout(() => loader.remove(), 600);
-    }
-
-    // remove on full page load
-    window.addEventListener("load", hideLoader);
-
-    // fallback timeout (in case resources load slowly)
-    setTimeout(hideLoader, 7000);
-});
-
     (function () {
-      const overlayId = 'loading-overlay';
-      const overlay = document.getElementById(overlayId);
+      const overlay = document.getElementById('loading-overlay');
+      const sticker = document.getElementById('sticker-img');
 
-      function removeOverlay() {
-        if (!overlay) return;
-        // add hidden class for fade-out
+      // Start the 3-rotation animation as soon as DOM is ready.
+      // This ensures users see the visible rotation quickly.
+      function startStickerSpin() {
+        if (!sticker) return;
+        // Add class to start exactly 3 rotations
+        sticker.classList.add('spin-3');
+
+        // If sticker has error (file missing), show a simple fallback and still remove overlay later
+        sticker.addEventListener('error', () => {
+          // Replace with a tiny inline SVG so users don't see a broken image
+          sticker.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24"><rect width="100%" height="100%" fill="#0f172a"/><text x="50%" y="50%" fill="#9ca3af" font-size="10" text-anchor="middle" alignment-baseline="central">sticker</text></svg>'
+          );
+        }, { once: true });
+      }
+
+      // Remove overlay with fade, guarded to run once
+      let overlayRemoved = false;
+      function removeOverlayNow() {
+        if (overlayRemoved || !overlay) return;
+        overlayRemoved = true;
         overlay.classList.add('hidden');
-        // remove from DOM after transition
         setTimeout(() => {
           if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
         }, 600);
       }
 
-      // If page already fully loaded, remove immediately
-      if (document.readyState === 'complete') {
-        removeOverlay();
-      } else {
-        // Hide overlay when all resources loaded
-        window.addEventListener('load', removeOverlay, { once: true });
-        // Also add a fallback timeout to avoid stuck loaders (optional)
+      // When sticker animation ends, remove overlay (gives user chance to see the rotation)
+      sticker.addEventListener('animationend', () => {
+        // wait a tiny moment to give smoothness
+        setTimeout(removeOverlayNow, 250);
+      });
+
+      // If the page finishes loading before the animation ends, still wait for animationend OR force-remove after short delay.
+      window.addEventListener('load', () => {
+        // If animation already ended, removeOverlayNow() will be no-op; otherwise allow sticker animation to finish.
+        // As a safety, force remove after max 6s.
         setTimeout(() => {
-          // If overlay still present after 8s, remove it
-          if (document.getElementById(overlayId)) removeOverlay();
-        }, 8000);
+          if (!overlayRemoved) removeOverlayNow();
+        }, 6000);
+      }, { once: true });
+
+      // Start spin as soon as DOM is ready
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        startStickerSpin();
+      } else {
+        document.addEventListener('DOMContentLoaded', startStickerSpin, { once: true });
       }
 
-      // Intersection observer for content fade-in
+      // Intersection observer for content reveal (unchanged behaviour)
       function initScroll(){
         const observer = new IntersectionObserver((entries)=>{
           entries.forEach(entry => {
@@ -346,8 +303,8 @@
         }, { threshold: 0.12 });
         document.querySelectorAll('.content-section').forEach(s => observer.observe(s));
       }
-
-      document.addEventListener('DOMContentLoaded', initScroll);
+      if (document.readyState === 'complete' || document.readyState === 'interactive') initScroll();
+      else document.addEventListener('DOMContentLoaded', initScroll, { once: true });
     })();
   </script>
 </body>
