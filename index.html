@@ -11,7 +11,627 @@
 
 <style>
   :root {
+    /* iOS Dark Mode Palette */<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>DailyDoseofBCA</title>
+
+<link rel="icon" href="mylogo.png" type="image/png">
+<link rel="apple-touch-icon" href="mylogo.png">
+
+<style>
+  :root {
     /* iOS Dark Mode Palette */
+    --bg-base: #121212;
+    --bg-gradient-start: #1c1c1e;
+    
+    /* Text Colors */
+    --text-primary: #f5f5f7;
+    --text-secondary: #86868b;
+    --accent-blue: #0a84ff;
+    
+    /* Glassmorphism Variables (Dark) */
+    --glass-panel: rgba(28, 28, 30, 0.65);
+    --glass-nav: rgba(28, 28, 30, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.05);
+    --glass-blur: blur(25px);
+
+    /* Animation Springs */
+    --ease-elastic: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    user-select: none;
+  }
+
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* --- DARK BACKGROUND BLOBS --- */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: -1;
+    opacity: 0.25; /* Lower opacity for subtle dark theme */
+    animation: float 12s infinite ease-in-out alternate;
+  }
+  
+  .blob-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #3b82f6; }
+  .blob-2 { top: 20%; right: -20%; width: 50vw; height: 50vw; background: #8b5cf6; animation-delay: -3s; }
+  .blob-3 { bottom: -10%; left: 10%; width: 60vw; height: 60vw; background: #10b981; animation-delay: -6s; }
+  
+  @keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, -30px) scale(1.1); }
+  }
+
+  /* --- HEADER --- */
+  header {
+    flex-shrink: 0;
+    padding: 3.5rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    position: relative;
+  }
+
+  .brand {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff, #a1a1aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .brand:active { opacity: 0.7; }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    max-width: 85%;
+    line-height: 1.4;
+  }
+
+  /* --- SLIDER VIEWPORT --- */
+  .slider-viewport {
+    flex: 1;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .slider-track {
+    display: flex;
+    height: 100%;
+    width: 300%; /* 3 Slides */
+    will-change: transform;
+    /* Ensure hardware acceleration for smooth glide */
+    transform: translate3d(0, 0, 0); 
+  }
+
+  .slide {
+    width: 100vw; /* Each slide is full viewport width */
+    max-width: 800px;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 140px; /* Space for bottom nav */
+    scrollbar-width: none; 
+  }
+  .slide::-webkit-scrollbar { display: none; }
+
+  /* --- DARK CARDS --- */
+  .card {
+    background: var(--glass-panel);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-highlight);
+    border-radius: 22px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .card:active { 
+    transform: scale(0.98); 
+    background: rgba(44, 44, 46, 0.8);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .subject-group { display: flex; flex-direction: column; gap: 4px; }
+  
+  .subject { font-size: 1.1rem; font-weight: 700; color: #fff; }
+  
+  .topic-preview { font-size: 0.8rem; color: var(--accent-blue); font-weight: 500; }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    margin-left: 10px;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    color: #aeaeb2;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  /* Buttons */
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px;
+    background: rgba(10, 132, 255, 0.15);
+    color: #64d2ff;
+    border: 1px solid rgba(10, 132, 255, 0.3);
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .action-btn:active { background: rgba(10, 132, 255, 0.25); }
+
+  .action-btn.lab { 
+    background: rgba(191, 90, 242, 0.15); 
+    color: #d996ff; 
+    border-color: rgba(191, 90, 242, 0.3);
+  }
+  .action-btn.assign { 
+    background: rgba(48, 209, 88, 0.15); 
+    color: #6ce086; 
+    border-color: rgba(48, 209, 88, 0.3);
+    margin-top: 10px; 
+  }
+
+  /* Accordion */
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    margin-top: 0;
+    opacity: 0.7;
+  }
+  .accordion-content.open { 
+    margin-top: 12px; 
+    padding-top: 12px; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+    opacity: 1;
+  }
+
+  /* --- BOTTOM NAV (Floating) --- */
+  .nav-wrapper {
+    position: fixed;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+    /* Prevent clicks on wrapper blocking content behind it */
+    pointer-events: none; 
+  }
+
+  .nav-container {
+    pointer-events: auto; /* Re-enable clicks for the bar itself */
+    position: relative;
+    width: 340px;
+    height: 64px;
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(35px);
+    -webkit-backdrop-filter: blur(35px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    overflow: visible;
+  }
+
+  /* Gliding Highlight Knob */
+  .nav-knob {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    bottom: 5px;
+    width: calc((100% - 10px) / 3);
+    background: rgba(99, 99, 102, 0.4);
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 1;
+    /* No default transition to allow instant dragging */
+  }
+
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #8e8e93;
+    z-index: 2;
+    cursor: pointer;
+    padding: 15px 0;
+    transition: color 0.2s;
+  }
+
+  .nav-item.active {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* Desktop adjustments */
+  @media (min-width: 801px) {
+    .slide { width: 33.333%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<header>
+  <div class="brand" onclick="window.location.reload()">DailyDoseofBCA</div>
+  <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
+</header>
+
+<div class="slider-viewport" id="viewport">
+  <div class="slider-track" id="track">
+    
+    <div class="slide">
+      <div class="card">
+        <div class="card-header">
+          <div class="subject-group"><span class="subject">Mobile App Dev</span></div>
+          <span class="tag" style="color:#32c46a; background: rgba(50, 196, 106, 0.1);">Updated!</span>
+        </div>
+        <p class="description">Development of Android Applications.</p>
+        <a href="https://drive.google.com/file/d/1eqbwVfpe7OvzrVSnUq_1b732fFSEGnXT/view?usp=sharing" class="action-btn">Open PDF</a>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="subject-group"><span class="subject">Python</span></div>
+          <span class="tag" style="color:#32c46a; background: rgba(50, 196, 106, 0.1);">13 Dec</span>
+        </div>
+        <p class="description">Programming with Python.</p>
+        <a href="https://drive.google.com/file/d/1YO_-FEzv9xf_KgwBtr_M3q4gKd_2nqaz/view?usp=sharing" class="action-btn">Open PDF</a>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="subject-group"><span class="subject">Operating Systems</span></div>
+          <span class="tag" style="color:#ff0000; background: rgba(233, 18, 36, 0.1);">Not Updated</span>
+        </div>
+        <p class="description">Working of Operating Systems.</p>
+        <a href="https://drive.google.com/file/d/1E98zYYEERfjGXAeFPMcoLDhvVQN5i_It/view?usp=sharing" class="action-btn">Open PDF</a>
+      </div>
+       <div class="card">
+        <div class="card-header">
+          <div class="subject-group"><span class="subject">AFM</span></div>
+          <span class="tag" style="color:#ffd900; background: rgba(255, 238, 0, 0.1);">06 Dec</span>
+        </div>
+        <p class="description">Accounting & Financial Management.</p>
+        <a href="https://drive.google.com/file/d/1bBNn016vo-gj9mf_7p-CMZaZEP7BV-cD/view?usp=sharing" class="action-btn">Open PDF</a>
+      </div>
+       <div class="card">
+        <div class="card-header">
+          <div class="subject-group"><span class="subject">SEO</span></div>
+          <span class="tag" style="color:hsl(0, 100%, 50%); background: rgba(255, 0, 0, 0.137);">10 Dec</span>
+        </div>
+        <p class="description">What is SEO, how does it work?</p>
+        <a href="https://drive.google.com/file/d/1sTi59Twjk9nyB9n5xlv9JMeWWmH0CFVB/view?usp=sharing" class="action-btn">Open PDF</a>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="card" onclick="toggleAccordion(this)">
+        <div class="card-header">
+          <div class="subject-group">
+            <span class="subject">MAD Assignment</span>
+            <span class="topic-preview">Topic: Android Studio Install</span>
+          </div>
+          <span class="tag" style="color:#32c46a; background: rgba(50, 196, 106, 0.1);">Due: Monday</span>
+        </div>
+        <div class="accordion-content">
+          <p class="description">Search android studio install GFG in Google. Write 9 steps with diagrams.</p>
+          <a href="https://www.geeksforgeeks.org/android/guide-to-install-and-set-up-android-studio/" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+        </div>
+      </div>
+      <div class="card" onclick="toggleAccordion(this)">
+        <div class="card-header">
+          <div class="subject-group">
+            <span class="subject">AFM Assignment</span>
+            <span class="topic-preview">Topic: Types, Advantages and disadvantages of AFM</span>
+          </div>
+          <span class="tag" style="color:#e71010; background: rgba(214, 35, 35, 0.1);">Due: 8 Dec</span>
+        </div>
+        <div class="accordion-content">
+          <p class="description">The topic is in the notebook</p>
+          <a href="https://drive.google.com/file/d/1-Ph21Km1u4eMbCy63Ynd_sSeqhOmLN5f/view?usp=drive_link" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+        </div>
+      </div>
+      <div class="card" onclick="toggleAccordion(this)">
+        <div class="card-header">
+          <div class="subject-group">
+            <span class="subject">Python Assignment</span>
+            <span class="topic-preview">Topic: Strings and String Functions</span>
+          </div>
+          <span class="tag" style="color:#e71010; background: rgba(214, 35, 35, 0.1);">Due: 15 Dec</span>
+        </div>
+        <div class="accordion-content">
+          <p class="description">The topic is in the notebook</p>
+          <a href="https://drive.google.com/file/d/1LJIpdBy3_PIrWBXv9Dx5lyaJim3TzhQ5/view?usp=drive_link" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="card">
+        <div class="card-header"><span class="subject">MAD Lab</span></div>
+        <p class="description">.-------------------.</p>
+        <a href="#" class="action-btn lab">View Manual</a>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="subject">Python Lab</span></div>
+        <p class="description">.-------------------.</p>
+        <a href="#" class="action-btn lab">View Manual</a>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="subject">OS Lab</span></div>
+        <p class="description">.-------------------.</p>
+        <a href="#" class="action-btn lab">View Manual</a>
+      </div>
+       <div class="card">
+        <div class="card-header"><span class="subject">SEO Lab</span></div>
+        <p class="description">.-------------------.</p>
+        <a href="#" class="action-btn lab">View Manual</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="nav-wrapper">
+  <div class="nav-container" id="nav-container">
+    <div class="nav-knob" id="nav-knob"></div>
+    <div class="nav-item active" data-index="0">Notes</div>
+    <div class="nav-item" data-index="1">Assign</div>
+    <div class="nav-item" data-index="2">Lab Work</div>
+  </div>
+</div>
+
+<script>
+  /* ROBUST NAV LOGIC 
+    1. Drag Nav Knob -> Moves Content
+    2. Click Nav Item -> Jumps Content
+  */
+  
+  const navContainer = document.getElementById('nav-container');
+  const navKnob = document.getElementById('nav-knob');
+  const track = document.getElementById('track');
+  const viewport = document.getElementById('viewport');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  let currentIndex = 0;
+  let isDragging = false;
+  let navWidth, knobWidth, maxTranslate;
+
+  // Initialize sizes
+  function initDimensions() {
+    navWidth = navContainer.clientWidth;
+    // Padding 5px left + 5px right = 10px total padding logic
+    knobWidth = (navWidth - 10) / 3; 
+    maxTranslate = navWidth - 10 - knobWidth;
+  }
+
+  // --- TOUCH / MOUSE EVENTS ---
+  navContainer.addEventListener('touchstart', dragStart, {passive: false});
+  navContainer.addEventListener('touchmove', dragMove, {passive: false});
+  navContainer.addEventListener('touchend', dragEnd);
+  
+  navContainer.addEventListener('mousedown', dragStart);
+  window.addEventListener('mousemove', dragMove);
+  window.addEventListener('mouseup', dragEnd);
+
+  function dragStart(e) {
+    if (e.target.closest('.nav-container')) {
+      isDragging = true;
+      initDimensions();
+      navKnob.style.transition = 'none';
+      track.style.transition = 'none';
+    }
+  }
+
+  function dragMove(e) {
+    if (!isDragging) return;
+    e.preventDefault(); 
+
+    const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    const navRect = navContainer.getBoundingClientRect();
+    
+    // Relative X inside the nav bar
+    // 5px is left padding offset
+    let offsetX = clientX - navRect.left - 5 - (knobWidth / 2);
+
+    // Clamp
+    if (offsetX < 0) offsetX = 0;
+    if (offsetX > maxTranslate) offsetX = maxTranslate;
+
+    // Move Knob
+    navKnob.style.transform = `translateX(${offsetX}px)`;
+
+    // Move Content (Map Nav% to Content%)
+    const percentage = offsetX / maxTranslate; 
+    
+    // We scroll 3 pages, so total scrollable width is 2 * ViewportWidth
+    const slideWidth = viewport.clientWidth;
+    const totalContentScroll = slideWidth * 2; 
+    
+    const contentTranslate = percentage * -totalContentScroll;
+    track.style.transform = `translateX(${contentTranslate}px)`;
+
+    highlightNavText(percentage);
+  }
+
+  function dragEnd(e) {
+    if (!isDragging) return;
+    isDragging = false;
+
+    // Snap logic
+    const currentKnobTransform = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41;
+    const percentage = currentKnobTransform / maxTranslate;
+
+    if (percentage < 0.33) currentIndex = 0;
+    else if (percentage < 0.66) currentIndex = 1;
+    else currentIndex = 2;
+
+    snapToPosition();
+  }
+
+  // Click Support
+  navItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      currentIndex = index;
+      snapToPosition();
+    });
+  });
+
+  function snapToPosition() {
+    initDimensions();
+    
+    // 1. Snap Knob
+    const preciseKnobX = ((navWidth - 10) / 3) * currentIndex;
+    navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+    navKnob.style.transform = `translateX(${preciseKnobX}px)`;
+
+    // 2. Snap Content
+    const slideWidth = viewport.clientWidth;
+    const contentX = currentIndex * -slideWidth;
+    track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+    track.style.transform = `translateX(${contentX}px)`;
+
+    // 3. Highlight
+    navItems.forEach((item, idx) => {
+      if (idx === currentIndex) {
+        item.classList.add('active');
+        item.style.color = '#fff';
+      } else {
+        item.classList.remove('active');
+        item.style.color = '#8e8e93';
+      }
+    });
+  }
+
+  function highlightNavText(pct) {
+    let activeIdx = 0;
+    if (pct > 0.33) activeIdx = 1;
+    if (pct > 0.66) activeIdx = 2;
+
+    navItems.forEach((item, idx) => {
+      if (idx === activeIdx) {
+        item.classList.add('active');
+        item.style.color = '#fff';
+      } else {
+        item.classList.remove('active');
+        item.style.color = '#8e8e93';
+      }
+    });
+  }
+
+  function toggleAccordion(card) {
+    const content = card.querySelector('.accordion-content');
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+      content.classList.remove('open');
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      content.classList.add('open');
+    }
+  }
+
+  /* --------------------------------------
+     AUTO-POPUP NOTIFICATION LOGIC
+     -------------------------------------- */
+  
+  // This function tries to run when the page loads
+  function askPermission() {
+    if (!("Notification" in window)) {
+      console.log("This browser does not support desktop notifications");
+      return;
+    }
+
+    if (Notification.permission === "default") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          new Notification("DailyDoseofBCA", {
+            body: "You are now subscribed to updates!",
+            icon: "mylogo.png"
+          });
+        }
+      });
+    }
+  }
+
+  // Handle Resize
+  window.addEventListener('resize', () => {
+    initDimensions();
+    snapToPosition();
+  });
+  
+  // Initial Call
+  window.onload = function() {
+      initDimensions();
+      snapToPosition();
+      
+      // TRIGGER PERMISSION REQUEST
+      // Note: Some browsers block this if not triggered by a click.
+      // If it doesn't appear, you might need a "Subscribe" button.
+      setTimeout(askPermission, 1000); 
+  };
+</script>
+</body>
+</html>
     --bg-base: #121212;
     --bg-gradient-start: #1c1c1e;
     
