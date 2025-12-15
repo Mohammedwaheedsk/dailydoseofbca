@@ -79,6 +79,41 @@
     align-items: center;
     text-align: center;
     z-index: 10;
+    position: relative;
+  }
+
+  /* NOTIFICATION BUTTON STYLES */
+  .notif-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .notif-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.2); }
+  .notif-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 8px;
+    height: 8px;
+    background: #ff3b30;
+    border-radius: 50%;
+    border: 1px solid var(--bg-base);
   }
 
   .brand {
@@ -302,6 +337,9 @@
 <div class="blob blob-3"></div>
 
 <header>
+  <!-- Notification Button -->
+  <button id="notifyBtn" class="notif-btn" title="Enable Notifications">🔔</button>
+
   <div class="brand" onclick="window.location.reload()">DailyDoseofBCA</div>
   <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
 </header>
@@ -582,6 +620,41 @@
       content.classList.add('open');
     }
   }
+
+  /* --------------------------------------
+     NOTIFICATION LOGIC
+     -------------------------------------- */
+  const notifyBtn = document.getElementById('notifyBtn');
+
+  // Check initial state
+  if (Notification.permission === "granted") {
+    notifyBtn.style.color = "#32c46a"; // Green bell if allowed
+  }
+
+  notifyBtn.addEventListener('click', () => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notifications");
+    } 
+    else if (Notification.permission === "granted") {
+      // Permission already granted, send a test notification
+      new Notification("DailyDoseofBCA", {
+        body: "Notifications are active! You will be updated when new notes arrive.",
+        icon: "mylogo.png"
+      });
+    } 
+    else if (Notification.permission !== "denied") {
+      // Request permission
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          notifyBtn.style.color = "#32c46a";
+          new Notification("DailyDoseofBCA", {
+            body: "Thanks for subscribing! We'll notify you about updates.",
+            icon: "mylogo.png"
+          });
+        }
+      });
+    }
+  });
 
   // Handle Resize
   window.addEventListener('resize', () => {
