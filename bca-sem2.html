@@ -367,6 +367,24 @@
       /* No default transition to allow instant dragging */
     }
 
+
+    /* --- KNOB REFLECTION GLOW --- */
+    .nav-container::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 5px;
+      width: calc((100% - 10px) / 3);
+      height: 100%;
+      border-radius: 28px;
+      background: radial-gradient(ellipse at center top, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%);
+      box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.06);
+      transform: translateX(var(--glow-x, 0px));
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform;
+      transition: none;
+    }
     .nav-item {
       flex: 1;
       text-align: center;
@@ -584,6 +602,7 @@
         initDimensions();
         navKnob.style.transition = 'none';
         track.style.transition = 'none';
+        navContainer.style.transition = 'none';
       }
     }
 
@@ -604,6 +623,7 @@
 
       // Move Knob
       navKnob.style.transform = `translateX(${offsetX}px)`;
+      navContainer.style.setProperty('--glow-x', offsetX + 'px');
 
       // Move Content (Map Nav% to Content%)
       const percentage = offsetX / maxTranslate;
@@ -648,6 +668,9 @@
       const preciseKnobX = ((navWidth - 10) / 3) * currentIndex;
       navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
       navKnob.style.transform = `translateX(${preciseKnobX}px)`;
+      navContainer.style.setProperty('--glow-x', preciseKnobX + 'px');
+      navContainer.style.transition = '--glow-x 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      navContainer.style.setProperty('--glow-x', preciseKnobX + 'px');
 
       // 2. Snap Content
       const slideWidth = viewport.clientWidth;
