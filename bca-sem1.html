@@ -500,6 +500,71 @@
     }
 
     
+    /* --- MOBILE OPTIMIZATION OVERHAUL --- */
+    :root {
+      --mobile-font-brand: 1.5rem;
+      --mobile-font-subtitle: 0.85rem;
+      --mobile-font-card-title: 1.1rem;
+      --mobile-font-card-desc: 0.85rem;
+    }
+
+    * {
+      touch-action: pan-y; /* Better scrolling feel */
+    }
+
+    header {
+      padding: 1.5rem 1rem 1rem !important;
+      max-width: 100% !important;
+    }
+
+    .brand {
+      font-size: var(--mobile-font-brand) !important;
+      white-space: nowrap;
+    }
+
+    .subtitle {
+      font-size: var(--mobile-font-subtitle) !important;
+      max-width: 90% !important;
+    }
+
+    .slide {
+      padding: 15px !important;
+      width: 100vw !important;
+      max-width: 100% !important;
+    }
+
+    .card {
+      padding: 16px !important;
+      margin-bottom: 12px !important;
+    }
+
+    .subject {
+      font-size: var(--mobile-font-card-title) !important;
+    }
+
+    .description {
+      font-size: var(--mobile-font-card-desc) !important;
+      margin-bottom: 12px !important;
+    }
+
+    .nav-center-wrap {
+      width: calc(100% - 80px) !important;
+      max-width: 320px !important;
+    }
+
+    .nav-container {
+      height: 56px !important;
+    }
+
+    .sem-button {
+      height: 56px !important;
+      padding: 0 20px !important;
+    }
+
+    .nav-item {
+      font-size: 0.8rem !important;
+    }
+
   </style>
 </head>
 
@@ -634,7 +699,7 @@
 
       // Move Knob
       navKnob.style.transform = `translateX(${offsetX}px)`;
-      var glowPct = 8 + (offsetX / maxTranslate) * 84;
+      var glowPct = (offsetX / (navWidth - 10 - knobWidth)) * 100;
       navContainer.style.setProperty('--glow-pct', glowPct + '%');
 
       // Move Content (Map Nav% to Content%)
