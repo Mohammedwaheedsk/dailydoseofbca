@@ -367,7 +367,7 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
-      padding: 0 5px;
+      padding: 0 5px; box-sizing: border-box;
       overflow: visible;
     }
 
@@ -386,18 +386,20 @@
 
 
     
-    .nav-item {
+        .nav-item {
       flex: 1;
-
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       font-size: 1rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
       font-weight: 500;
       color: #8e8e93;
       z-index: 2;
       cursor: pointer;
-      padding: 15px 0;
+      height: 100%;
       transition: color 0.2s;
+      white-space: nowrap;
     }
 
     .nav-item.active {
