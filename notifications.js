@@ -1,10 +1,10 @@
 // --- NOTIFICATION CONFIGURATION (Admin controlled) ---
 const NOTIFICATION_CONFIG = {
     active: true, // Set to false to hide the notification
-    message: "Semester 6 notes have been added! Check them out now. 🚀", // Your message here
+    message: "Site is under progress, every content from Sem 1 to Sem 4 are updated.", // Your message here
     type: "info", // info, warning, success
-    link: "bca-sem6.html", // Optional link, set to "#" if not needed
-    expireSeconds: 30 // How often to show it to the same user (after dismissal)
+    link: "bca-sem4.html", // Optional link, set to "#" if not needed
+    expireSeconds: 20 // How often to show it to the same user (after dismissal)
 };
 
 // --- NOTIFICATION LOGIC ---
