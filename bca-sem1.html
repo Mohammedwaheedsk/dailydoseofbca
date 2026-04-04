@@ -131,17 +131,14 @@
     }
 
     /* --- HEADER --- */
-    header {
+        header {
       flex-shrink: 0;
       padding: 3.5rem 1.5rem 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
+
       z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       width: 100%;
       max-width: 800px;
       margin: 0 auto;
@@ -168,7 +165,7 @@
       text-overflow: ellipsis;
       color: var(--text-secondary);
       font-weight: 400;
-      max-width: 90%;
+      max-width: 85%;
       margin: 0 auto;
       line-height: 1.4;
     }
@@ -229,13 +226,17 @@
       background: rgba(255, 255, 255, 0.12);
     }
 
-    .card-header {
+    .card-    header {
+      flex-shrink: 0;
+      padding: 3.5rem 1.5rem 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-      align-items: flex-start;
-      margin-bottom: 10px;
+
+      z-index: 10;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .subject-group {
@@ -266,7 +267,7 @@
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: var(--text-secondary);
       white-space: nowrap;
-      margin: 8px 0;
+      margin-left: 10px;
     }
 
     .description {
@@ -276,7 +277,7 @@
       color: #aeaeb2;
       line-height: 1.5;
       margin-bottom: 16px;
-      text-align: center;
+
     }
 
     /* Buttons */
@@ -420,7 +421,7 @@
     }
     .nav-item {
       flex: 1;
-      text-align: center;
+
       font-size: 0.8rem;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -438,7 +439,7 @@
     }
 
     .sem-button {
-      margin: 8px 0;
+      margin-left: 10px;
       height: 64px;
       padding: 0 15px;
       flex-shrink: 0;
@@ -512,7 +513,7 @@
       cursor: pointer;
       transition: background 0.2s;
       white-space: nowrap;
-      text-align: center;
+
       text-decoration: none;
     }
 
