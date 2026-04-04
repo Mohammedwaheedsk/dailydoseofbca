@@ -126,7 +126,9 @@
     }
 
     .subtitle {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
       color: var(--text-secondary);
       font-weight: 400;
       max-width: 85%;
@@ -153,9 +155,8 @@
     }
 
     .slide {
-      width: 100vw;
-      /* Each slide is full viewport width */
-      max-width: 800px;
+      flex: 1;
+      width: 100%;
       height: 100%;
       overflow-y: auto;
       padding: 20px;
@@ -225,7 +226,9 @@
     }
 
     .description {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
       color: #aeaeb2;
       line-height: 1.5;
       margin-bottom: 16px;
@@ -287,7 +290,10 @@
       bottom: 30px;
       left: 0;
       width: 100%;
+      padding: 0 15px;
+      box-sizing: border-box;
       display: flex;
+      align-items: center;
       justify-content: center;
       z-index: 100;
       /* Prevent clicks on wrapper blocking content behind it */
@@ -298,7 +304,7 @@
       pointer-events: auto;
       /* Re-enable clicks for the bar itself */
       position: relative;
-      width: 340px;
+      width: 100%;
       height: 64px;
       background: rgba(30, 30, 30, 0.8);
       backdrop-filter: blur(35px);
@@ -329,7 +335,9 @@
     .nav-item {
       flex: 1;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-weight: 500;
       color: #8e8e93;
       z-index: 2;
@@ -346,7 +354,8 @@
     .sem-button {
       margin-left: 10px;
       height: 64px;
-      padding: 0 25px;
+      padding: 0 15px;
+      flex-shrink: 0;
       background: rgba(30, 30, 30, 0.8);
       backdrop-filter: blur(35px);
       -webkit-backdrop-filter: blur(35px);
@@ -403,7 +412,9 @@
       border: 1px solid rgba(255,255,255,0.1);
       padding: 10px 0;
       border-radius: 12px;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
@@ -416,12 +427,7 @@
       background: rgba(255, 255, 255, 0.15);
     }
 
-    /* Desktop adjustments */
-    @media (min-width: 801px) {
-      .slide {
-        width: 33.333%;
-      }
-    }
+    
   </style>
 </head>
 
@@ -470,7 +476,7 @@
 
   <!-- BOTTOM FLOATING NAV -->
   <div class="nav-wrapper">
-    <div style="position: relative;">
+    <div class="nav-center-wrap" style="position: relative; flex: 1; max-width: 340px; display: flex;">
       <div class="nav-container" id="nav-container">
         <div class="nav-knob" id="nav-knob"></div>
         <div class="nav-item active" data-index="0">Notes</div>
