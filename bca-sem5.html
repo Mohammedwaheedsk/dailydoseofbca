@@ -175,8 +175,8 @@
     }
 
     .slide {
-      flex: 1;
-      width: 100%;
+      width: 100vw;
+      max-width: 800px;
       height: 100%;
       overflow-y: auto;
       padding: 20px;
@@ -497,7 +497,7 @@
 
   <!-- BOTTOM FLOATING NAV -->
   <div class="nav-wrapper">
-    <div class="nav-center-wrap" style="position: relative; flex: 1; max-width: 340px; display: flex;">
+    <div class="nav-center-wrap" style="position: relative; width: calc(100% - 90px); max-width: 340px; display: flex;">
       <div class="nav-container" id="nav-container">
         <div class="nav-knob" id="nav-knob"></div>
         <div class="nav-item active" data-index="0">Notes</div>
