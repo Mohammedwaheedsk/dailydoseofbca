@@ -368,22 +368,33 @@
     }
 
 
-    /* --- KNOB REFLECTION GLOW --- */
+    /* --- KNOB REFLECTION GLOW (border ring) --- */
     .nav-container::before {
       content: '';
       position: absolute;
-      top: -1px;
-      left: 5px;
-      width: calc((100% - 10px) / 3);
-      height: 100%;
-      border-radius: 28px;
-      background: radial-gradient(ellipse at center top, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%);
-      box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.06);
-      transform: translateX(var(--glow-x, 0px));
+      inset: -2px;
+      border-radius: 34px;
+      background: radial-gradient(
+        ellipse 35% 80% at var(--glow-pct, 16%) 50%,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.12) 40%,
+        transparent 70%
+      );
       pointer-events: none;
-      z-index: 0;
-      will-change: transform;
-      transition: none;
+      z-index: -1;
+      will-change: background;
+    }
+    .nav-container::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 34px;
+      box-shadow:
+        0 0 18px 4px rgba(255, 255, 255, calc(var(--glow-intensity, 0.08))),
+        0 0 40px 8px rgba(255, 255, 255, calc(var(--glow-intensity, 0.04)));
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: -1;
     }
     .nav-item {
       flex: 1;
@@ -620,7 +631,8 @@
 
       // Move Knob
       navKnob.style.transform = `translateX(${offsetX}px)`;
-      navContainer.style.setProperty('--glow-x', offsetX + 'px');
+      var glowPct = 8 + (offsetX / maxTranslate) * 84;
+      navContainer.style.setProperty('--glow-pct', glowPct + '%');
 
       // Move Content (Map Nav% to Content%)
       const percentage = offsetX / maxTranslate;
@@ -665,7 +677,8 @@
       const preciseKnobX = ((navWidth - 10) / 3) * currentIndex;
       navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
       navKnob.style.transform = `translateX(${preciseKnobX}px)`;
-      navContainer.style.setProperty('--glow-x', preciseKnobX + 'px');
+      var snapGlowPct = 8 + (currentIndex / 2) * 84;
+      navContainer.style.setProperty('--glow-pct', snapGlowPct + '%');
 
       // 2. Snap Content
       const slideWidth = viewport.clientWidth;
