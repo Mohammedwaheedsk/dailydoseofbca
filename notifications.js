@@ -53,11 +53,18 @@ function showNoirNotification() {
     if (!document.getElementById('noir-notif')) {
         const notif = document.createElement('div');
         notif.id = 'noir-notif';
+        
+        // Determine icon type
+        const isImage = /\.(png|jpg|jpeg|gif|webp)$/i.test(NOTIFICATION_CONFIG.icon || "");
+        const iconHtml = isImage 
+            ? `<img src="${NOTIFICATION_CONFIG.icon}" class="notif-icon-img" alt="icon">` 
+            : `<span class="notif-icon">${NOTIFICATION_CONFIG.icon || "✨"}</span>`;
+
         notif.innerHTML = `
             <div class="notif-content">
-                <span class="notif-icon">✨</span>
+                ${iconHtml}
                 <p class="notif-text">${NOTIFICATION_CONFIG.message}</p>
-                ${NOTIFICATION_CONFIG.link !== "#" ? `<a href="${NOTIFICATION_CONFIG.link}" class="notif-link">View</a>` : ""}
+                ${NOTIFICATION_CONFIG.link && NOTIFICATION_CONFIG.link !== "#" ? `<a href="${NOTIFICATION_CONFIG.link}" class="notif-link">View</a>` : ""}
                 <button class="notif-close" id="close-notif">×</button>
             </div>
         `;
@@ -99,6 +106,12 @@ function showNoirNotification() {
                 .notif-icon {
                     font-size: 1.2rem;
                 }
+                .notif-icon-img {
+                    width: 24px;
+                    height: 24px;
+                    object-fit: contain;
+                    border-radius: 6px;
+                }
                 .notif-text {
                     flex: 1;
                     font-size: 0.95rem;
@@ -138,6 +151,7 @@ function showNoirNotification() {
             `;
             document.head.appendChild(style);
         }
+
         
         document.body.appendChild(notif);
 

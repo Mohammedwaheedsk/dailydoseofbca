@@ -1,5 +1,6 @@
 {
     "active": true,
+    "icon": "✨",
     "message": "Site is under progress, every content from Sem 1 to Sem 4 are updated.",
     "type": "info",
     "link": "bca-sem4.html",
