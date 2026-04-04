@@ -4,7 +4,7 @@ const NOTIFICATION_CONFIG = {
     message: "Site is under progress, every content from Sem 1 to Sem 4 are updated.", // Your message here
     type: "info", // info, warning, success
     link: "bca-sem4.html", // Optional link, set to "#" if not needed
-    expireSeconds: 20 // How often to show it to the same user (after dismissal)
+    expireSeconds: 24 // How often to show it to the same user (after dismissal)
 };
 
 // --- NOTIFICATION LOGIC ---
