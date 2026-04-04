@@ -22,11 +22,11 @@
       --accent-blue: #0a84ff;
 
       /* Glassmorphism Variables (Dark) */
-      --glass-panel: rgba(28, 28, 30, 0.65);
-      --glass-nav: rgba(28, 28, 30, 0.85);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --glass-highlight: rgba(255, 255, 255, 0.05);
-      --glass-blur: blur(25px);
+      --glass-panel: rgba(255, 255, 255, 0.06);
+      --glass-nav: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass-highlight: rgba(255, 255, 255, 0.35);
+      --glass-blur: blur(50px);
 
       /* Animation Springs */
       --ease-elastic: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -197,17 +197,17 @@
       border-radius: 22px;
       padding: 20px;
       margin-bottom: 16px;
-      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(40px) saturate(180%);
       transition: transform 0.2s, background 0.2s;
     }
 
     .card:active {
       transform: scale(0.98);
-      background: rgba(44, 44, 46, 0.8);
+      background: rgba(255, 255, 255, 0.12);
     }
 
     .card-header {
@@ -238,8 +238,11 @@
     .tag {
       font-size: 0.7rem;
       padding: 4px 10px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: var(--text-secondary);
       white-space: nowrap;
       margin-left: 10px;
@@ -261,9 +264,12 @@
       justify-content: center;
       width: 100%;
       padding: 14px;
-      background: rgba(10, 132, 255, 0.15);
+      background: rgba(10, 132, 255, 0.1);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
       color: #64d2ff;
-      border: 1px solid rgba(10, 132, 255, 0.3);
+      border: 1px solid rgba(10, 132, 255, 0.2);
+      border-top: 1px solid rgba(100, 210, 255, 0.3);
       border-radius: 14px;
       font-weight: 600;
       font-size: 0.95rem;
@@ -272,19 +278,25 @@
     }
 
     .action-btn:active {
-      background: rgba(10, 132, 255, 0.25);
+      background: rgba(10, 132, 255, 0.18);
     }
 
     .action-btn.lab {
-      background: rgba(191, 90, 242, 0.15);
+      background: rgba(191, 90, 242, 0.1);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
       color: #d996ff;
-      border-color: rgba(191, 90, 242, 0.3);
+      border-color: rgba(191, 90, 242, 0.2);
+      border-top: 1px solid rgba(217, 150, 255, 0.3);
     }
 
     .action-btn.assign {
-      background: rgba(48, 209, 88, 0.15);
+      background: rgba(48, 209, 88, 0.1);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
       color: #6ce086;
-      border-color: rgba(48, 209, 88, 0.3);
+      border-color: rgba(48, 209, 88, 0.2);
+      border-top: 1px solid rgba(108, 224, 134, 0.3);
       margin-top: 10px;
     }
 
@@ -326,12 +338,13 @@
       position: relative;
       width: 100%;
       height: 64px;
-      background: rgba(30, 30, 30, 0.8);
-      backdrop-filter: blur(35px);
-      -webkit-backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
       border-radius: 32px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       padding: 0 5px;
@@ -345,9 +358,11 @@
       top: 5px;
       bottom: 5px;
       width: calc((100% - 10px) / 3);
-      background: rgba(99, 99, 102, 0.4);
+      background: rgba(255, 255, 255, 0.12);
       border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       z-index: 1;
       /* No default transition to allow instant dragging */
     }
@@ -376,12 +391,13 @@
       height: 64px;
       padding: 0 15px;
       flex-shrink: 0;
-      background: rgba(30, 30, 30, 0.8);
-      backdrop-filter: blur(35px);
-      -webkit-backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
       border-radius: 32px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       color: #fff;
       font-weight: 600;
       font-size: 0.95rem;
@@ -395,7 +411,7 @@
     
     .sem-button:active {
       transform: scale(0.95);
-      background: rgba(50, 50, 50, 0.8);
+      background: rgba(255, 255, 255, 0.2);
     }
 
     .sem-menu {
@@ -403,9 +419,11 @@
       bottom: 80px; 
       left: 0; 
       width: 100%;
-      background: rgba(30, 30, 30, 0.95);
-      backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
       border-radius: 20px;
       padding: 15px;
       display: grid;
@@ -427,9 +445,13 @@
     }
 
     .sem-menu-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-top: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
       padding: 10px 0;
       border-radius: 12px;
       font-size: 0.8rem;
@@ -444,7 +466,7 @@
     }
 
     .sem-menu-btn:active, .sem-menu-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.2);
     }
 
     
