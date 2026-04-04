@@ -107,37 +107,14 @@
     @keyframes floatAurora {
       0% {
         transform: translate(0, 0) scale(1) rotate(0deg);
-      }
-      33% {
-        transform: translate(-40px, 30px) scale(1.05) rotate(5deg);
-      }
-      66% {
-        transform: translate(20px, -40px) scale(1.1) rotate(-5deg);
-      }
-      100% {
-        transform: translate(0, 0) scale(1) rotate(0deg);
-      }
-    }
-
-      33% {
-        transform: translate(-50px, 40px) scale(1.1);
-      }
-      66% {
-        transform: translate(30px, -50px) scale(1.05);
-      }
-      100% {
-        transform: translate(0, 0) scale(1);
-      }
-    }
-
-    /* --- HEADER --- */
-        header {
+      } /* --- HEADER --- */
+            header {
       flex-shrink: 0;
-      padding: 2.5rem 1.25rem 1.25rem;
+      padding: 1.5rem 1.25rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-
+      text-align: center;
       z-index: 10;
       width: 100%;
       max-width: 800px;
@@ -145,13 +122,13 @@
     }
 
     .brand {
-      font-size: 2rem;
+      font-size: 1.7rem;
       font-weight: 800;
       letter-spacing: -0.5px;
       background: linear-gradient(135deg, #fff, #a1a1aa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       cursor: pointer;
     }
 
@@ -160,7 +137,7 @@
     }
 
     .subtitle {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-align: center;
       color: var(--text-secondary);
       font-weight: 400;
@@ -225,13 +202,13 @@
       background: rgba(255, 255, 255, 0.12);
     }
 
-    .card-    header {
+    .card-        header {
       flex-shrink: 0;
-      padding: 2.5rem 1.25rem 1.25rem;
+      padding: 1.5rem 1.25rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-
+      text-align: center;
       z-index: 10;
       width: 100%;
       max-width: 800px;
@@ -273,30 +250,29 @@
     }
 
     .description {
-      font-size: 1rem;
-      text-align: center;
+      font-size: 0.85rem;
+      text-align: left;
       color: #aeaeb2;
       line-height: 1.5;
-      margin-bottom: 16px;
-
+      margin-bottom: 14px;
     }
 
     /* Buttons */
-    .action-btn {
+        .action-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      padding: 14px;
+      padding: 12px;
       background: rgba(10, 132, 255, 0.1);
-      backdrop-filter: blur(20px) saturate(150%);
-      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       color: #64d2ff;
       border: 1px solid rgba(10, 132, 255, 0.2);
       border-top: 1px solid rgba(100, 210, 255, 0.3);
       border-radius: 14px;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.9rem;
       text-decoration: none;
       transition: all 0.2s;
     }
@@ -419,20 +395,20 @@
       pointer-events: none;
       z-index: -1;
     }
-        .nav-item {
+            .nav-item {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: #8e8e93;
       z-index: 2;
       cursor: pointer;
-      padding: 15px 0;
       height: 100%;
-      transition: all 0.2s;
+      transition: color 0.2s;
+      white-space: nowrap;
     }
 
     .nav-item.active {
