@@ -1,12 +1,7 @@
 {
     "active": true,
-<<<<<<< HEAD
     "icon": "https://media1.tenor.com/m/Ob7Y0A4KFyQAAAAC/setting-icon.gif",
     "message": "Site is under progress, every content from Sem 1 to Sem 4 are updated.",
-=======
-    "icon": "https://tenor.com/view/setting-icon-gif-4161001493837256484",
-    "message": "Webite is under progress, everything from Sem 1 to Sem 4 are updated.",
->>>>>>> fb0889a9ed2676a11973e99451eebe7904f92939
     "type": "info",
     "link": "bca-sem4.html",
     "expireSeconds": 25
