@@ -1,119 +1,482 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
   <meta charset="utf-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-
   <title>DailyDoseofBCA</title>
 
+  <!-- FAVICON -->
   <link rel="icon" href="mylogo.png" type="image/png">
-
   <link rel="apple-touch-icon" href="mylogo.png">
 
   <style>
-
     :root {
-
+      /* iOS Dark Mode Palette */
       --bg-base: #121212;
+      --bg-gradient-start: #1c1c1e;
 
+      /* Text Colors */
       --text-primary: #f5f5f7;
-
       --text-secondary: #86868b;
-
       --accent-blue: #0a84ff;
 
+      /* Glassmorphism Variables (Dark) */
       --glass-panel: rgba(255, 255, 255, 0.06);
-
+      --glass-nav: rgba(255, 255, 255, 0.08);
       --glass-border: rgba(255, 255, 255, 0.18);
-
       --glass-highlight: rgba(255, 255, 255, 0.35);
+      --glass-blur: blur(50px);
+
+      /* Animation Springs */
+      --ease-elastic: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+        /* --- ULTRA-PREMIUM NOIR MONOCHROME BACKGROUND --- */
+    body {
+      background-color: #000000 !important;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: -1;
+      opacity: 0.35;
+      animation: floatAurora 22s infinite ease-in-out alternate;
+      will-change: transform;
+    }
+
+    .blob-1 {
+      top: -15%;
+      right: -5%;
+      width: 65vw;
+      height: 65vw;
+      background: radial-gradient(circle, #444 0%, transparent 80%);
+      animation-duration: 28s;
+    }
+
+    .blob-2 {
+      bottom: -15%;
+      left: -10%;
+      width: 75vw;
+      height: 75vw;
+      background: radial-gradient(circle, #222 0%, transparent 85%);
+      animation-duration: 35s;
+    }
+
+    .blob-3 {
+      top: 35%;
+      left: 5%;
+      width: 55vw;
+      height: 55vw;
+      background: radial-gradient(circle, #333 0%, transparent 80%);
+      animation-duration: 25s;
+      animation-delay: -7s;
+    }
+
+    .blob-4 {
+      bottom: 5%;
+      right: -5%;
+      width: 65vw;
+      height: 65vw;
+      background: radial-gradient(circle, #111 0%, transparent 90%);
+      animation-duration: 32s;
+      animation-delay: -12s;
+    }
+
+    @keyframes floatAurora {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+      33% {
+        transform: translate(-40px, 30px) scale(1.05) rotate(5deg);
+      }
+      66% {
+        transform: translate(20px, -40px) scale(1.1) rotate(-5deg);
+      }
+      100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+    }
+
+      33% {
+        transform: translate(-50px, 40px) scale(1.1);
+      }
+      66% {
+        transform: translate(30px, -50px) scale(1.05);
+      }
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+    }
+
+    /* --- HEADER --- */
+        header {
+      flex-shrink: 0;
+      padding: 2.5rem 1.25rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      z-index: 10;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff, #a1a1aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+
+    .brand:active {
+      opacity: 0.7;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      text-align: center;
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 95%;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    .slider-viewport {
+      flex: 1;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slider-track {
+      display: flex;
+      height: 100%;
+      width: 300%;
+      /* 3 Slides */
+      will-change: transform;
+      /* Ensure hardware acceleration for smooth glide */
+      transform: translate3d(0, 0, 0);
+    }
+
+    .slide {
+      width: 100%;
+      min-width: 100%;
+      max-width: 800px;
+      height: 100%;
+      overflow-y: auto;
+      padding: 20px;
+      padding-bottom: 140px;
+      /* Space for bottom nav */
+      scrollbar-width: none;
+    }
+
+    .slide::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* --- DARK CARDS --- */
+    .card {
+      background: var(--glass-panel);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-highlight);
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(40px) saturate(180%);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .card:active {
+      transform: scale(0.98);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .card-    header {
+      flex-shrink: 0;
+      padding: 2.5rem 1.25rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      z-index: 10;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .subject-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .subject {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+    }
+
+    .topic-preview {
+      font-size: 1rem;
+      color: var(--accent-blue);
+      font-weight: 500;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-secondary);
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+
+    .description {
+      font-size: 1rem;
+      text-align: center;
+      color: #aeaeb2;
+      line-height: 1.5;
+      margin-bottom: 16px;
 
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; user-select: none; }
+    /* Buttons */
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px;
+      background: rgba(10, 132, 255, 0.1);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      color: #64d2ff;
+      border: 1px solid rgba(10, 132, 255, 0.2);
+      border-top: 1px solid rgba(100, 210, 255, 0.3);
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
 
-    body { background-color: #000; color: var(--text-primary); height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+    .action-btn:active {
+      background: rgba(10, 132, 255, 0.18);
+    }
 
-    .blob { position: absolute; border-radius: 50%; filter: blur(140px); z-index: -1; opacity: 0.35; animation: floatAurora 22s infinite ease-in-out alternate; }
+    .action-btn.lab {
+      background: rgba(191, 90, 242, 0.1);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      color: #d996ff;
+      border-color: rgba(191, 90, 242, 0.2);
+      border-top: 1px solid rgba(217, 150, 255, 0.3);
+    }
 
-    .blob-1 { top: -15%; right: -5%; width: 65vw; height: 65vw; background: radial-gradient(circle, #444 0%, transparent 80%); animation-duration: 28s; }
+    .action-btn.assign {
+      background: rgba(48, 209, 88, 0.1);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      color: #6ce086;
+      border-color: rgba(48, 209, 88, 0.2);
+      border-top: 1px solid rgba(108, 224, 134, 0.3);
+      margin-top: 10px;
+    }
 
-    .blob-2 { bottom: -15%; left: -10%; width: 75vw; height: 75vw; background: radial-gradient(circle, #222 0%, transparent 85%); animation-duration: 35s; }
+    /* Accordion */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+      margin-top: 0;
+      opacity: 0.7;
+    }
 
-    .blob-3 { top: 35%; left: 5%; width: 55vw; height: 55vw; background: radial-gradient(circle, #333 0%, transparent 80%); animation-duration: 25s; animation-delay: -7s; }
+    .accordion-content.open {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 1;
+    }
 
-    .blob-4 { bottom: 5%; right: -5%; width: 65vw; height: 65vw; background: radial-gradient(circle, #111 0%, transparent 90%); animation-duration: 32s; animation-delay: -12s; }
+    /* --- BOTTOM NAV (Floating) --- */
+    .nav-wrapper {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      width: 100%;
+      padding: 0 15px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      /* Prevent clicks on wrapper blocking content behind it */
+      pointer-events: none;
+    }
 
-    @keyframes floatAurora { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(-40px,30px) scale(1.05); } 66% { transform: translate(20px, -40px) scale(1.1); } 100% { transform: translate(0,0) scale(1); } }
+    .nav-container {
+      pointer-events: auto;
+      /* Re-enable clicks for the bar itself */
+      position: relative;
+      width: 100%;
+      height: 64px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+      overflow: visible;
+    }
 
-    header { flex-shrink: 0; padding: 2.5rem 1rem 1.5rem; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 800px; margin: 0 auto; z-index: 10; }
+    /* Gliding Highlight Knob */
+    .nav-knob {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      bottom: 5px;
+      width: calc((100% - 10px) / 3);
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1;
+      /* No default transition to allow instant dragging */
+    }
 
-    .brand { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #fff, #a1a1aa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; cursor: pointer; white-space: nowrap; }
 
-    .subtitle { font-size: 0.85rem; color: var(--text-secondary); max-width: 90%; margin: 0 auto; line-height: 1.4; text-align: center; }
+    /* --- KNOB REFLECTION GLOW (border ring) --- */
+    .nav-container::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 34px;
+      background: radial-gradient(
+        ellipse 35% 80% at var(--glow-pct, 16%) 50%,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.12) 40%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: -1;
+      will-change: background;
+    }
+    .nav-container::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 34px;
+      box-shadow:
+        0 0 18px 4px rgba(255, 255, 255, calc(var(--glow-intensity, 0.08))),
+        0 0 40px 8px rgba(255, 255, 255, calc(var(--glow-intensity, 0.04)));
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .nav-item {
+      flex: 1;
 
-    .slider-viewport { flex: 1; width: 100%; max-width: 800px; margin: 0 auto; overflow: hidden; position: relative; }
+      font-size: 1rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+      color: #8e8e93;
+      z-index: 2;
+      cursor: pointer;
+      padding: 15px 0;
+      transition: color 0.2s;
+    }
 
-    .slider-track { display: flex; height: 100%; width: 300%; will-change: transform; transform: translate3d(0,0,0); }
+    .nav-item.active {
+      color: #fff;
+      font-weight: 600;
+    }
 
-    .slide { width: 100%; min-width: 100%; height: 100%; overflow-y: auto; padding: 15px; padding-bottom: 140px; scrollbar-width: none; }
-
-    .slide::-webkit-scrollbar { display: none; }
-
-    .card { background: var(--glass-panel); border: 1px solid var(--glass-border); border-top: 1px solid var(--glass-highlight); border-radius: 22px; padding: 16px; margin-bottom: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); transition: transform 0.2s; }
-
-    .card:active { transform: scale(0.98); background: rgba(255,255,255,0.12); }
-
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-
-    .subject-group { display: flex; flex-direction: column; gap: 4px; }
-
-    .subject { font-size: 1.1rem; font-weight: 700; color: #fff; }
-
-    .tag { font-size: 0.7rem; padding: 4px 10px; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary); }
-
-    .description { font-size: 0.85rem; color: #aeaeb2; line-height: 1.5; margin-bottom: 12px; }
-
-    .action-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; background: rgba(10,132,255,0.1); color: #64d2ff; border: 1px solid rgba(10,132,255,0.2); border-top: 1px solid rgba(100,210,255,0.3); border-radius: 14px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: all 0.2s; }
-
-    .action-btn.assign { background: rgba(48,209,88,0.1); color: #6ce086; border-color: rgba(48,209,88,0.2); border-top-color: rgba(108,224,134,0.3); margin-top: 8px; }
-
-    .action-btn.lab { background: rgba(191,90,242,0.1); color: #d996ff; border-color: rgba(191,90,242,0.2); border-top-color: rgba(217,150,255,0.3); }
-
-    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; opacity: 0.7; }
-
-    .accordion-content.open { margin-top: 10px; opacity: 1; }
-
-    .nav-wrapper { position: fixed; bottom: 30px; left: 0; width: 100%; padding: 0 15px; display: flex; align-items: center; justify-content: center; z-index: 100; pointer-events: none; }
-
-    .nav-center-wrap { position: relative; width: calc(100% - 80px); max-width: 320px; display: flex; pointer-events: auto; }
-
-        .nav-container { position: relative; width: 100%; height: 56px; background: rgba(30, 30, 30, 0.8); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 32px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); display: flex; align-items: center; padding: 0 5px; }
-
-        .nav-knob { position: absolute; left: 5px; top: 5px; bottom: 5px; width: calc((100% - 10px) / 3); background: rgba(99, 99, 102, 0.4); border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.1); z-index: 1; }
-
+    .sem-button {
+      margin-left: 10px;
+      height: 64px;
+      padding: 0 15px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: background 0.2s, transform 0.2s;
+    }
     
+    .sem-button:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.2);
+    }
 
-    .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 600; color: #8e8e93; z-index: 2; cursor: pointer; height: 100%; transition: color 0.2s; white-space: nowrap; }
-
-    .nav-item.active { color: #fff; }
-
-        .sem-button { margin-left: 10px; height: 56px; padding: 0 20px; background: rgba(30, 30, 30, 0.8); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 32px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; transition: transform 0.2s; }
-
-    .sem-button:active { transform: scale(0.95); }
-
-            .sem-menu {
+    .sem-menu {
       position: absolute;
       bottom: 80px; 
       left: 0; 
       width: 100%;
-      background: rgba(30, 30, 30, 0.95);
-      backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
       border-radius: 20px;
       padding: 15px;
       display: grid;
@@ -124,209 +487,305 @@
       transform-origin: bottom center;
       transform: translateY(30px) scale(0.85);
       pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       z-index: 101;
     }
 
-    .sem-menu::-webkit-scrollbar { display: none; }
+    .sem-menu.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
 
-    .sem-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-
-        .sem-menu-btn {
-      background: rgba(255, 255, 255, 0.05);
+    .sem-menu-btn {
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-top: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
       padding: 10px 0;
       border-radius: 12px;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
       white-space: nowrap;
-      text-align: center;
+
       text-decoration: none;
     }
 
-    .sem-menu-btn:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.15); }
+    .sem-menu-btn:active, .sem-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
 
-    .sem-menu-btn:active { background: rgba(255,255,255,0.2); }
-
+    
   </style>
-
 </head>
 
 <body>
 
-  <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div><div class="blob blob-4"></div>
+  <!-- Dark Blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
 
   <header>
-
     <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA : Sem-2</div>
-
     <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
-
   </header>
 
+  <!-- Main Content Slider -->
   <div class="slider-viewport" id="viewport">
-
     <div class="slider-track" id="track">
 
       <!-- PAGE 1: NOTES -->
-
       <div class="slide">
-
         <div class="card">
-
           <div class="card-header"><span class="subject">All Notes</span></div>
-
           <p class="description">Access all subjects notes for Semester 2.</p>
-
           <a href="2-notes.html" class="action-btn">Open Notes</a>
+        </div>
+      </div>
+
+      <!-- PAGE 2: ASSIGNMENTS -->
+      <div class="slide">
+        <div class="card">
+          <div class="card-header"><span class="subject">All Assignments</span></div>
+          <p class="description">Access all assignments for Semester 2.</p>
+          <a href="2-assignment.html" class="action-btn assign">Open Assignments</a>
+        </div>
+      </div>
+
+      <!-- PAGE 3: LAB WORK -->
+      <div class="slide">
+        <div class="card">
+          <div class="card-header"><span class="subject">All Lab Manuals</span></div>
+          <p class="description">Access all lab manuals for Semester 2.</p>
+          <a href="2-labmanual.html" class="action-btn lab">Open Lab Manuals</a>
+        </div>
+      </div>
 
     </div>
-
   </div>
 
+  <!-- BOTTOM FLOATING NAV -->
   <div class="nav-wrapper">
-
-    <div class="nav-center-wrap">
-
+    <div class="nav-center-wrap" style="position: relative; width: calc(100% - 90px); max-width: 340px; display: flex;">
       <div class="nav-container" id="nav-container">
-
         <div class="nav-knob" id="nav-knob"></div>
-
         <div class="nav-item active" data-index="0">Notes</div>
-
         <div class="nav-item" data-index="1">Assign</div>
-
         <div class="nav-item" data-index="2">Lab Work</div>
-
       </div>
-
-            <div class="sem-menu" id="sem-menu">
-
-        <a href="bca-sem1.html" class="sem-menu-btn">Sem 1</a>
-
-        <a href="bca-sem2.html" class="sem-menu-btn">Sem 2</a>
-
-        <a href="bca-sem3.html" class="sem-menu-btn">Sem 3</a>
-
-        <a href="bca-sem4.html" class="sem-menu-btn">Sem 4</a>
-
-        <a href="bca-sem5.html" class="sem-menu-btn">Sem 5</a>
-
-        <a href="#" class="sem-menu-btn" style="opacity: 0.4;">Sem 6</a>
-
+      
+      <!-- Mini Menu Box for Semesters -->
+      <div class="sem-menu" id="sem-menu">
+        <a href="bca-sem1.html" class="sem-menu-btn">Semester 1</a>
+        <a href="bca-sem2.html" class="sem-menu-btn">Semester 2</a>
+        <a href="bca-sem3.html" class="sem-menu-btn">Semester 3</a>
+        <a href="bca-sem4.html" class="sem-menu-btn">Semester 4</a>
+        <a href="bca-sem5.html" class="sem-menu-btn">Semester 5</a>
+        <a href="#" class="sem-menu-btn">Semester 6</a>
       </div>
-
     </div>
-
+    
     <div class="sem-button" id="sem-btn">Sem</div>
 
   </div>
 
   <script>
+    /* ROBUST NAV LOGIC 
+      1. Drag Nav Knob -> Moves Content
+      2. Click Nav Item -> Jumps Content
+    */
 
     const navContainer = document.getElementById('nav-container');
-
     const navKnob = document.getElementById('nav-knob');
-
     const track = document.getElementById('track');
-
     const viewport = document.getElementById('viewport');
-
     const navItems = document.querySelectorAll('.nav-item');
 
-    let currentIndex = 0, isDragging = false, navWidth, knobWidth, maxTranslate;
+    let currentIndex = 0;
+    let isDragging = false;
+    let navWidth, knobWidth, maxTranslate;
 
+    // Initialize sizes
     function initDimensions() {
-
       navWidth = navContainer.clientWidth;
-
+      // Padding 5px left + 5px right = 10px total padding logic
       knobWidth = (navWidth - 10) / 3;
-
       maxTranslate = navWidth - 10 - knobWidth;
-
     }
 
+    // --- TOUCH / MOUSE EVENTS ---
     navContainer.addEventListener('touchstart', dragStart, { passive: false });
-
     navContainer.addEventListener('touchmove', dragMove, { passive: false });
-
     navContainer.addEventListener('touchend', dragEnd);
 
     navContainer.addEventListener('mousedown', dragStart);
-
     window.addEventListener('mousemove', dragMove);
-
     window.addEventListener('mouseup', dragEnd);
 
-    function dragStart(e) { if(e.target.closest('.nav-container')) { isDragging = true; initDimensions(); navKnob.style.transition = 'none'; track.style.transition = 'none'; } }
+    function dragStart(e) {
+      if (e.target.closest('.nav-container')) {
+        isDragging = true;
+        initDimensions();
+        navKnob.style.transition = 'none';
+        track.style.transition = 'none';
+        navContainer.style.transition = 'none';
+      }
+    }
 
     function dragMove(e) {
-
       if (!isDragging) return;
-
       e.preventDefault();
 
       const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-
       const navRect = navContainer.getBoundingClientRect();
 
+      // Relative X inside the nav bar
+      // 5px is left padding offset
       let offsetX = clientX - navRect.left - 5 - (knobWidth / 2);
 
-      if (offsetX < 0) offsetX = 0; if (offsetX > maxTranslate) offsetX = maxTranslate;
+      // Clamp
+      if (offsetX < 0) offsetX = 0;
+      if (offsetX > maxTranslate) offsetX = maxTranslate;
 
+      // Move Knob
       navKnob.style.transform = `translateX(${offsetX}px)`;
+      var glowPct = 8 + (offsetX / maxTranslate) * 84;
+      navContainer.style.setProperty('--glow-pct', glowPct + '%');
 
-      navContainer.style.setProperty('--glow-pct', (offsetX / maxTranslate) * 100 + '%');
-
+      // Move Content (Map Nav% to Content%)
       const percentage = offsetX / maxTranslate;
 
-      track.style.transform = `translateX(${percentage * -(viewport.clientWidth * 2)}px)`;
+      // We scroll 3 pages, so total scrollable width is 2 * ViewportWidth
+      const slideWidth = viewport.clientWidth;
+      const totalContentScroll = slideWidth * 2;
+
+      const contentTranslate = percentage * -totalContentScroll;
+      track.style.transform = `translateX(${contentTranslate}px)`;
 
       highlightNavText(percentage);
-
     }
 
-    function dragEnd() { if (!isDragging) return; isDragging = false; const x = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41; const p = x / maxTranslate; currentIndex = p < 0.33 ? 0 : p < 0.66 ? 1 : 2; snapToPosition(); }
+    function dragEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
 
-    navItems.forEach((item, index) => item.addEventListener('click', () => { currentIndex = index; snapToPosition(); }));
+      // Snap logic
+      const currentKnobTransform = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41;
+      const percentage = currentKnobTransform / maxTranslate;
+
+      if (percentage < 0.33) currentIndex = 0;
+      else if (percentage < 0.66) currentIndex = 1;
+      else currentIndex = 2;
+
+      snapToPosition();
+    }
+
+    // Click Support
+    navItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        currentIndex = index;
+        snapToPosition();
+      });
+    });
 
     function snapToPosition() {
-
       initDimensions();
 
-      const x = ((navWidth - 10) / 3) * currentIndex;
-
+      // 1. Snap Knob
+      const preciseKnobX = ((navWidth - 10) / 3) * currentIndex;
       navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      navKnob.style.transform = `translateX(${preciseKnobX}px)`;
+      var snapGlowPct = 8 + (currentIndex / 2) * 84;
+      navContainer.style.setProperty('--glow-pct', snapGlowPct + '%');
+      navContainer.style.transition = '--glow-x 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      var snapGlowPct = 8 + (currentIndex / 2) * 84;
+      navContainer.style.setProperty('--glow-pct', snapGlowPct + '%');
 
-      navKnob.style.transform = `translateX(${x}px)`;
-
-      navContainer.style.setProperty('--glow-pct', (currentIndex/2)*100 + '%');
-
+      // 2. Snap Content
+      const slideWidth = viewport.clientWidth;
+      const contentX = currentIndex * -slideWidth;
       track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      track.style.transform = `translateX(${contentX}px)`;
 
-      track.style.transform = `translateX(${-currentIndex * viewport.clientWidth}px)`;
-
-      navItems.forEach((item, idx) => item.classList.toggle('active', idx === currentIndex));
-
+      // 3. Highlight
+      navItems.forEach((item, idx) => {
+        if (idx === currentIndex) {
+          item.classList.add('active');
+          item.style.color = '#fff';
+        } else {
+          item.classList.remove('active');
+          item.style.color = '#8e8e93';
+        }
+      });
     }
 
-    function highlightNavText(pct) { const i = pct < 0.33 ? 0 : pct < 0.66 ? 1 : 2; navItems.forEach((item, idx) => item.classList.toggle('active', idx === i)); }
+    function highlightNavText(pct) {
+      let activeIdx = 0;
+      if (pct > 0.33) activeIdx = 1;
+      if (pct > 0.66) activeIdx = 2;
 
-    function toggleAccordion(card) { const c = card.querySelector('.accordion-content'); if (c.style.maxHeight) { c.style.maxHeight = null; c.classList.remove('open'); } else { c.style.maxHeight = c.scrollHeight + "px"; c.classList.add('open'); } }
+      navItems.forEach((item, idx) => {
+        if (idx === activeIdx) {
+          item.classList.add('active');
+          item.style.color = '#fff';
+        } else {
+          item.classList.remove('active');
+          item.style.color = '#8e8e93';
+        }
+      });
+    }
 
-    window.addEventListener('resize', () => { initDimensions(); snapToPosition(); });
+    function toggleAccordion(card) {
+      const content = card.querySelector('.accordion-content');
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+        content.classList.remove('open');
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        content.classList.add('open');
+      }
+    }
 
-    window.onload = () => { initDimensions(); snapToPosition(); };
+    // Handle Resize
+    window.addEventListener('resize', () => {
+      initDimensions();
+      snapToPosition();
+    });
 
-    const semBtn = document.getElementById('sem-btn'), semMenu = document.getElementById('sem-menu');
+    // Initial Call
+    window.onload = function () {
+      initDimensions();
+      snapToPosition();
+    };
 
-    semBtn.onclick = (e) => { e.stopPropagation(); semMenu.classList.toggle('open'); };
+    // SEM BUTTON LOGIC
+    const semBtn = document.getElementById('sem-btn');
+    const semMenu = document.getElementById('sem-menu');
 
-    document.onclick = (e) => { if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) semMenu.classList.remove('open'); };
+    semBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      semMenu.classList.toggle('open');
+    });
 
+    document.addEventListener('click', (e) => {
+      if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) {
+        semMenu.classList.remove('open');
+      }
+    });
+
+    // Prevent clicks inside menu from bubbling up
+    semMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
   </script>
 
 </body>
