@@ -1,338 +1,675 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-
-  <meta charset="utf-8" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-
-  <title>DailyDoseofBCA</title>
-
-  <link rel="icon" href="mylogo.png" type="image/png">
-
-  <link rel="apple-touch-icon" href="mylogo.png">
-
-  <style>
-
-    :root {
-
-      --bg-base: #121212;
-
-      --text-primary: #f5f5f7;
-
-      --text-secondary: #86868b;
-
-      --accent-blue: #0a84ff;
-
-      --glass-panel: rgba(255, 255, 255, 0.06);
-
-      --glass-border: rgba(255, 255, 255, 0.18);
-
-      --glass-highlight: rgba(255, 255, 255, 0.35);
-
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; user-select: none; }
-
-    body { background-color: #000; color: var(--text-primary); height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-
-    .blob { position: absolute; border-radius: 50%; filter: blur(140px); z-index: -1; opacity: 0.35; animation: floatAurora 22s infinite ease-in-out alternate; }
-
-    .blob-1 { top: -15%; right: -5%; width: 65vw; height: 65vw; background: radial-gradient(circle, #444 0%, transparent 80%); animation-duration: 28s; }
-
-    .blob-2 { bottom: -15%; left: -10%; width: 75vw; height: 75vw; background: radial-gradient(circle, #222 0%, transparent 85%); animation-duration: 35s; }
-
-    .blob-3 { top: 35%; left: 5%; width: 55vw; height: 55vw; background: radial-gradient(circle, #333 0%, transparent 80%); animation-duration: 25s; animation-delay: -7s; }
-
-    .blob-4 { bottom: 5%; right: -5%; width: 65vw; height: 65vw; background: radial-gradient(circle, #111 0%, transparent 90%); animation-duration: 32s; animation-delay: -12s; }
-
-    @keyframes floatAurora { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(-40px,30px) scale(1.05); } 66% { transform: translate(20px, -40px) scale(1.1); } 100% { transform: translate(0,0) scale(1); } }
-
-    
-
-    header { flex-shrink: 0; padding: 2.5rem 1rem 1.5rem; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 800px; margin: 0 auto; z-index: 10; }
-
-    .brand { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #fff, #a1a1aa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; cursor: pointer; white-space: nowrap; }
-
-    .subtitle { font-size: 0.85rem; color: var(--text-secondary); max-width: 90%; margin: 0 auto; line-height: 1.4; text-align: center; }
-
-    
-
-    .slider-viewport { flex: 1; width: 100%; max-width: 800px; margin: 0 auto; overflow: hidden; position: relative; }
-
-    .slider-track { display: flex; height: 100%; width: 300%; will-change: transform; transform: translate3d(0,0,0); }
-
-    .slide { width: 100%; min-width: 100%; height: 100%; overflow-y: auto; padding: 15px; padding-bottom: 140px; scrollbar-width: none; }
-
-    .slide::-webkit-scrollbar { display: none; }
-
-    
-
-    .card { background: var(--glass-panel); border: 1px solid var(--glass-border); border-top: 1px solid var(--glass-highlight); border-radius: 22px; padding: 16px; margin-bottom: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); transition: transform 0.2s; }
-
-    .card:active { transform: scale(0.98); background: rgba(255,255,255,0.12); }
-
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-
-    .subject-group { display: flex; flex-direction: column; gap: 4px; }
-
-    .subject { font-size: 1.1rem; font-weight: 700; color: #fff; }
-
-    .tag { font-size: 0.7rem; padding: 4px 10px; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary); }
-
-    .description { font-size: 0.85rem; color: #aeaeb2; line-height: 1.5; margin-bottom: 12px; }
-
-    .action-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; background: rgba(10,132,255,0.1); color: #64d2ff; border: 1px solid rgba(10,132,255,0.2); border-top: 1px solid rgba(100,210,255,0.3); border-radius: 14px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: all 0.2s; }
-
-    .action-btn.assign { background: rgba(48,209,88,0.1); color: #6ce086; border-color: rgba(48,209,88,0.2); border-top-color: rgba(108,224,134,0.3); margin-top: 8px; }
-
-    .action-btn.lab { background: rgba(191,90,242,0.1); color: #d996ff; border-color: rgba(191,90,242,0.2); border-top-color: rgba(217,150,255,0.3); }
-
-    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; opacity: 0.7; }
-
-    .accordion-content.open { margin-top: 10px; opacity: 1; }
-
-
-
-    .nav-wrapper { position: fixed; bottom: 30px; left: 0; width: 100%; padding: 0 15px; display: flex; align-items: center; justify-content: center; z-index: 100; pointer-events: none; }
-
-    .nav-center-wrap { position: relative; width: calc(100% - 80px); max-width: 320px; display: flex; pointer-events: auto; }
-
-    .nav-container { position: relative; width: 100%; height: 56px; background: rgba(255,255,255,0.08); backdrop-filter: blur(50px) saturate(200%); border: 1px solid var(--glass-border); border-top: 1px solid var(--glass-highlight); border-radius: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); display: flex; align-items: center; padding: 0 5px; }
-
-    .nav-knob { position: absolute; left: 5px; top: 5px; bottom: 5px; width: calc((100% - 10px) / 3); background: rgba(255,255,255,0.12); border-radius: 28px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(20px); z-index: 1; }
-
-    .nav-container::before { content: ''; position: absolute; inset: -2px; border-radius: 34px; background: radial-gradient(ellipse 35% 80% at var(--glow-pct, 16%) 50%, rgba(255,255,255,0.45) 0%, transparent 70%); pointer-events: none; z-index: -1; }
-
-    .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #8e8e93; z-index: 2; cursor: pointer; height: 100%; transition: color 0.2s; white-space: nowrap; }
-
-    .nav-item.active { color: #fff; }
-
-    .sem-button { margin-left:10px; height: 56px; padding: 0 20px; background: rgba(255,255,255,0.08); backdrop-filter: blur(50px) saturate(200%); border: 1px solid var(--glass-border); border-top: 1px solid var(--glass-highlight); border-radius: 32px; color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; transition: transform 0.2s; }
-
-    .sem-button:active { transform: scale(0.95); }
-
-        .sem-menu {
-      position: absolute;
-      bottom: 80px;
-      left: 0;
-      width: 100%;
-      display: flex;
-      gap: 12px;
-      padding: 10px 20px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-      z-index: 101;
-      opacity: 0;
-      transform: translateY(20px);
-      pointer-events: none;
-      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    .sem-menu::-webkit-scrollbar { display: none; }
-    .sem-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    .sem-menu-btn {
-      flex-shrink: 0;
-      padding: 12px 24px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      color: #fff;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .sem-menu-btn:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.15); }
-
-
-    .sem-menu-btn:active { background: rgba(255,255,255,0.2); }
-
-  </style>
-
-</head>
-
-<body>
-
-  <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div><div class="blob blob-4"></div>
-
-  <header>
-
-    <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA : Sem-3</div>
-
-    <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
-
-  </header>
-
-  <div class="slider-viewport" id="viewport">
-
-    <div class="slider-track" id="track">
-
-      <!-- PAGE 1: NOTES -->
-
-
-
-      <div class="slide">
-
-
-
-        <div class="card">
-
-
-
-          <div class="card-header"><span class="subject">All Notes</span></div>
-
-
-
-          <p class="description">Access all subjects notes for Semester 3.</p>
-
-
-
-          <a href="3-notes.html" class="action-btn">Open Notes</a>
-
-    </div>
-
-  </div>
-
-  <div class="nav-wrapper">
-
-    <div class="nav-center-wrap">
-
-      <div class="nav-container" id="nav-container">
-
-        <div class="nav-knob" id="nav-knob"></div>
-
-        <div class="nav-item active" data-index="0">Notes</div>
-
-        <div class="nav-item" data-index="1">Assign</div>
-
-        <div class="nav-item" data-index="2">Lab Work</div>
-
-      </div>
-
-            <div class="sem-menu" id="sem-menu">
-        <a href="bca-sem1.html" class="sem-menu-btn">Sem 1</a>
-        <a href="bca-sem2.html" class="sem-menu-btn">Sem 2</a>
-        <a href="bca-sem3.html" class="sem-menu-btn">Sem 3</a>
-        <a href="bca-sem4.html" class="sem-menu-btn">Sem 4</a>
-        <a href="bca-sem5.html" class="sem-menu-btn">Sem 5</a>
-        <a href="#" class="sem-menu-btn" style="opacity: 0.4;">Sem 6</a>
-      </div>
-
-    </div>
-
-    <div class="sem-button" id="sem-btn">Sem</div>
-
-  </div>
-
-  <script>
-
-    const navContainer = document.getElementById('nav-container');
-
-    const navKnob = document.getElementById('nav-knob');
-
-    const track = document.getElementById('track');
-
-    const viewport = document.getElementById('viewport');
-
-    const navItems = document.querySelectorAll('.nav-item');
-
-    let currentIndex = 0, isDragging = false, navWidth, knobWidth, maxTranslate;
-
-    function initDimensions() {
-
-      navWidth = navContainer.clientWidth;
-
-      knobWidth = (navWidth - 10) / 3;
-
-      maxTranslate = navWidth - 10 - knobWidth;
-
-    }
-
-    navContainer.addEventListener('touchstart', dragStart, { passive: false });
-
-    navContainer.addEventListener('touchmove', dragMove, { passive: false });
-
-    navContainer.addEventListener('touchend', dragEnd);
-
-    navContainer.addEventListener('mousedown', dragStart);
-
-    window.addEventListener('mousemove', dragMove);
-
-    window.addEventListener('mouseup', dragEnd);
-
-    function dragStart(e) { if(e.target.closest('.nav-container')) { isDragging = true; initDimensions(); navKnob.style.transition = 'none'; track.style.transition = 'none'; } }
-
-    function dragMove(e) {
-
-      if (!isDragging) return;
-
-      e.preventDefault();
-
-      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-
-      const navRect = navContainer.getBoundingClientRect();
-
-      let offsetX = clientX - navRect.left - 5 - (knobWidth / 2);
-
-      if (offsetX < 0) offsetX = 0; if (offsetX > maxTranslate) offsetX = maxTranslate;
-
-      navKnob.style.transform = `translateX(${offsetX}px)`;
-
-      navContainer.style.setProperty('--glow-pct', (offsetX / maxTranslate) * 100 + '%');
-
-      const percentage = offsetX / maxTranslate;
-
-      track.style.transform = `translateX(${percentage * -(viewport.clientWidth * 2)}px)`;
-
-      highlightNavText(percentage);
-
-    }
-
-    function dragEnd() { if (!isDragging) return; isDragging = false; const x = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41; const p = x / maxTranslate; currentIndex = p < 0.33 ? 0 : p < 0.66 ? 1 : 2; snapToPosition(); }
-
-    navItems.forEach((item, index) => item.addEventListener('click', () => { currentIndex = index; snapToPosition(); }));
-
-    function snapToPosition() {
-
-      initDimensions();
-
-      const x = ((navWidth - 10) / 3) * currentIndex;
-
-      navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-
-      navKnob.style.transform = `translateX(${x}px)`;
-
-      navContainer.style.setProperty('--glow-pct', (currentIndex/2)*100 + '%');
-
-      track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-
-      track.style.transform = `translateX(${-currentIndex * viewport.clientWidth}px)`;
-
-      navItems.forEach((item, idx) => item.classList.toggle('active', idx === currentIndex));
-
-    }
-
-    function highlightNavText(pct) { const i = pct < 0.33 ? 0 : pct < 0.66 ? 1 : 2; navItems.forEach((item, idx) => item.classList.toggle('active', idx === i)); }
-
-    function toggleAccordion(card) { const c = card.querySelector('.accordion-content'); if (c.style.maxHeight) { c.style.maxHeight = null; c.classList.remove('open'); } else { c.style.maxHeight = c.scrollHeight + "px"; c.classList.add('open'); } }
-
-    window.addEventListener('resize', () => { initDimensions(); snapToPosition(); });
-
-    window.onload = () => { initDimensions(); snapToPosition(); };
-
-    const semBtn = document.getElementById('sem-btn'), semMenu = document.getElementById('sem-menu');
-
-    semBtn.onclick = (e) => { e.stopPropagation(); semMenu.classList.toggle('open'); };
-
-    document.onclick = (e) => { if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) semMenu.classList.remove('open'); };
-
-  </script>
-
-</body>
-
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+
+
+<head>
+
+
+
+  <meta charset="utf-8" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+
+
+  <title>DailyDoseofBCA</title>
+
+
+
+  <link rel="icon" href="mylogo.png" type="image/png">
+
+
+
+  <link rel="apple-touch-icon" href="mylogo.png">
+
+
+
+  <style>
+
+
+
+    :root {
+
+
+
+      --bg-base: #121212;
+
+
+
+      --text-primary: #f5f5f7;
+
+
+
+      --text-secondary: #86868b;
+
+
+
+      --accent-blue: #0a84ff;
+
+
+
+      --glass-panel: rgba(255, 255, 255, 0.06);
+
+
+
+      --glass-border: rgba(255, 255, 255, 0.18);
+
+
+
+      --glass-highlight: rgba(255, 255, 255, 0.35);
+
+
+
+    }
+
+
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; user-select: none; }
+
+
+
+    body { background-color: #000; color: var(--text-primary); height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+
+
+
+    .blob { position: absolute; border-radius: 50%; filter: blur(140px); z-index: -1; opacity: 0.35; animation: floatAurora 22s infinite ease-in-out alternate; }
+
+
+
+    .blob-1 { top: -15%; right: -5%; width: 65vw; height: 65vw; background: radial-gradient(circle, #444 0%, transparent 80%); animation-duration: 28s; }
+
+
+
+    .blob-2 { bottom: -15%; left: -10%; width: 75vw; height: 75vw; background: radial-gradient(circle, #222 0%, transparent 85%); animation-duration: 35s; }
+
+
+
+    .blob-3 { top: 35%; left: 5%; width: 55vw; height: 55vw; background: radial-gradient(circle, #333 0%, transparent 80%); animation-duration: 25s; animation-delay: -7s; }
+
+
+
+    .blob-4 { bottom: 5%; right: -5%; width: 65vw; height: 65vw; background: radial-gradient(circle, #111 0%, transparent 90%); animation-duration: 32s; animation-delay: -12s; }
+
+
+
+    @keyframes floatAurora { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(-40px,30px) scale(1.05); } 66% { transform: translate(20px, -40px) scale(1.1); } 100% { transform: translate(0,0) scale(1); } }
+
+
+
+    
+
+
+
+    header { flex-shrink: 0; padding: 2.5rem 1rem 1.5rem; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 800px; margin: 0 auto; z-index: 10; }
+
+
+
+    .brand { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #fff, #a1a1aa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; cursor: pointer; white-space: nowrap; }
+
+
+
+    .subtitle { font-size: 0.85rem; color: var(--text-secondary); max-width: 90%; margin: 0 auto; line-height: 1.4; text-align: center; }
+
+
+
+    
+
+
+
+    .slider-viewport { flex: 1; width: 100%; max-width: 800px; margin: 0 auto; overflow: hidden; position: relative; }
+
+
+
+    .slider-track { display: flex; height: 100%; width: 300%; will-change: transform; transform: translate3d(0,0,0); }
+
+
+
+    .slide { width: 100%; min-width: 100%; height: 100%; overflow-y: auto; padding: 15px; padding-bottom: 140px; scrollbar-width: none; }
+
+
+
+    .slide::-webkit-scrollbar { display: none; }
+
+
+
+    
+
+
+
+    .card { background: var(--glass-panel); border: 1px solid var(--glass-border); border-top: 1px solid var(--glass-highlight); border-radius: 22px; padding: 16px; margin-bottom: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); transition: transform 0.2s; }
+
+
+
+    .card:active { transform: scale(0.98); background: rgba(255,255,255,0.12); }
+
+
+
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+
+
+    .subject-group { display: flex; flex-direction: column; gap: 4px; }
+
+
+
+    .subject { font-size: 1.1rem; font-weight: 700; color: #fff; }
+
+
+
+    .tag { font-size: 0.7rem; padding: 4px 10px; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary); }
+
+
+
+    .description { font-size: 0.85rem; color: #aeaeb2; line-height: 1.5; margin-bottom: 12px; }
+
+
+
+    .action-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; background: rgba(10,132,255,0.1); color: #64d2ff; border: 1px solid rgba(10,132,255,0.2); border-top: 1px solid rgba(100,210,255,0.3); border-radius: 14px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: all 0.2s; }
+
+
+
+    .action-btn.assign { background: rgba(48,209,88,0.1); color: #6ce086; border-color: rgba(48,209,88,0.2); border-top-color: rgba(108,224,134,0.3); margin-top: 8px; }
+
+
+
+    .action-btn.lab { background: rgba(191,90,242,0.1); color: #d996ff; border-color: rgba(191,90,242,0.2); border-top-color: rgba(217,150,255,0.3); }
+
+
+
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; opacity: 0.7; }
+
+
+
+    .accordion-content.open { margin-top: 10px; opacity: 1; }
+
+
+
+
+
+
+
+    .nav-wrapper { position: fixed; bottom: 30px; left: 0; width: 100%; padding: 0 15px; display: flex; align-items: center; justify-content: center; z-index: 100; pointer-events: none; }
+
+
+
+    .nav-center-wrap { position: relative; width: calc(100% - 80px); max-width: 320px; display: flex; pointer-events: auto; }
+
+
+
+    .nav-container { position: relative; width: 100%; height: 56px; background: rgba(255,255,255,0.08); backdrop-filter: blur(50px) saturate(200%); border: 1px solid var(--glass-border); border-top: 1px solid var(--glass-highlight); border-radius: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); display: flex; align-items: center; padding: 0 5px; }
+
+
+
+    .nav-knob { position: absolute; left: 5px; top: 5px; bottom: 5px; width: calc((100% - 10px) / 3); background: rgba(255,255,255,0.12); border-radius: 28px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(20px); z-index: 1; }
+
+
+
+    .nav-container::before { content: ''; position: absolute; inset: -2px; border-radius: 34px; background: radial-gradient(ellipse 35% 80% at var(--glow-pct, 16%) 50%, rgba(255,255,255,0.45) 0%, transparent 70%); pointer-events: none; z-index: -1; }
+
+
+
+    .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #8e8e93; z-index: 2; cursor: pointer; height: 100%; transition: color 0.2s; white-space: nowrap; }
+
+
+
+    .nav-item.active { color: #fff; }
+
+
+
+    .sem-button { margin-left:10px; height: 56px; padding: 0 20px; background: rgba(255,255,255,0.08); backdrop-filter: blur(50px) saturate(200%); border: 1px solid var(--glass-border); border-top: 1px solid var(--glass-highlight); border-radius: 32px; color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; transition: transform 0.2s; }
+
+
+
+    .sem-button:active { transform: scale(0.95); }
+
+
+
+        .sem-menu {
+
+      position: absolute;
+
+      bottom: 80px;
+
+      left: 0;
+
+      width: 100%;
+
+      display: flex;
+
+      gap: 12px;
+
+      padding: 10px 20px;
+
+      overflow-x: auto;
+
+      scrollbar-width: none;
+
+      -webkit-overflow-scrolling: touch;
+
+      z-index: 101;
+
+      opacity: 0;
+
+      transform: translateY(20px);
+
+      pointer-events: none;
+
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    }
+
+    .sem-menu::-webkit-scrollbar { display: none; }
+
+    .sem-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    .sem-menu-btn {
+
+      flex-shrink: 0;
+
+      padding: 12px 24px;
+
+      background: rgba(255, 255, 255, 0.08);
+
+      backdrop-filter: blur(20px);
+
+      border: 1px solid rgba(255, 255, 255, 0.15);
+
+      border-radius: 20px;
+
+      color: #fff;
+
+      font-size: 0.9rem;
+
+      font-weight: 600;
+
+      text-decoration: none;
+
+      white-space: nowrap;
+
+      transition: all 0.2s;
+
+    }
+
+    .sem-menu-btn:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.15); }
+
+
+
+
+
+    .sem-menu-btn:active { background: rgba(255,255,255,0.2); }
+
+
+
+  </style>
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+  <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div><div class="blob blob-4"></div>
+
+
+
+  <header>
+
+
+
+    <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA : Sem-3</div>
+
+
+
+    <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
+
+
+
+  </header>
+
+
+
+  <div class="slider-viewport" id="viewport">
+
+
+
+    <div class="slider-track" id="track">
+
+
+
+      <!-- PAGE 1: NOTES -->
+
+
+
+
+
+
+
+      <div class="slide">
+
+
+
+
+
+
+
+        <div class="card">
+
+
+
+
+
+
+
+          <div class="card-header"><span class="subject">All Notes</span></div>
+
+
+
+
+
+
+
+          <p class="description">Access all subjects notes for Semester 3.</p>
+
+
+
+
+
+
+
+          <a href="3-notes.html" class="action-btn">Open Notes</a>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="nav-wrapper">
+
+
+
+    <div class="nav-center-wrap">
+
+
+
+      <div class="nav-container" id="nav-container">
+
+
+
+        <div class="nav-knob" id="nav-knob"></div>
+
+
+
+        <div class="nav-item active" data-index="0">Notes</div>
+
+
+
+        <div class="nav-item" data-index="1">Assign</div>
+
+
+
+        <div class="nav-item" data-index="2">Lab Work</div>
+
+
+
+      </div>
+
+
+
+            <div class="sem-menu" id="sem-menu">
+
+        <a href="bca-sem1.html" class="sem-menu-btn">Sem 1</a>
+
+        <a href="bca-sem2.html" class="sem-menu-btn">Sem 2</a>
+
+        <a href="bca-sem3.html" class="sem-menu-btn">Sem 3</a>
+
+        <a href="bca-sem4.html" class="sem-menu-btn">Sem 4</a>
+
+        <a href="bca-sem5.html" class="sem-menu-btn">Sem 5</a>
+
+        <a href="#" class="sem-menu-btn" style="opacity: 0.4;">Sem 6</a>
+
+      </div>
+
+
+
+    </div>
+
+
+
+    <div class="sem-button" id="sem-btn">Sem</div>
+
+
+
+  </div>
+
+
+
+  <script>
+
+
+
+    const navContainer = document.getElementById('nav-container');
+
+
+
+    const navKnob = document.getElementById('nav-knob');
+
+
+
+    const track = document.getElementById('track');
+
+
+
+    const viewport = document.getElementById('viewport');
+
+
+
+    const navItems = document.querySelectorAll('.nav-item');
+
+
+
+    let currentIndex = 0, isDragging = false, navWidth, knobWidth, maxTranslate;
+
+
+
+    function initDimensions() {
+
+
+
+      navWidth = navContainer.clientWidth;
+
+
+
+      knobWidth = (navWidth - 10) / 3;
+
+
+
+      maxTranslate = navWidth - 10 - knobWidth;
+
+
+
+    }
+
+
+
+    navContainer.addEventListener('touchstart', dragStart, { passive: false });
+
+
+
+    navContainer.addEventListener('touchmove', dragMove, { passive: false });
+
+
+
+    navContainer.addEventListener('touchend', dragEnd);
+
+
+
+    navContainer.addEventListener('mousedown', dragStart);
+
+
+
+    window.addEventListener('mousemove', dragMove);
+
+
+
+    window.addEventListener('mouseup', dragEnd);
+
+
+
+    function dragStart(e) { if(e.target.closest('.nav-container')) { isDragging = true; initDimensions(); navKnob.style.transition = 'none'; track.style.transition = 'none'; } }
+
+
+
+    function dragMove(e) {
+
+
+
+      if (!isDragging) return;
+
+
+
+      e.preventDefault();
+
+
+
+      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+
+
+
+      const navRect = navContainer.getBoundingClientRect();
+
+
+
+      let offsetX = clientX - navRect.left - 5 - (knobWidth / 2);
+
+
+
+      if (offsetX < 0) offsetX = 0; if (offsetX > maxTranslate) offsetX = maxTranslate;
+
+
+
+      navKnob.style.transform = `translateX(${offsetX}px)`;
+
+
+
+      navContainer.style.setProperty('--glow-pct', (offsetX / maxTranslate) * 100 + '%');
+
+
+
+      const percentage = offsetX / maxTranslate;
+
+
+
+      track.style.transform = `translateX(${percentage * -(viewport.clientWidth * 2)}px)`;
+
+
+
+      highlightNavText(percentage);
+
+
+
+    }
+
+
+
+    function dragEnd() { if (!isDragging) return; isDragging = false; const x = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41; const p = x / maxTranslate; currentIndex = p < 0.33 ? 0 : p < 0.66 ? 1 : 2; snapToPosition(); }
+
+
+
+    navItems.forEach((item, index) => item.addEventListener('click', () => { currentIndex = index; snapToPosition(); }));
+
+
+
+    function snapToPosition() {
+
+
+
+      initDimensions();
+
+
+
+      const x = ((navWidth - 10) / 3) * currentIndex;
+
+
+
+      navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+
+
+      navKnob.style.transform = `translateX(${x}px)`;
+
+
+
+      navContainer.style.setProperty('--glow-pct', (currentIndex/2)*100 + '%');
+
+
+
+      track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+
+
+      track.style.transform = `translateX(${-currentIndex * viewport.clientWidth}px)`;
+
+
+
+      navItems.forEach((item, idx) => item.classList.toggle('active', idx === currentIndex));
+
+
+
+    }
+
+
+
+    function highlightNavText(pct) { const i = pct < 0.33 ? 0 : pct < 0.66 ? 1 : 2; navItems.forEach((item, idx) => item.classList.toggle('active', idx === i)); }
+
+
+
+    function toggleAccordion(card) { const c = card.querySelector('.accordion-content'); if (c.style.maxHeight) { c.style.maxHeight = null; c.classList.remove('open'); } else { c.style.maxHeight = c.scrollHeight + "px"; c.classList.add('open'); } }
+
+
+
+    window.addEventListener('resize', () => { initDimensions(); snapToPosition(); });
+
+
+
+    window.onload = () => { initDimensions(); snapToPosition(); };
+
+
+
+    const semBtn = document.getElementById('sem-btn'), semMenu = document.getElementById('sem-menu');
+
+
+
+    semBtn.onclick = (e) => { e.stopPropagation(); semMenu.classList.toggle('open'); };
+
+
+
+    document.onclick = (e) => { if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) semMenu.classList.remove('open'); };
+
+
+
+  </script>
+
+
+
+</body>
+
+
+
 </html>
