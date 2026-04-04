@@ -55,10 +55,17 @@ function showNoirNotification() {
         notif.id = 'noir-notif';
         
         // Determine icon type
+        const isEmbed = (NOTIFICATION_CONFIG.icon || "").includes('<div');
         const isImage = /\.(png|jpg|jpeg|gif|webp)$/i.test(NOTIFICATION_CONFIG.icon || "");
-        const iconHtml = isImage 
-            ? `<img src="${NOTIFICATION_CONFIG.icon}" class="notif-icon-img" alt="icon">` 
-            : `<span class="notif-icon">${NOTIFICATION_CONFIG.icon || "✨"}</span>`;
+        
+        let iconHtml = "";
+        if (isEmbed) {
+            iconHtml = `<div class="notif-icon-embed">${NOTIFICATION_CONFIG.icon}</div>`;
+        } else if (isImage) {
+            iconHtml = `<img src="${NOTIFICATION_CONFIG.icon}" class="notif-icon-img" alt="icon">`;
+        } else {
+            iconHtml = `<span class="notif-icon">${NOTIFICATION_CONFIG.icon || "✨"}</span>`;
+        }
 
         notif.innerHTML = `
             <div class="notif-content">
@@ -107,10 +114,17 @@ function showNoirNotification() {
                     font-size: 1.2rem;
                 }
                 .notif-icon-img {
-                    width: 24px;
-                    height: 24px;
-                    object-fit: contain;
-                    border-radius: 6px;
+                    width: 32px;
+                    height: 32px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+                .notif-icon-embed {
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
                 .notif-text {
                     flex: 1;
@@ -154,6 +168,15 @@ function showNoirNotification() {
 
         
         document.body.appendChild(notif);
+
+        // Load Tenor Script if embedding
+        if (isEmbed && !document.getElementById('tenor-script')) {
+            const script = document.createElement('script');
+            script.id = 'tenor-script';
+            script.src = "https://tenor.com/embed.js";
+            script.async = true;
+            document.head.appendChild(script);
+        }
 
         // Show with delay
         setTimeout(() => {
