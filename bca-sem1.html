@@ -1,341 +1,682 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Semester - 1</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>DailyDoseofBCA</title>
+
+  <!-- FAVICON -->
+  <link rel="icon" href="mylogo.png" type="image/png">
+  <link rel="apple-touch-icon" href="mylogo.png">
+
   <style>
+    :root {
+      /* iOS Dark Mode Palette */
+      --bg-base: #121212;
+      --bg-gradient-start: #1c1c1e;
+
+      /* Text Colors */
+      --text-primary: #f5f5f7;
+      --text-secondary: #86868b;
+      --accent-blue: #0a84ff;
+
+      /* Glassmorphism Variables (Dark) */
+      --glass-panel: rgba(28, 28, 30, 0.65);
+      --glass-nav: rgba(28, 28, 30, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-highlight: rgba(255, 255, 255, 0.05);
+      --glass-blur: blur(25px);
+
+      /* Animation Springs */
+      --ease-elastic: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      user-select: none;
     }
 
     body {
-      min-height: 100vh;
-      background: #0f0f0f;
-      color: white;
-      overflow-y: auto;
-      opacity: 0;
-      animation: fadeInBody 1.2s ease-out forwards;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
 
-    @keyframes fadeInBody {
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeUp {
-      0% {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .cont {
-      opacity: 0;
-      animation: fadeUp 1s ease-out forwards;
-    }
-
-    .cont:nth-child(1) { animation-delay: 0.2s; }
-    .cont:nth-child(2) { animation-delay: 0.4s; }
-
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    /* --- DARK BACKGROUND BLOBS --- */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
       z-index: -1;
-      filter: brightness(60%);
+      opacity: 0.25;
+      /* Lower opacity for subtle dark theme */
+      animation: float 12s infinite ease-in-out alternate;
     }
 
-    .menu {
-      position: sticky;
-      top: 20px;
-      margin: 0 auto;
-      width: calc(100% - 40px);
-      max-width: 800px;
-      padding: 20px 30px;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(14px);
-      border-radius: 16px;
+    .blob-1 {
+      top: -10%;
+      left: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: #3b82f6;
+    }
+
+    .blob-2 {
+      top: 20%;
+      right: -20%;
+      width: 50vw;
+      height: 50vw;
+      background: #8b5cf6;
+      animation-delay: -3s;
+    }
+
+    .blob-3 {
+      bottom: -10%;
+      left: 10%;
+      width: 60vw;
+      height: 60vw;
+      background: #10b981;
+      animation-delay: -6s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(30px, -30px) scale(1.1);
+      }
+    }
+
+    /* --- HEADER --- */
+    header {
+      flex-shrink: 0;
+      padding: 3.5rem 1.5rem 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       z-index: 10;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     }
 
-    .menu h1 {
-      font-size: 28px;
-      font-weight: 600;
-      color: #ffffff;
+    .brand {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff, #a1a1aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+
+    .brand:active {
+      opacity: 0.7;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+
+    .slider-viewport {
+      flex: 1;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slider-track {
+      display: flex;
+      height: 100%;
+      width: 300%;
+      /* 3 Slides */
+      will-change: transform;
+      /* Ensure hardware acceleration for smooth glide */
+      transform: translate3d(0, 0, 0);
+    }
+
+    .slide {
+      width: 100vw;
+      /* Each slide is full viewport width */
+      max-width: 800px;
+      height: 100%;
+      overflow-y: auto;
+      padding: 20px;
+      padding-bottom: 140px;
+      /* Space for bottom nav */
+      scrollbar-width: none;
+    }
+
+    .slide::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* --- DARK CARDS --- */
+    .card {
+      background: var(--glass-panel);
+      border: 1px solid var(--glass-border);
+      border-top: 1px solid var(--glass-highlight);
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .card:active {
+      transform: scale(0.98);
+      background: rgba(44, 44, 46, 0.8);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       margin-bottom: 10px;
     }
 
-    .items {
+    .subject-group {
       display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .it {
-      color: #ffffff;
-      font-size: 16px;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      transition: 0.3s;
+    .subject {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
     }
 
-    .it:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(6px);
+    .topic-preview {
+      font-size: 0.8rem;
+      color: var(--accent-blue);
+      font-weight: 500;
     }
 
-    .timer-section {
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .timer-section p {
-      font-size: 16px;
-      margin: 4px 0;
-    }
-
-    .not {
-      margin-top: 140px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      padding: 60px 20px 100px;
-    }
-
-    .cont {
-      width: 280px;
-      padding: 35px 25px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    }
-
-    .cont:hover {
-      transform: translateY(-10px) scale(1.05);
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 12px 38px rgba(0, 0, 0, 0.5);
-    }
-
-    .ip {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .its {
-      display: inline-block;
-      padding: 12px 30px;
-      font-size: 16px;
-      font-weight: 600;
-      text-decoration: none;
-      color: white;
-      background: linear-gradient(135deg, #6e07f3, #ff4de4);
-      border-radius: 10px;
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-
-    .its:hover {
-      background: linear-gradient(135deg, #ff4de4, #6e07f3);
-      transform: scale(1.05);
-    }
-
-    @media (max-width: 768px) {
-      .not {
-        flex-direction: column;
-      }
-
-      .menu {
-        width: calc(100% - 20px);
-        padding: 16px;
-      }
-
-      .menu h1 {
-        font-size: 22px;
-      }
-
-      .it {
-        font-size: 14px;
-      }
-    }
-
-    /* 🧠 Semester Box Styling */
-    .semester-box {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
+    .tag {
+      font-size: 0.7rem;
+      padding: 4px 10px;
       background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(14px);
-      border-radius: 16px;
-      padding: 12px 20px;
+      border-radius: 20px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      color: #aeaeb2;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    /* Buttons */
+    .action-btn {
       display: flex;
-      gap: 10px;
       align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px;
+      background: rgba(10, 132, 255, 0.15);
+      color: #64d2ff;
+      border: 1px solid rgba(10, 132, 255, 0.3);
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .action-btn:active {
+      background: rgba(10, 132, 255, 0.25);
+    }
+
+    .action-btn.lab {
+      background: rgba(191, 90, 242, 0.15);
+      color: #d996ff;
+      border-color: rgba(191, 90, 242, 0.3);
+    }
+
+    .action-btn.assign {
+      background: rgba(48, 209, 88, 0.15);
+      color: #6ce086;
+      border-color: rgba(48, 209, 88, 0.3);
+      margin-top: 10px;
+    }
+
+    /* Accordion */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+      margin-top: 0;
+      opacity: 0.7;
+    }
+
+    .accordion-content.open {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 1;
+    }
+
+    /* --- BOTTOM NAV (Floating) --- */
+    .nav-wrapper {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
       z-index: 100;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      /* Prevent clicks on wrapper blocking content behind it */
+      pointer-events: none;
     }
 
-    .semester-box input {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-size: 14px;
+    .nav-container {
+      pointer-events: auto;
+      /* Re-enable clicks for the bar itself */
+      position: relative;
+      width: 340px;
+      height: 64px;
+      background: rgba(30, 30, 30, 0.8);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+      overflow: visible;
     }
 
-    .semester-box input {
-  width: 80px;
-  background-color: rgba(255, 255, 255, 0.15);
-  color: white;
-}
-    .semester-box button {
-      padding: 8px 14px;
-      border: none;
-      background: linear-gradient(135deg, #6e07f3, #ff4de4);
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
+    /* Gliding Highlight Knob */
+    .nav-knob {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      bottom: 5px;
+      width: calc((100% - 10px) / 3);
+      background: rgba(99, 99, 102, 0.4);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 1;
+      /* No default transition to allow instant dragging */
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #8e8e93;
+      z-index: 2;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      padding: 15px 0;
+      transition: color 0.2s;
     }
 
-    .semester-box button:hover {
-      transform: scale(1.05);
+    .nav-item.active {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .sem-button {
+      margin-left: 10px;
+      height: 64px;
+      padding: 0 25px;
+      background: rgba(30, 30, 30, 0.8);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: background 0.2s, transform 0.2s;
+    }
+    
+    .sem-button:active {
+      transform: scale(0.95);
+      background: rgba(50, 50, 50, 0.8);
+    }
+
+    .sem-menu {
+      position: absolute;
+      bottom: 80px; 
+      left: 0; 
+      width: 100%;
+      background: rgba(30, 30, 30, 0.95);
+      backdrop-filter: blur(35px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform-origin: bottom center;
+      transform: translateY(30px) scale(0.85);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 101;
+    }
+
+    .sem-menu.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .sem-menu-btn {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 0;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .sem-menu-btn:active, .sem-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Desktop adjustments */
+    @media (min-width: 801px) {
+      .slide {
+        width: 33.333%;
+      }
     }
   </style>
 </head>
+
 <body>
-  <video id="bg-video" autoplay muted loop playsinline>
-    <source src="1bg.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
 
-  <header class="menu">
-    <h1>DailyDoseofBCA : Sem-1</h1>
-    <nav class="items">
-      <a class="it" href="about.html">About</a>
-      <a class="it" href="contact.html">Contact</a>
-    </nav>
+  <!-- Dark Blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
 
-    <div class="timer-section">
-      <p id="currentTime">Current Time: --:--:--</p>
-      <p id="countdown">Countdown: --:--:--</p>
-      <p id="label">Label: --</p>
-    </div>
+  <header>
+    <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA : Sem-1</div>
+    <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
   </header>
 
-  <main class="not">
-    <div class="cont">
-      <p class="ip">Notes</p>
-      <a class="its" href="notes1.html">Click Here</a>
-    </div>
-    <div class="cont">
-      <p class="ip">Assignments</p>
-      <a class="its" href="assignment1.html">Click Here</a>
-    </div>
-  </main>
+  <!-- Main Content Slider -->
+  <div class="slider-viewport" id="viewport">
+    <div class="slider-track" id="track">
 
-  <!-- 🔍 Semester Search Box -->
-  <div class="semester-box">
-    <input type="number" id="semInput" min="1" max="6" placeholder="Sem ?">
-    <button onclick="goToSemester()">Go</button>
+      <!-- PAGE 1: NOTES -->
+      <div class="slide">
+        <div class="card">
+          <div class="card-header"><span class="subject">All Notes</span></div>
+          <p class="description">Access all subjects notes for Semester 1.</p>
+          <a href="notes1.html" class="action-btn">Open Notes</a>
+        </div>
+      </div>
+
+      <!-- PAGE 2: ASSIGNMENTS -->
+      <div class="slide">
+        <div class="card">
+          <div class="card-header"><span class="subject">All Assignments</span></div>
+          <p class="description">Access all assignments for Semester 1.</p>
+          <a href="assignment1.html" class="action-btn assign">Open Assignments</a>
+        </div>
+      </div>
+
+      <!-- PAGE 3: LAB WORK -->
+      <div class="slide">
+        <div class="card" style="opacity: 0.5;">
+          <div class="card-header"><span class="subject">No Lab Work</span></div>
+          <p class="description">There are no lab manuals available.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM FLOATING NAV -->
+  <div class="nav-wrapper">
+    <div style="position: relative;">
+      <div class="nav-container" id="nav-container">
+        <div class="nav-knob" id="nav-knob"></div>
+        <div class="nav-item active" data-index="0">Notes</div>
+        <div class="nav-item" data-index="1">Assign</div>
+        <div class="nav-item" data-index="2">Lab Work</div>
+      </div>
+      
+      <!-- Mini Menu Box for Semesters -->
+      <div class="sem-menu" id="sem-menu">
+        <a href="bca-sem1.html" class="sem-menu-btn">Semester 1</a>
+        <a href="bca-sem2.html" class="sem-menu-btn">Semester 2</a>
+        <a href="bca-sem3.html" class="sem-menu-btn">Semester 3</a>
+        <a href="bca-sem4.html" class="sem-menu-btn">Semester 4</a>
+        <a href="#" class="sem-menu-btn">Semester 5</a>
+        <a href="#" class="sem-menu-btn">Semester 6</a>
+      </div>
+    </div>
+    
+    <div class="sem-button" id="sem-btn">Sem</div>
+
   </div>
 
   <script>
-    window.addEventListener('load', () => {
-      const video = document.getElementById('bg-video');
-      video.play().catch((e) => {
-        console.log("Autoplay blocked:", e);
+    /* ROBUST NAV LOGIC 
+      1. Drag Nav Knob -> Moves Content
+      2. Click Nav Item -> Jumps Content
+    */
+
+    const navContainer = document.getElementById('nav-container');
+    const navKnob = document.getElementById('nav-knob');
+    const track = document.getElementById('track');
+    const viewport = document.getElementById('viewport');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    let currentIndex = 0;
+    let isDragging = false;
+    let navWidth, knobWidth, maxTranslate;
+
+    // Initialize sizes
+    function initDimensions() {
+      navWidth = navContainer.clientWidth;
+      // Padding 5px left + 5px right = 10px total padding logic
+      knobWidth = (navWidth - 10) / 3;
+      maxTranslate = navWidth - 10 - knobWidth;
+    }
+
+    // --- TOUCH / MOUSE EVENTS ---
+    navContainer.addEventListener('touchstart', dragStart, { passive: false });
+    navContainer.addEventListener('touchmove', dragMove, { passive: false });
+    navContainer.addEventListener('touchend', dragEnd);
+
+    navContainer.addEventListener('mousedown', dragStart);
+    window.addEventListener('mousemove', dragMove);
+    window.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+      if (e.target.closest('.nav-container')) {
+        isDragging = true;
+        initDimensions();
+        navKnob.style.transition = 'none';
+        track.style.transition = 'none';
+      }
+    }
+
+    function dragMove(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+
+      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      const navRect = navContainer.getBoundingClientRect();
+
+      // Relative X inside the nav bar
+      // 5px is left padding offset
+      let offsetX = clientX - navRect.left - 5 - (knobWidth / 2);
+
+      // Clamp
+      if (offsetX < 0) offsetX = 0;
+      if (offsetX > maxTranslate) offsetX = maxTranslate;
+
+      // Move Knob
+      navKnob.style.transform = `translateX(${offsetX}px)`;
+
+      // Move Content (Map Nav% to Content%)
+      const percentage = offsetX / maxTranslate;
+
+      // We scroll 3 pages, so total scrollable width is 2 * ViewportWidth
+      const slideWidth = viewport.clientWidth;
+      const totalContentScroll = slideWidth * 2;
+
+      const contentTranslate = percentage * -totalContentScroll;
+      track.style.transform = `translateX(${contentTranslate}px)`;
+
+      highlightNavText(percentage);
+    }
+
+    function dragEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
+
+      // Snap logic
+      const currentKnobTransform = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41;
+      const percentage = currentKnobTransform / maxTranslate;
+
+      if (percentage < 0.33) currentIndex = 0;
+      else if (percentage < 0.66) currentIndex = 1;
+      else currentIndex = 2;
+
+      snapToPosition();
+    }
+
+    // Click Support
+    navItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        currentIndex = index;
+        snapToPosition();
       });
     });
 
-    function goToSemester() {
-      const sem = document.getElementById("semInput").value;
-      if (sem >= 1 && sem <= 6) {
-        window.location.href = `bca-sem${sem}.html`;
+    function snapToPosition() {
+      initDimensions();
+
+      // 1. Snap Knob
+      const preciseKnobX = ((navWidth - 10) / 3) * currentIndex;
+      navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      navKnob.style.transform = `translateX(${preciseKnobX}px)`;
+
+      // 2. Snap Content
+      const slideWidth = viewport.clientWidth;
+      const contentX = currentIndex * -slideWidth;
+      track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      track.style.transform = `translateX(${contentX}px)`;
+
+      // 3. Highlight
+      navItems.forEach((item, idx) => {
+        if (idx === currentIndex) {
+          item.classList.add('active');
+          item.style.color = '#fff';
+        } else {
+          item.classList.remove('active');
+          item.style.color = '#8e8e93';
+        }
+      });
+    }
+
+    function highlightNavText(pct) {
+      let activeIdx = 0;
+      if (pct > 0.33) activeIdx = 1;
+      if (pct > 0.66) activeIdx = 2;
+
+      navItems.forEach((item, idx) => {
+        if (idx === activeIdx) {
+          item.classList.add('active');
+          item.style.color = '#fff';
+        } else {
+          item.classList.remove('active');
+          item.style.color = '#8e8e93';
+        }
+      });
+    }
+
+    function toggleAccordion(card) {
+      const content = card.querySelector('.accordion-content');
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+        content.classList.remove('open');
       } else {
-        alert("Please enter a valid semester number between 1 and 6!");
+        content.style.maxHeight = content.scrollHeight + "px";
+        content.classList.add('open');
       }
     }
 
-    const weeklySchedule = {
-      1: [ { start: "09:00", end: "09:50", label: "FC" }, { start: "09:51", end: "10:40", label: "SANS" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "BO" }, { start: "11:40", end: "12:30", label: "ENG" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "FC" }, { start: "14:10", end: "15:00", label: "G.ACT" }, { start: "15:00", end: "15:50", label: "G.ACT" } ],
-      2: [ { start: "09:00", end: "09:50", label: "FC" }, { start: "09:51", end: "10:40", label: "LIB" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "BO" }, { start: "11:40", end: "12:30", label: "BO" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "FC" }, { start: "14:10", end: "15:00", label: "LS" }, { start: "15:00", end: "15:50", label: "IH" } ],
-      3: [ { start: "09:00", end: "09:50", label: "ENG" }, { start: "09:51", end: "10:40", label: "BO" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "FC" }, { start: "11:40", end: "12:30", label: "GAMES" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "FC" }, { start: "14:10", end: "15:00", label: "FC" }, { start: "15:00", end: "15:50", label: "GAMES" } ],
-      4: [ { start: "09:00", end: "09:50", label: "BO" }, { start: "09:51", end: "10:40", label: "COUNCELING" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "FC" }, { start: "11:40", end: "12:30", label: "IH" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "BO" }, { start: "14:10", end: "15:00", label: "CS" }, { start: "15:00", end: "15:50", label: "LIB" } ],
-      5: [ { start: "09:00", end: "09:50", label: "BO" }, { start: "09:51", end: "10:40", label: "ENG" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "COUNCELING" }, { start: "11:40", end: "12:30", label: "BO" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "SANS" }, { start: "14:10", end: "15:00", label: "FC" }, { start: "15:00", end: "15:50", label: "GAMES" } ],
-      6: [ { start: "09:00", end: "09:50", label: "SANS" }, { start: "09:51", end: "10:40", label: "LS" }, { start: "10:40", end: "10:50", label: "BREAK" }, { start: "10:50", end: "11:40", label: "BO" }, { start: "11:40", end: "12:30", label: "ENG" }, { start: "12:30", end: "13:20", label: "LUNCH" }, { start: "13:20", end: "14:10", label: "CS" }, { start: "14:10", end: "15:00", label: "BO" }, { start: "15:00", end: "15:50", label: "FC" } ]
+    // Handle Resize
+    window.addEventListener('resize', () => {
+      initDimensions();
+      snapToPosition();
+    });
+
+    // Initial Call
+    window.onload = function () {
+      initDimensions();
+      snapToPosition();
     };
 
-    function updateTimer() {
-      const now = new Date();
-      const currentTime = now.toLocaleTimeString();
-      document.getElementById("currentTime").textContent = "Current Time: " + currentTime;
-      const day = now.getDay();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    // SEM BUTTON LOGIC
+    const semBtn = document.getElementById('sem-btn');
+    const semMenu = document.getElementById('sem-menu');
 
-      if (day === 0 || !weeklySchedule[day]) {
-        document.getElementById("countdown").textContent = "Countdown: --:--";
-        document.getElementById("label").textContent = "Label: Holiday";
-        return;
+    semBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      semMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) {
+        semMenu.classList.remove('open');
       }
+    });
 
-      const todaySchedule = weeklySchedule[day];
-      let found = false;
-
-      for (const period of todaySchedule) {
-        const [sh, sm] = period.start.split(":").map(Number);
-        const [eh, em] = period.end.split(":").map(Number);
-        const startMin = sh * 60 + sm;
-        const endMin = eh * 60 + em;
-
-        if (currentMinutes >= startMin && currentMinutes < endMin) {
-          const remainingMin = endMin - currentMinutes;
-          const remainingSec = 60 - now.getSeconds();
-          const minutes = String(remainingMin - 1).padStart(2, '0');
-          const seconds = String(remainingSec % 60).padStart(2, '0');
-          document.getElementById("countdown").textContent = `Countdown: ${minutes}:${seconds}`;
-          document.getElementById("label").textContent = `Label: ${period.label}`;
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
-        document.getElementById("countdown").textContent = "Countdown: NONE";
-        document.getElementById("label").textContent = "Label: NONE";
-      }
-    }
-
-    setInterval(updateTimer, 1000);
-    updateTimer();
+    // Prevent clicks inside menu from bubbling up
+    semMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
   </script>
+
 </body>
 
 </html>
