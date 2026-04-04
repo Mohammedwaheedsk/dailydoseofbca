@@ -4,7 +4,7 @@ const NOTIFICATION_CONFIG = {
     message: "Semester 6 notes have been added! Check them out now. 🚀", // Your message here
     type: "info", // info, warning, success
     link: "bca-sem6.html", // Optional link, set to "#" if not needed
-    expireDays: 1 // How often to show it to the same user (after dismissal)
+    expireSeconds: 30 // How often to show it to the same user (after dismissal)
 };
 
 // --- NOTIFICATION LOGIC ---
@@ -15,7 +15,7 @@ function showNoirNotification() {
     const dismissedTime = localStorage.getItem('noir-notif-dismissed');
     if (dismissedTime) {
         const diff = Date.now() - parseInt(dismissedTime);
-        if (diff < NOTIFICATION_CONFIG.expireDays * 24 * 60 * 60 * 1000) return;
+        if (diff < NOTIFICATION_CONFIG.expireSeconds * 1000) return;
     }
 
     // Create Notification Element
