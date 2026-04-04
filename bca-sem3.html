@@ -52,62 +52,36 @@
       position: relative;
     }
 
-        /* --- ULTRA-PREMIUM NOIR MONOCHROME BACKGROUND --- */
+            /* --- DYNAMIC NOIR LIQUID BACKGROUND --- */
     body {
-      background-color: #000000 !important;
+      background-color: #000 !important;
+      overflow: hidden;
     }
+    
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(140px);
+      filter: blur(160px);
       z-index: -1;
-      opacity: 0.35;
-      animation: floatAurora 22s infinite ease-in-out alternate;
+      opacity: 0.25;
       will-change: transform;
+      animation: drift 30s infinite ease-in-out;
     }
 
-    .blob-1 {
-      top: -15%;
-      right: -5%;
-      width: 65vw;
-      height: 65vw;
-      background: radial-gradient(circle, #444 0%, transparent 80%);
-      animation-duration: 28s;
+    .blob-1 { top: -10%; right: -10%; width: 70vw; height: 70vw; background: radial-gradient(circle, #333 0%, transparent 70%); animation-duration: 35s; }
+    .blob-2 { bottom: -15%; left: -15%; width: 80vw; height: 80vw; background: radial-gradient(circle, #222 0%, transparent 70%); animation-duration: 45s; animation-delay: -5s; }
+    .blob-3 { top: 20%; left: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #444 0%, transparent 70%); animation-duration: 40s; animation-delay: -10s; }
+    .blob-4 { bottom: 10%; right: -10%; width: 75vw; height: 75vw; background: radial-gradient(circle, #1a1a1a 0%, transparent 80%); animation-duration: 50s; animation-delay: -15s; }
+    .blob-5 { top: 40%; right: 10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #2a2a2a 0%, transparent 70%); animation-duration: 38s; animation-delay: -20s; opacity: 0.15; }
+
+    @keyframes drift {
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+      25% { transform: translate(10%, 15%) scale(1.1) rotate(90deg); }
+      50% { transform: translate(-5%, 20%) scale(0.9) rotate(180deg); }
+      75% { transform: translate(-15%, 5%) scale(1.05) rotate(270deg); }
+      100% { transform: translate(0, 0) scale(1) rotate(360deg); }
     }
 
-    .blob-2 {
-      bottom: -15%;
-      left: -10%;
-      width: 75vw;
-      height: 75vw;
-      background: radial-gradient(circle, #222 0%, transparent 85%);
-      animation-duration: 35s;
-    }
-
-    .blob-3 {
-      top: 35%;
-      left: 5%;
-      width: 55vw;
-      height: 55vw;
-      background: radial-gradient(circle, #333 0%, transparent 80%);
-      animation-duration: 25s;
-      animation-delay: -7s;
-    }
-
-    .blob-4 {
-      bottom: 5%;
-      right: -5%;
-      width: 65vw;
-      height: 65vw;
-      background: radial-gradient(circle, #111 0%, transparent 90%);
-      animation-duration: 32s;
-      animation-delay: -12s;
-    }
-
-    @keyframes floatAurora {
-      0% {
-        transform: translate(0, 0) scale(1) rotate(0deg);
-      }
       33% {
         transform: translate(-40px, 30px) scale(1.05) rotate(5deg);
       }
@@ -500,6 +474,7 @@
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
   <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
 
   <header>
     <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA : Sem-3</div>
