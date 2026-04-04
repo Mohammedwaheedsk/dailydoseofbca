@@ -135,6 +135,16 @@
       opacity: 0.7;
     }
 
+        .sem-subtitle {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: -5px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
     .subtitle {
       font-size: 0.9rem;
       text-align: center;
@@ -179,19 +189,19 @@
     }
 
     /* --- DARK CARDS --- */
-    .card {
-      background: var(--glass-panel);
-      border: 1px solid var(--glass-border);
-      border-top: 1px solid var(--glass-highlight);
-      border-radius: 22px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(40px) saturate(180%);
-      -webkit-backdrop-filter: blur(40px) saturate(180%);
-      transition: transform 0.2s, background 0.2s;
+      backdrop-filter: blur(80px) saturate(200%);
+      -webkit-backdrop-filter: blur(80px) saturate(200%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
     }
 
     .card:active {
@@ -477,7 +487,8 @@
   <div class="blob blob-5"></div>
 
   <header>
-    <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA : Sem-3</div>
+    <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA</div>
+    <div class="sem-subtitle">Semester 3</div>
     <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
   </header>
 
@@ -526,12 +537,12 @@
       
       <!-- Mini Menu Box for Semesters -->
       <div class="sem-menu" id="sem-menu">
-        <a href="bca-sem1.html" class="sem-menu-btn">Semester 1</a>
-        <a href="bca-sem2.html" class="sem-menu-btn">Semester 2</a>
-        <a href="bca-sem3.html" class="sem-menu-btn">Semester 3</a>
-        <a href="bca-sem4.html" class="sem-menu-btn">Semester 4</a>
-        <a href="bca-sem5.html" class="sem-menu-btn">Semester 5</a>
-        <a href="#" class="sem-menu-btn">Semester 6</a>
+        <a href="bca-sem1.html" class="sem-menu-btn">Sem 1</a>
+        <a href="bca-sem2.html" class="sem-menu-btn">Sem 2</a>
+        <a href="bca-sem3.html" class="sem-menu-btn">Sem 3</a>
+        <a href="bca-sem4.html" class="sem-menu-btn">Sem 4</a>
+        <a href="bca-sem5.html" class="sem-menu-btn">Sem 5</a>
+        <a href="#" class="sem-menu-btn">Sem 6</a>
       </div>
     </div>
     
