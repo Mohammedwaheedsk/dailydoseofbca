@@ -356,19 +356,17 @@
       pointer-events: none;
     }
 
-    .nav-container {
+        .nav-container {
       pointer-events: auto;
-      /* Re-enable clicks for the bar itself */
       position: relative;
       width: 100%;
       height: 64px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(50px) saturate(200%);
-      -webkit-backdrop-filter: blur(50px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(30, 30, 30, 0.8);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 32px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
       padding: 0 5px;
@@ -376,50 +374,20 @@
     }
 
     /* Gliding Highlight Knob */
-    .nav-knob {
+        .nav-knob {
       position: absolute;
       left: 5px;
       top: 5px;
       bottom: 5px;
       width: calc((100% - 10px) / 3);
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(99, 99, 102, 0.4);
       border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       z-index: 1;
-      /* No default transition to allow instant dragging */
     }
 
 
-    /* --- KNOB REFLECTION GLOW (border ring) --- */
-    .nav-container::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 34px;
-      background: radial-gradient(
-        ellipse 35% 80% at var(--glow-pct, 16%) 50%,
-        rgba(255, 255, 255, 0.45) 0%,
-        rgba(255, 255, 255, 0.12) 40%,
-        transparent 70%
-      );
-      pointer-events: none;
-      z-index: -1;
-      will-change: background;
-    }
-    .nav-container::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 34px;
-      box-shadow:
-        0 0 18px 4px rgba(255, 255, 255, calc(var(--glow-intensity, 0.08))),
-        0 0 40px 8px rgba(255, 255, 255, calc(var(--glow-intensity, 0.04)));
-      opacity: 0.8;
-      pointer-events: none;
-      z-index: -1;
-    }
+    
     .nav-item {
       flex: 1;
 
@@ -439,18 +407,17 @@
       font-weight: 600;
     }
 
-    .sem-button {
+        .sem-button {
       margin-left: 10px;
       height: 64px;
       padding: 0 15px;
       flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(50px) saturate(200%);
-      -webkit-backdrop-filter: blur(50px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(30, 30, 30, 0.8);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 32px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
       color: #fff;
       font-weight: 600;
       font-size: 1rem;
@@ -467,16 +434,14 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    .sem-menu {
+        .sem-menu {
       position: absolute;
       bottom: 80px; 
       left: 0; 
       width: 100%;
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(50px) saturate(200%);
-      -webkit-backdrop-filter: blur(50px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(30, 30, 30, 0.95);
+      backdrop-filter: blur(35px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
       padding: 15px;
       display: grid;
@@ -487,7 +452,7 @@
       transform-origin: bottom center;
       transform: translateY(30px) scale(0.85);
       pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 101;
     }
 
@@ -579,7 +544,7 @@
         <div class="nav-knob" id="nav-knob"></div>
         <div class="nav-item active" data-index="0">Notes</div>
         <div class="nav-item" data-index="1">Assign</div>
-        <div class="nav-item" data-index="2">Lab Work</div>
+        <div class="nav-item" data-index="2">Lab</div>
       </div>
       
       <!-- Mini Menu Box for Semesters -->
@@ -657,8 +622,7 @@
 
       // Move Knob
       navKnob.style.transform = `translateX(${offsetX}px)`;
-      var glowPct = 8 + (offsetX / maxTranslate) * 84;
-      navContainer.style.setProperty('--glow-pct', glowPct + '%');
+      
 
       // Move Content (Map Nav% to Content%)
       const percentage = offsetX / maxTranslate;
@@ -703,11 +667,9 @@
       const preciseKnobX = ((navWidth - 10) / 3) * currentIndex;
       navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
       navKnob.style.transform = `translateX(${preciseKnobX}px)`;
-      var snapGlowPct = 8 + (currentIndex / 2) * 84;
-      navContainer.style.setProperty('--glow-pct', snapGlowPct + '%');
+      
       navContainer.style.transition = '--glow-x 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      var snapGlowPct = 8 + (currentIndex / 2) * 84;
-      navContainer.style.setProperty('--glow-pct', snapGlowPct + '%');
+      
 
       // 2. Snap Content
       const slideWidth = viewport.clientWidth;
