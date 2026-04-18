@@ -626,14 +626,29 @@
               target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
           </div>
         </div>
-      
+        <div class="card" onclick="toggleAccordion(this)">
+          <div class="card-header">
+            <div class="subject-group">
+              <span class="subject">MAD Assignment 2</span>
+              <span class="topic-preview">Topic: alarm clock and calculator app</span>
+            </div>
+            
+          </div>
+          <div class="accordion-content">
+            <p class="description">The topic is from ChatGPT</p>
+            <a href="https://drive.google.com/file/d/157Q_gIhELH6mi58B9FsQXUKAp3Vg40hm/view?usp=sharing"
+              target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+          </div>
+        </div>
+        
+      </div>
 
       <!-- PAGE 3: LAB WORK -->
       <div class="slide">
         <div class="card">
           <div class="card-header"><span class="subject">MAD Lab</span></div>
           <p class="description">14 programs in record and 9 programs in observation book.</p>
-          <a href="https://drive.google.com/file/d/1zhO1VE3We77nOfNCQaIXIUXPyzOEBw5V/view?usp=sharing" class="action-btn lab">View Manual</a>
+          <a href="https://docs.google.com/document/d/1u38OqstCpUlzHHhg9g8Ee6tE4BXXSeE0/edit?usp=sharing&ouid=110377963400939528523&rtpof=true&sd=true" class="action-btn lab">View Manual</a>
         </div>
         <div class="card">
           <div class="card-header"><span class="subject">Python Lab</span></div>
@@ -648,6 +663,7 @@
 
     </div>
   </div>
+
   <!-- BOTTOM FLOATING NAV -->
   <div class="nav-wrapper">
     <div class="nav-center-wrap" style="position: relative; width: calc(100% - 90px); max-width: 340px; display: flex;">
@@ -928,8 +944,6 @@
     window.addEventListener('load', () => new Stardust());
   </script>
 
-  <!-- NOIR NOTIFICATION SYSTEM -->
-  <script src="notifications.js"></script>
 </body>
 
 </html>
