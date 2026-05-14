@@ -5,6 +5,7 @@
 
   const state = {
     profile: readProfile(),
+    authMode: "login",
     isOpen: false
   };
 
@@ -127,6 +128,28 @@
       .ddobca-message-form {
         display: grid;
         gap: 10px;
+      }
+
+      .ddobca-auth-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .ddobca-auth-tab {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        padding: 10px;
+        font: 800 0.88rem system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        cursor: pointer;
+      }
+
+      .ddobca-auth-tab.active {
+        background: rgba(56, 189, 248, 0.18);
+        border-color: rgba(56, 189, 248, 0.36);
       }
 
       .ddobca-profile-form label {
@@ -280,22 +303,23 @@
     if (!body || !foot) return;
 
     if (!state.profile) {
+      const isSignup = state.authMode === "signup";
       body.innerHTML = `
-        <form class="ddobca-profile-form" id="ddobca-profile-form">
-          <label>
-            Username
-            <input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" placeholder="waheed_01" required>
-          </label>
-          <label>
-            Name
-            <input name="name" autocomplete="name" maxlength="80" placeholder="Your name" required>
-          </label>
-          <button type="submit">Create profile</button>
-          <p class="ddobca-chat-status" id="ddobca-profile-status"></p>
-        </form>
+        <div class="ddobca-auth-tabs" role="tablist" aria-label="Chat account">
+          <button class="ddobca-auth-tab ${!isSignup ? "active" : ""}" type="button" data-auth-mode="login">Login</button>
+          <button class="ddobca-auth-tab ${isSignup ? "active" : ""}" type="button" data-auth-mode="signup">Signup</button>
+        </div>
+        ${isSignup ? signupFormHtml() : loginFormHtml()}
       `;
       foot.innerHTML = "";
-      document.getElementById("ddobca-profile-form").addEventListener("submit", createProfile);
+      body.querySelectorAll("[data-auth-mode]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.authMode = button.dataset.authMode;
+          render();
+        });
+      });
+      const authForm = document.getElementById("ddobca-profile-form");
+      authForm.addEventListener("submit", isSignup ? createProfile : loginProfile);
       return;
     }
 
@@ -307,6 +331,44 @@
       </form>
     `;
     document.getElementById("ddobca-message-form").addEventListener("submit", sendMessage);
+  }
+
+  function loginFormHtml() {
+    return `
+      <form class="ddobca-profile-form" id="ddobca-profile-form">
+        <label>
+          Username or name
+          <input name="login" autocomplete="username" maxlength="80" placeholder="waheed_01 or Waheed" required>
+        </label>
+        <label>
+          4-digit PIN
+          <input name="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="4" maxlength="4" pattern="\\d{4}" placeholder="1234" required>
+        </label>
+        <button type="submit">Login</button>
+        <p class="ddobca-chat-status" id="ddobca-profile-status"></p>
+      </form>
+    `;
+  }
+
+  function signupFormHtml() {
+    return `
+      <form class="ddobca-profile-form" id="ddobca-profile-form">
+        <label>
+          Username
+          <input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" placeholder="waheed_01" required>
+        </label>
+        <label>
+          Name
+          <input name="name" autocomplete="name" maxlength="80" placeholder="Your name" required>
+        </label>
+        <label>
+          4-digit PIN
+          <input name="pin" type="password" inputmode="numeric" autocomplete="new-password" minlength="4" maxlength="4" pattern="\\d{4}" placeholder="1234" required>
+        </label>
+        <button type="submit">Create profile</button>
+        <p class="ddobca-chat-status" id="ddobca-profile-status"></p>
+      </form>
+    `;
   }
 
   async function createProfile(event) {
@@ -325,6 +387,29 @@
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Could not create profile.");
+      saveProfile(data.profile);
+      render();
+      await loadMessages();
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  }
+
+  async function loginProfile(event) {
+    event.preventDefault();
+    const status = document.getElementById("ddobca-profile-status");
+    status.textContent = "Logging in...";
+
+    const payload = Object.fromEntries(new FormData(event.currentTarget).entries());
+
+    try {
+      const response = await fetch("/api/chat/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Could not login.");
       saveProfile(data.profile);
       render();
       await loadMessages();

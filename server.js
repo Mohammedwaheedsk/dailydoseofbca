@@ -55,7 +55,7 @@ function requireAdminToken(req, res, next) {
   next();
 }
 
-function cleanText(value, maxLength) {
+function cleanText(value, maxLength = 1000) {
   return String(value || "")
     .replace(/\s+/g, " ")
     .trim()
@@ -71,6 +71,20 @@ function cleanUsername(value) {
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, "")
     .slice(0, 24);
+}
+
+function cleanPin(value) {
+  return String(value || "").replace(/\D/g, "").slice(0, 4);
+}
+
+function publicProfile(profile) {
+  return {
+    id: profile.id,
+    username: profile.username,
+    name: profile.name,
+    createdAt: profile.createdAt,
+    updatedAt: profile.updatedAt
+  };
 }
 
 function isExpiredMessage(message) {
@@ -198,6 +212,7 @@ app.post("/api/chat/profile", async (req, res, next) => {
     await withChatWriteLock(async () => {
       const username = cleanUsername(req.body.username);
       const name = cleanText(req.body.name, 80);
+      const pin = cleanPin(req.body.pin);
       const storedProfileId = cleanText(req.body.profileId, 80);
 
       if (!/^[a-z0-9_]{3,24}$/.test(username)) {
@@ -211,6 +226,13 @@ app.post("/api/chat/profile", async (req, res, next) => {
         return res.status(400).json({
           ok: false,
           error: "Name must be at least 2 characters."
+        });
+      }
+
+      if (!/^\d{4}$/.test(pin)) {
+        return res.status(400).json({
+          ok: false,
+          error: "PIN must be exactly 4 digits."
         });
       }
 
@@ -243,6 +265,7 @@ app.post("/api/chat/profile", async (req, res, next) => {
 
       profile.username = username;
       profile.name = name;
+      profile.pin = pin;
       profile.updatedAt = now;
 
       const nextProfiles = existingProfile
@@ -250,8 +273,38 @@ app.post("/api/chat/profile", async (req, res, next) => {
         : [profile, ...profiles];
 
       await writeJson(CHAT_PROFILES_FILE, nextProfiles);
-      res.status(existingProfile ? 200 : 201).json({ ok: true, profile });
+      res.status(existingProfile ? 200 : 201).json({ ok: true, profile: publicProfile(profile) });
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/chat/login", async (req, res, next) => {
+  try {
+    const login = normalizeUniqueValue(req.body.login || req.body.username || req.body.name);
+    const pin = cleanPin(req.body.pin);
+
+    if (!login || !/^\d{4}$/.test(pin)) {
+      return res.status(400).json({
+        ok: false,
+        error: "Enter your username/name and 4-digit PIN."
+      });
+    }
+
+    const profiles = await readJson(CHAT_PROFILES_FILE, []);
+    const profile = profiles.find((item) => (
+      item.username === login || normalizeUniqueValue(item.name) === login
+    ));
+
+    if (!profile || profile.pin !== pin) {
+      return res.status(401).json({
+        ok: false,
+        error: "Profile not found or PIN is incorrect."
+      });
+    }
+
+    res.json({ ok: true, profile: publicProfile(profile) });
   } catch (error) {
     next(error);
   }
