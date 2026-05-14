@@ -49,6 +49,7 @@ Set a private token:
 
 ```text
 ADMIN_TOKEN=your-private-password
+DATA_DIR=./data
 ```
 
 Then open:
@@ -96,6 +97,14 @@ Typical settings:
 - Build command: `npm install`
 - Start command: `npm start`
 - Environment variables: `ADMIN_TOKEN`, optional `PORT`
+
+For permanent profile storage on Render, add a persistent disk and set:
+
+```text
+DATA_DIR=/var/data
+```
+
+Mount the Render disk at `/var/data`. Profiles, admin notifications, and contact messages will stay there permanently. Chat messages are still automatically kept only for 24 hours.
 
 If you want the full-stack host to use your purchased domain, point your domain DNS to that host instead of GitHub Pages.
 

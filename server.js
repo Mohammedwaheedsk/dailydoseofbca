@@ -6,7 +6,9 @@ require("dotenv").config();
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const ROOT_DIR = __dirname;
-const DATA_DIR = path.join(ROOT_DIR, "data");
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(ROOT_DIR, "data");
 const MESSAGES_FILE = path.join(DATA_DIR, "messages.json");
 const CHAT_PROFILES_FILE = path.join(DATA_DIR, "chat-profiles.json");
 const CHAT_MESSAGES_FILE = path.join(DATA_DIR, "chat-messages.json");
