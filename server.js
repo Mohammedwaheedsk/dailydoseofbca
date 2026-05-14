@@ -8,8 +8,12 @@ const PORT = Number(process.env.PORT || 3000);
 const ROOT_DIR = __dirname;
 const DATA_DIR = path.join(ROOT_DIR, "data");
 const MESSAGES_FILE = path.join(DATA_DIR, "messages.json");
+const CHAT_PROFILES_FILE = path.join(DATA_DIR, "chat-profiles.json");
+const CHAT_MESSAGES_FILE = path.join(DATA_DIR, "chat-messages.json");
 const NOTIFICATION_FILE = path.join(ROOT_DIR, "notification-config.json");
 const SITE_CONFIG_FILE = path.join(ROOT_DIR, "site-config.json");
+const CHAT_MESSAGE_TTL_MS = 24 * 60 * 60 * 1000;
+let chatWriteQueue = Promise.resolve();
 
 app.disable("x-powered-by");
 app.use(express.json({ limit: "80kb" }));
@@ -18,6 +22,7 @@ app.use(express.urlencoded({ extended: true, limit: "80kb" }));
 async function readJson(filePath, fallback) {
   try {
     const data = await fs.readFile(filePath, "utf8");
+    if (!data.trim()) return fallback;
     return JSON.parse(data);
   } catch (error) {
     if (error.code === "ENOENT") return fallback;
@@ -27,7 +32,9 @@ async function readJson(filePath, fallback) {
 
 async function writeJson(filePath, data) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
+  const tempPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+  await fs.writeFile(tempPath, `${JSON.stringify(data, null, 2)}\n`);
+  await fs.rename(tempPath, filePath);
 }
 
 function requireAdminToken(req, res, next) {
@@ -53,6 +60,36 @@ function cleanText(value, maxLength) {
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, maxLength);
+}
+
+function normalizeUniqueValue(value) {
+  return cleanText(value, 80).toLowerCase();
+}
+
+function cleanUsername(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, "")
+    .slice(0, 24);
+}
+
+function isExpiredMessage(message) {
+  return Date.now() - Date.parse(message.createdAt || 0) >= CHAT_MESSAGE_TTL_MS;
+}
+
+async function readFreshChatMessages() {
+  const messages = await readJson(CHAT_MESSAGES_FILE, []);
+  const freshMessages = messages.filter((message) => !isExpiredMessage(message));
+  if (freshMessages.length !== messages.length) {
+    await writeJson(CHAT_MESSAGES_FILE, freshMessages);
+  }
+  return freshMessages;
+}
+
+async function withChatWriteLock(task) {
+  const runTask = chatWriteQueue.then(task, task);
+  chatWriteQueue = runTask.catch(() => {});
+  return runTask;
 }
 
 app.get("/api/health", (req, res) => {
@@ -151,6 +188,120 @@ app.put("/api/site-config", requireAdminToken, async (req, res, next) => {
     const config = { landingPage };
     await writeJson(SITE_CONFIG_FILE, config);
     res.json({ ok: true, config });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/chat/profile", async (req, res, next) => {
+  try {
+    await withChatWriteLock(async () => {
+      const username = cleanUsername(req.body.username);
+      const name = cleanText(req.body.name, 80);
+      const storedProfileId = cleanText(req.body.profileId, 80);
+
+      if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+        return res.status(400).json({
+          ok: false,
+          error: "Username must be 3-24 characters using letters, numbers, or underscore."
+        });
+      }
+
+      if (name.length < 2) {
+        return res.status(400).json({
+          ok: false,
+          error: "Name must be at least 2 characters."
+        });
+      }
+
+      const profiles = await readJson(CHAT_PROFILES_FILE, []);
+      const normalizedName = normalizeUniqueValue(name);
+      const existingProfile = profiles.find((profile) => profile.id === storedProfileId);
+
+      const usernameOwner = profiles.find((profile) => profile.username === username);
+      const nameOwner = profiles.find((profile) => normalizeUniqueValue(profile.name) === normalizedName);
+
+      if (usernameOwner && usernameOwner.id !== storedProfileId) {
+        return res.status(409).json({
+          ok: false,
+          error: "That username is already taken."
+        });
+      }
+
+      if (nameOwner && nameOwner.id !== storedProfileId) {
+        return res.status(409).json({
+          ok: false,
+          error: "That name is already taken."
+        });
+      }
+
+      const now = new Date().toISOString();
+      const profile = existingProfile || {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+        createdAt: now
+      };
+
+      profile.username = username;
+      profile.name = name;
+      profile.updatedAt = now;
+
+      const nextProfiles = existingProfile
+        ? profiles.map((item) => (item.id === profile.id ? profile : item))
+        : [profile, ...profiles];
+
+      await writeJson(CHAT_PROFILES_FILE, nextProfiles);
+      res.status(existingProfile ? 200 : 201).json({ ok: true, profile });
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/chat/messages", async (req, res, next) => {
+  try {
+    const messages = await readFreshChatMessages();
+    res.json({ ok: true, messages });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/chat/messages", async (req, res, next) => {
+  try {
+    await withChatWriteLock(async () => {
+      const profileId = cleanText(req.body.profileId, 80);
+      const text = cleanText(req.body.message, 500);
+      const profiles = await readJson(CHAT_PROFILES_FILE, []);
+      const profile = profiles.find((item) => item.id === profileId);
+
+      if (!profile) {
+        return res.status(401).json({
+          ok: false,
+          error: "Create your profile before sending a message."
+        });
+      }
+
+      if (!text) {
+        return res.status(400).json({
+          ok: false,
+          error: "Message cannot be empty."
+        });
+      }
+
+      const message = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        profileId: profile.id,
+        username: profile.username,
+        name: profile.name,
+        message: text,
+        createdAt: new Date().toISOString()
+      };
+
+      const messages = await readFreshChatMessages();
+      messages.push(message);
+      await writeJson(CHAT_MESSAGES_FILE, messages.slice(-300));
+      res.status(201).json({ ok: true, message });
+    });
   } catch (error) {
     next(error);
   }

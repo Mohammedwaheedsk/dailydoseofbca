@@ -14,6 +14,7 @@ This repo now works in two hosting modes:
 - Admin-controlled landing page driven by `site-config.json` or `/api/site-config`.
 - Contact form that saves messages when the Node backend is running.
 - Admin page for updating notifications and reading saved contact messages.
+- Public semester-page chat with unique user profiles and messages that expire after 24 hours.
 - GitHub Pages workflow and custom domain support through `CNAME`.
 
 ## Run Locally
@@ -105,5 +106,6 @@ If you want the full-stack host to use your purchased domain, point your domain 
 - `admin.html`: Protected admin UI for notifications and messages.
 - `notification-config.json`: Static notification config.
 - `site-config.json`: Static landing page config.
+- `chat-widget.js`: Floating public chat widget for semester pages.
 - `CNAME`: GitHub Pages custom domain.
 - `.github/workflows/pages.yml`: Static GitHub Pages deployment.
