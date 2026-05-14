@@ -236,6 +236,30 @@
       font-size: 1.7rem;
     }
 
+    .admin-section-title {
+      margin: 22px 0 10px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .detail-line {
+      display: block;
+      color: #d9dee8;
+      margin: 4px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .pin-badge {
+      display: inline-block;
+      border: 1px solid rgba(56, 189, 248, 0.36);
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.12);
+      color: #bae6fd;
+      padding: 4px 8px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
     .danger-button {
       border-color: rgba(251, 113, 133, 0.45);
       background: rgba(251, 113, 133, 0.1);
@@ -360,6 +384,11 @@
           </div>
         </div>
         <p class="status" id="chat-status" role="status"></p>
+        <h2 class="admin-section-title">Created profiles</h2>
+        <div class="messages" id="chat-profiles"></div>
+        <h2 class="admin-section-title">Admin notifications</h2>
+        <div class="messages" id="admin-notifications"></div>
+        <h2 class="admin-section-title">24-hour chat messages</h2>
         <div class="messages" id="chat-messages"></div>
       </section>
     </div>
@@ -374,6 +403,8 @@
     const messagesStatus = document.getElementById("messages-status");
     const chatStatus = document.getElementById("chat-status");
     const messagesEl = document.getElementById("messages");
+    const chatProfilesEl = document.getElementById("chat-profiles");
+    const adminNotificationsEl = document.getElementById("admin-notifications");
     const chatMessagesEl = document.getElementById("chat-messages");
     const chatProfileCountEl = document.getElementById("chat-profile-count");
     const chatMessageCountEl = document.getElementById("chat-message-count");
@@ -495,6 +526,8 @@
 
     async function loadChat() {
       setStatus(chatStatus, "Loading 24-hour chat...");
+      chatProfilesEl.innerHTML = "";
+      adminNotificationsEl.innerHTML = "";
       chatMessagesEl.innerHTML = "";
       localStorage.setItem("ddobca-admin-token", tokenInput.value);
 
@@ -505,6 +538,48 @@
 
         chatProfileCountEl.textContent = data.profileCount;
         chatMessageCountEl.textContent = data.messages.length;
+
+        if (!data.profiles.length) {
+          chatProfilesEl.innerHTML = "<p>No profiles created yet.</p>";
+        } else {
+          chatProfilesEl.innerHTML = data.profiles.map((profile) => `
+            <article class="message">
+              <strong>${escapeHtml(profile.name)} (@${escapeHtml(profile.username)})</strong>
+              <small>Created: ${escapeHtml(profile.createdAt)}</small>
+              <span class="detail-line">Name: ${escapeHtml(profile.name)}</span>
+              <span class="detail-line">Username: @${escapeHtml(profile.username)}</span>
+              <span class="detail-line">PIN: <span class="pin-badge">${escapeHtml(profile.pin)}</span></span>
+              <button class="danger-button" type="button" data-delete-profile="${escapeHtml(profile.id)}">Delete profile</button>
+            </article>
+          `).join("");
+
+          chatProfilesEl.querySelectorAll("[data-delete-profile]").forEach((button) => {
+            button.addEventListener("click", () => deleteChatProfile(button.dataset.deleteProfile));
+          });
+        }
+
+        if (!data.notifications.length) {
+          adminNotificationsEl.innerHTML = "<p>No admin notifications yet.</p>";
+        } else {
+          adminNotificationsEl.innerHTML = data.notifications.map((notification) => `
+            <article class="message">
+              <strong>${escapeHtml(notification.title || "Admin notification")}</strong>
+              <small>${escapeHtml(notification.createdAt)}</small>
+              <p>${escapeHtml(notification.message || "")}</p>
+              ${notification.requestedLogin ? `<span class="detail-line">Requested login: ${escapeHtml(notification.requestedLogin)}</span>` : ""}
+              ${notification.profile ? `
+                <span class="detail-line">Name: ${escapeHtml(notification.profile.name)}</span>
+                <span class="detail-line">Username: @${escapeHtml(notification.profile.username)}</span>
+                <span class="detail-line">PIN: <span class="pin-badge">${escapeHtml(notification.profile.pin)}</span></span>
+              ` : ""}
+              <button class="danger-button" type="button" data-delete-notification="${escapeHtml(notification.id)}">Dismiss notification</button>
+            </article>
+          `).join("");
+
+          adminNotificationsEl.querySelectorAll("[data-delete-notification]").forEach((button) => {
+            button.addEventListener("click", () => deleteAdminNotification(button.dataset.deleteNotification));
+          });
+        }
 
         if (!data.messages.length) {
           chatMessagesEl.innerHTML = "<p>No messages in the current 24-hour chat window.</p>";
@@ -524,6 +599,42 @@
         }
 
         setStatus(chatStatus, "24-hour chat loaded.", "ok");
+      } catch (error) {
+        setStatus(chatStatus, error.message, "error");
+      }
+    }
+
+    async function deleteChatProfile(profileId) {
+      setStatus(chatStatus, "Deleting profile...");
+      localStorage.setItem("ddobca-admin-token", tokenInput.value);
+
+      try {
+        const response = await fetch(`/api/admin/chat/profiles/${encodeURIComponent(profileId)}`, {
+          method: "DELETE",
+          headers: authHeaders()
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to delete profile.");
+        setStatus(chatStatus, "Profile deleted.", "ok");
+        await loadChat();
+      } catch (error) {
+        setStatus(chatStatus, error.message, "error");
+      }
+    }
+
+    async function deleteAdminNotification(notificationId) {
+      setStatus(chatStatus, "Dismissing notification...");
+      localStorage.setItem("ddobca-admin-token", tokenInput.value);
+
+      try {
+        const response = await fetch(`/api/admin/notifications/${encodeURIComponent(notificationId)}`, {
+          method: "DELETE",
+          headers: authHeaders()
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to dismiss notification.");
+        setStatus(chatStatus, "Notification dismissed.", "ok");
+        await loadChat();
       } catch (error) {
         setStatus(chatStatus, error.message, "error");
       }

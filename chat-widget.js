@@ -206,6 +206,12 @@
         cursor: pointer;
       }
 
+      .ddobca-profile-form .ddobca-secondary-button {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.07);
+        color: #f8fafc;
+      }
+
       .ddobca-chat-status {
         margin: 0;
         min-height: 18px;
@@ -350,6 +356,8 @@
       });
       const authForm = document.getElementById("ddobca-profile-form");
       authForm.addEventListener("submit", isSignup ? createProfile : loginProfile);
+      const forgotPinButton = document.getElementById("ddobca-forgot-pin");
+      if (forgotPinButton) forgotPinButton.addEventListener("click", forgotPin);
       return;
     }
 
@@ -375,6 +383,7 @@
           <input name="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="4" maxlength="4" pattern="\\d{4}" placeholder="1234" required>
         </label>
         <button type="submit">Login</button>
+        <button class="ddobca-secondary-button" id="ddobca-forgot-pin" type="button">Forgot PIN?</button>
         <p class="ddobca-chat-status" id="ddobca-profile-status"></p>
       </form>
     `;
@@ -443,6 +452,32 @@
       saveProfile(data.profile);
       render();
       await loadMessages();
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  }
+
+  async function forgotPin() {
+    const form = document.getElementById("ddobca-profile-form");
+    const status = document.getElementById("ddobca-profile-status");
+    const login = form && form.elements.login ? form.elements.login.value.trim() : "";
+    if (!status) return;
+
+    if (!login) {
+      status.textContent = "Enter your username or name first.";
+      return;
+    }
+
+    status.textContent = "Notifying admin...";
+    try {
+      const response = await fetch("/api/chat/forgot-pin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ login })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Could not notify admin.");
+      status.textContent = data.message || "Admin has been notified.";
     } catch (error) {
       status.textContent = error.message;
     }

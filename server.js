@@ -10,6 +10,7 @@ const DATA_DIR = path.join(ROOT_DIR, "data");
 const MESSAGES_FILE = path.join(DATA_DIR, "messages.json");
 const CHAT_PROFILES_FILE = path.join(DATA_DIR, "chat-profiles.json");
 const CHAT_MESSAGES_FILE = path.join(DATA_DIR, "chat-messages.json");
+const ADMIN_NOTIFICATIONS_FILE = path.join(DATA_DIR, "admin-notifications.json");
 const NOTIFICATION_FILE = path.join(ROOT_DIR, "notification-config.json");
 const SITE_CONFIG_FILE = path.join(ROOT_DIR, "site-config.json");
 const CHAT_MESSAGE_TTL_MS = 24 * 60 * 60 * 1000;
@@ -85,6 +86,26 @@ function publicProfile(profile) {
     createdAt: profile.createdAt,
     updatedAt: profile.updatedAt
   };
+}
+
+function adminProfile(profile) {
+  return {
+    ...publicProfile(profile),
+    pin: profile.pin
+  };
+}
+
+async function addAdminNotification(notification) {
+  const notifications = await readJson(ADMIN_NOTIFICATIONS_FILE, []);
+  const nextNotification = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    read: false,
+    createdAt: new Date().toISOString(),
+    ...notification
+  };
+  notifications.unshift(nextNotification);
+  await writeJson(ADMIN_NOTIFICATIONS_FILE, notifications.slice(0, 500));
+  return nextNotification;
 }
 
 function isExpiredMessage(message) {
@@ -273,6 +294,14 @@ app.post("/api/chat/profile", async (req, res, next) => {
         : [profile, ...profiles];
 
       await writeJson(CHAT_PROFILES_FILE, nextProfiles);
+      if (!existingProfile) {
+        await addAdminNotification({
+          type: "profile_created",
+          title: "New profile created",
+          message: `${name} created a chat profile.`,
+          profile: adminProfile(profile)
+        });
+      }
       res.status(existingProfile ? 200 : 201).json({ ok: true, profile: publicProfile(profile) });
     });
   } catch (error) {
@@ -305,6 +334,41 @@ app.post("/api/chat/login", async (req, res, next) => {
     }
 
     res.json({ ok: true, profile: publicProfile(profile) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/chat/forgot-pin", async (req, res, next) => {
+  try {
+    const login = normalizeUniqueValue(req.body.login || req.body.username || req.body.name);
+
+    if (!login) {
+      return res.status(400).json({
+        ok: false,
+        error: "Enter your username or name."
+      });
+    }
+
+    const profiles = await readJson(CHAT_PROFILES_FILE, []);
+    const profile = profiles.find((item) => (
+      item.username === login || normalizeUniqueValue(item.name) === login
+    ));
+
+    await addAdminNotification({
+      type: "forgot_pin",
+      title: "Forgot PIN request",
+      message: profile
+        ? `${profile.name} requested PIN help.`
+        : `Unknown profile requested PIN help for "${login}".`,
+      requestedLogin: login,
+      profile: profile ? adminProfile(profile) : null
+    });
+
+    res.json({
+      ok: true,
+      message: "Admin has been notified. Please contact DailyDoseofBCA for your PIN."
+    });
   } catch (error) {
     next(error);
   }
@@ -364,11 +428,63 @@ app.get("/api/admin/chat", requireAdminToken, async (req, res, next) => {
   try {
     const profiles = await readJson(CHAT_PROFILES_FILE, []);
     const messages = await readFreshChatMessages();
+    const notifications = await readJson(ADMIN_NOTIFICATIONS_FILE, []);
     res.json({
       ok: true,
       profileCount: profiles.length,
-      profiles: profiles.map(publicProfile),
-      messages
+      profiles: profiles.map(adminProfile),
+      messages,
+      notifications
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.delete("/api/admin/notifications/:notificationId", requireAdminToken, async (req, res, next) => {
+  try {
+    const notificationId = cleanText(req.params.notificationId, 80);
+    const notifications = await readJson(ADMIN_NOTIFICATIONS_FILE, []);
+    const nextNotifications = notifications.filter((notification) => notification.id !== notificationId);
+
+    if (nextNotifications.length === notifications.length) {
+      return res.status(404).json({
+        ok: false,
+        error: "Notification not found."
+      });
+    }
+
+    await writeJson(ADMIN_NOTIFICATIONS_FILE, nextNotifications);
+    res.json({ ok: true, deletedId: notificationId });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.delete("/api/admin/chat/profiles/:profileId", requireAdminToken, async (req, res, next) => {
+  try {
+    await withChatWriteLock(async () => {
+      const profileId = cleanText(req.params.profileId, 80);
+      const profiles = await readJson(CHAT_PROFILES_FILE, []);
+      const nextProfiles = profiles.filter((profile) => profile.id !== profileId);
+
+      if (nextProfiles.length === profiles.length) {
+        return res.status(404).json({
+          ok: false,
+          error: "Profile not found."
+        });
+      }
+
+      const messages = await readFreshChatMessages();
+      const nextMessages = messages.filter((message) => message.profileId !== profileId);
+      await writeJson(CHAT_PROFILES_FILE, nextProfiles);
+      await writeJson(CHAT_MESSAGES_FILE, nextMessages);
+
+      res.json({
+        ok: true,
+        deletedId: profileId,
+        deletedMessages: messages.length - nextMessages.length
+      });
     });
   } catch (error) {
     next(error);
