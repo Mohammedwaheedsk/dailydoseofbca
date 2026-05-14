@@ -107,6 +107,29 @@
         font-size: 0.78rem;
       }
 
+      .ddobca-chat-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .ddobca-chat-logout {
+        display: none;
+        min-height: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+        padding: 0 10px;
+        font: 800 0.78rem system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        cursor: pointer;
+      }
+
+      #ddobca-chat.has-profile .ddobca-chat-logout {
+        display: inline-flex;
+        align-items: center;
+      }
+
       .ddobca-chat-close {
         width: 34px;
         height: 34px;
@@ -270,7 +293,10 @@
           <strong>Messages</strong>
           <span>Public chat, messages clear after 24 hours</span>
         </div>
-        <button class="ddobca-chat-close" type="button" aria-label="Close messages">x</button>
+        <div class="ddobca-chat-actions">
+          <button class="ddobca-chat-logout" type="button">Logout</button>
+          <button class="ddobca-chat-close" type="button" aria-label="Close messages">x</button>
+        </div>
       </div>
       <div class="ddobca-chat-body" id="ddobca-chat-body"></div>
       <div class="ddobca-chat-foot" id="ddobca-chat-foot"></div>
@@ -291,6 +317,8 @@
       widget.classList.remove("open");
     });
 
+    widget.querySelector(".ddobca-chat-logout").addEventListener("click", logoutProfile);
+
     render();
     pollTimer = window.setInterval(() => {
       if (state.isOpen && state.profile) loadMessages();
@@ -300,7 +328,9 @@
   function render() {
     const body = document.getElementById("ddobca-chat-body");
     const foot = document.getElementById("ddobca-chat-foot");
+    const widget = document.getElementById("ddobca-chat");
     if (!body || !foot) return;
+    if (widget) widget.classList.toggle("has-profile", Boolean(state.profile));
 
     if (!state.profile) {
       const isSignup = state.authMode === "signup";
@@ -416,6 +446,13 @@
     } catch (error) {
       status.textContent = error.message;
     }
+  }
+
+  function logoutProfile() {
+    localStorage.removeItem(PROFILE_KEY);
+    state.profile = null;
+    state.authMode = "login";
+    render();
   }
 
   async function loadMessages() {
