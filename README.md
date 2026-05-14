@@ -50,6 +50,8 @@ Set a private token:
 ```text
 ADMIN_TOKEN=your-private-password
 DATA_DIR=./data
+# Optional: use Supabase/Postgres instead of local JSON files.
+DATABASE_URL=postgresql://postgres.example:your-password@your-supabase-pooler-host:6543/postgres
 ```
 
 Then open:
@@ -105,6 +107,14 @@ DATA_DIR=/var/data
 ```
 
 Mount the Render disk at `/var/data`. Profiles, admin notifications, and contact messages will stay there permanently. Chat messages are still automatically kept only for 24 hours.
+
+If you use Supabase, you do not need a Render disk. Add this environment variable in Render instead:
+
+```text
+DATABASE_URL=your-supabase-postgres-connection-string
+```
+
+When `DATABASE_URL` is set, the backend stores profiles, chat messages, admin notifications, and contact messages in Supabase/Postgres. Chat messages older than 24 hours are deleted automatically by the server.
 
 If you want the full-stack host to use your purchased domain, point your domain DNS to that host instead of GitHub Pages.
 
