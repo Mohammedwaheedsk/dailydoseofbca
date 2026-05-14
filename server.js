@@ -306,6 +306,15 @@ function adminProfile(profile) {
   };
 }
 
+function adminProfileStatus(profile, activeProfileIds) {
+  return {
+    id: profile.id,
+    status: activeProfileIds.has(profile.id) ? "active" : "inactive",
+    createdAt: profile.createdAt,
+    updatedAt: profile.updatedAt
+  };
+}
+
 async function addAdminNotification(notification) {
   const nextNotification = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -561,7 +570,7 @@ app.post("/api/chat/profile", async (req, res, next) => {
         await addAdminNotification({
           type: "profile_created",
           title: "New profile created",
-          message: `${name} created a chat profile.`,
+          message: "A user created a chat profile.",
           profile: adminProfile(profile)
         });
       }
@@ -622,8 +631,8 @@ app.post("/api/chat/forgot-pin", async (req, res, next) => {
       type: "forgot_pin",
       title: "Forgot PIN request",
       message: profile
-        ? `${profile.name} requested PIN help.`
-        : `Unknown profile requested PIN help for "${login}".`,
+        ? "A registered user requested PIN help."
+        : "An unknown profile requested PIN help.",
       requestedLogin: login,
       profile: profile ? adminProfile(profile) : null
     });
@@ -690,12 +699,23 @@ app.get("/api/admin/chat", requireAdminToken, async (req, res, next) => {
     const profiles = await readProfiles();
     const messages = await readFreshChatMessages();
     const notifications = await readAdminNotifications();
+    const activeProfileIds = new Set(messages.map((message) => message.profileId));
+    const profileStatuses = profiles.map((profile) => adminProfileStatus(profile, activeProfileIds));
     res.json({
       ok: true,
       profileCount: profiles.length,
-      profiles: profiles.map(adminProfile),
+      activeProfileCount: profileStatuses.filter((profile) => profile.status === "active").length,
+      inactiveProfileCount: profileStatuses.filter((profile) => profile.status === "inactive").length,
+      profiles: profileStatuses,
       messages,
-      notifications
+      notifications: notifications.map((notification) => ({
+        id: notification.id,
+        type: notification.type,
+        title: notification.title,
+        message: notification.message,
+        read: notification.read,
+        createdAt: notification.createdAt
+      }))
     });
   } catch (error) {
     next(error);

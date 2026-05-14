@@ -211,7 +211,7 @@
 
     .metric-row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
       margin-bottom: 14px;
     }
@@ -249,15 +249,23 @@
       overflow-wrap: anywhere;
     }
 
-    .pin-badge {
+    .status-badge {
       display: inline-block;
-      border: 1px solid rgba(56, 189, 248, 0.36);
-      border-radius: 8px;
-      background: rgba(56, 189, 248, 0.12);
-      color: #bae6fd;
-      padding: 4px 8px;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 0.78rem;
       font-weight: 900;
-      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-badge.active {
+      background: rgba(134, 239, 172, 0.14);
+      color: #bbf7d0;
+    }
+
+    .status-badge.inactive {
+      background: rgba(168, 176, 191, 0.14);
+      color: #cbd5e1;
     }
 
     .danger-button {
@@ -379,12 +387,20 @@
             <strong id="chat-profile-count">0</strong>
           </div>
           <div class="metric">
+            <span>Active users</span>
+            <strong id="chat-active-profile-count">0</strong>
+          </div>
+          <div class="metric">
+            <span>Inactive users</span>
+            <strong id="chat-inactive-profile-count">0</strong>
+          </div>
+          <div class="metric">
             <span>24-hour messages</span>
             <strong id="chat-message-count">0</strong>
           </div>
         </div>
         <p class="status" id="chat-status" role="status"></p>
-        <h2 class="admin-section-title">Created profiles</h2>
+        <h2 class="admin-section-title">Profile activity</h2>
         <div class="messages" id="chat-profiles"></div>
         <h2 class="admin-section-title">Admin notifications</h2>
         <div class="messages" id="admin-notifications"></div>
@@ -407,6 +423,8 @@
     const adminNotificationsEl = document.getElementById("admin-notifications");
     const chatMessagesEl = document.getElementById("chat-messages");
     const chatProfileCountEl = document.getElementById("chat-profile-count");
+    const chatActiveProfileCountEl = document.getElementById("chat-active-profile-count");
+    const chatInactiveProfileCountEl = document.getElementById("chat-inactive-profile-count");
     const chatMessageCountEl = document.getElementById("chat-message-count");
     let chatRefreshTimer = null;
 
@@ -537,21 +555,27 @@
         if (!response.ok || !data.ok) throw new Error(data.error || "Unable to load 24-hour chat.");
 
         chatProfileCountEl.textContent = data.profileCount;
+        chatActiveProfileCountEl.textContent = data.activeProfileCount || 0;
+        chatInactiveProfileCountEl.textContent = data.inactiveProfileCount || 0;
         chatMessageCountEl.textContent = data.messages.length;
 
         if (!data.profiles.length) {
           chatProfilesEl.innerHTML = "<p>No profiles created yet.</p>";
         } else {
-          chatProfilesEl.innerHTML = data.profiles.map((profile) => `
+          const activeProfiles = data.profiles.filter((profile) => profile.status === "active");
+          const inactiveProfiles = data.profiles.filter((profile) => profile.status !== "active");
+          chatProfilesEl.innerHTML = `
             <article class="message">
-              <strong>${escapeHtml(profile.name)} (@${escapeHtml(profile.username)})</strong>
-              <small>Created: ${escapeHtml(profile.createdAt)}</small>
-              <span class="detail-line">Name: ${escapeHtml(profile.name)}</span>
-              <span class="detail-line">Username: @${escapeHtml(profile.username)}</span>
-              <span class="detail-line">PIN: <span class="pin-badge">${escapeHtml(profile.pin)}</span></span>
-              <button class="danger-button" type="button" data-delete-profile="${escapeHtml(profile.id)}">Delete profile</button>
+              <strong>Active users</strong>
+              <small>Users who sent a message in the current 24-hour chat window.</small>
+              ${activeProfiles.length ? activeProfiles.map(profileStatusHtml).join("") : "<p>No active users right now.</p>"}
             </article>
-          `).join("");
+            <article class="message">
+              <strong>Inactive users</strong>
+              <small>Profiles created, but no message in the current 24-hour chat window.</small>
+              ${inactiveProfiles.length ? inactiveProfiles.map(profileStatusHtml).join("") : "<p>No inactive users right now.</p>"}
+            </article>
+          `;
 
           chatProfilesEl.querySelectorAll("[data-delete-profile]").forEach((button) => {
             button.addEventListener("click", () => deleteChatProfile(button.dataset.deleteProfile));
@@ -566,12 +590,6 @@
               <strong>${escapeHtml(notification.title || "Admin notification")}</strong>
               <small>${escapeHtml(notification.createdAt)}</small>
               <p>${escapeHtml(notification.message || "")}</p>
-              ${notification.requestedLogin ? `<span class="detail-line">Requested login: ${escapeHtml(notification.requestedLogin)}</span>` : ""}
-              ${notification.profile ? `
-                <span class="detail-line">Name: ${escapeHtml(notification.profile.name)}</span>
-                <span class="detail-line">Username: @${escapeHtml(notification.profile.username)}</span>
-                <span class="detail-line">PIN: <span class="pin-badge">${escapeHtml(notification.profile.pin)}</span></span>
-              ` : ""}
               <button class="danger-button" type="button" data-delete-notification="${escapeHtml(notification.id)}">Dismiss notification</button>
             </article>
           `).join("");
@@ -602,6 +620,18 @@
       } catch (error) {
         setStatus(chatStatus, error.message, "error");
       }
+    }
+
+    function profileStatusHtml(profile) {
+      const shortId = String(profile.id || "").slice(0, 10);
+      const status = profile.status === "active" ? "active" : "inactive";
+      return `
+        <div class="message">
+          <strong><span class="status-badge ${status}">${status}</span> Profile ${escapeHtml(shortId)}</strong>
+          <small>Created: ${escapeHtml(profile.createdAt)}</small>
+          <button class="danger-button" type="button" data-delete-profile="${escapeHtml(profile.id)}">Delete profile</button>
+        </div>
+      `;
     }
 
     async function deleteChatProfile(profileId) {
