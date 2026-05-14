@@ -347,15 +347,15 @@
 
       <section class="panel">
         <div class="toolbar">
-          <button id="load-chat" type="button">Load live chat</button>
+          <button id="load-chat" type="button">Load 24-hour chat</button>
         </div>
         <div class="metric-row">
           <div class="metric">
-            <span>User profiles</span>
+            <span>Total profiles created</span>
             <strong id="chat-profile-count">0</strong>
           </div>
           <div class="metric">
-            <span>Live messages</span>
+            <span>24-hour messages</span>
             <strong id="chat-message-count">0</strong>
           </div>
         </div>
@@ -494,20 +494,20 @@
     }
 
     async function loadChat() {
-      setStatus(chatStatus, "Loading live chat...");
+      setStatus(chatStatus, "Loading 24-hour chat...");
       chatMessagesEl.innerHTML = "";
       localStorage.setItem("ddobca-admin-token", tokenInput.value);
 
       try {
         const response = await fetch("/api/admin/chat", { headers: authHeaders() });
         const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to load live chat.");
+        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to load 24-hour chat.");
 
         chatProfileCountEl.textContent = data.profileCount;
         chatMessageCountEl.textContent = data.messages.length;
 
         if (!data.messages.length) {
-          chatMessagesEl.innerHTML = "<p>No live chat messages yet.</p>";
+          chatMessagesEl.innerHTML = "<p>No messages in the current 24-hour chat window.</p>";
         } else {
           chatMessagesEl.innerHTML = data.messages.slice().reverse().map((item) => `
             <article class="message">
@@ -523,7 +523,7 @@
           });
         }
 
-        setStatus(chatStatus, "Live chat loaded.", "ok");
+        setStatus(chatStatus, "24-hour chat loaded.", "ok");
       } catch (error) {
         setStatus(chatStatus, error.message, "error");
       }
