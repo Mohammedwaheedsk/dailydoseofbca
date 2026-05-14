@@ -376,7 +376,7 @@
       <form class="ddobca-profile-form" id="ddobca-profile-form">
         <label>
           Username or name
-          <input name="login" autocomplete="username" maxlength="80" placeholder="waheed_01 or Waheed" required>
+          <input name="login" autocomplete="username" maxlength="80" placeholder="username or Name" required>
         </label>
         <label>
           4-digit PIN
@@ -394,7 +394,7 @@
       <form class="ddobca-profile-form" id="ddobca-profile-form">
         <label>
           Username
-          <input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" placeholder="waheed_01" required>
+          <input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" placeholder="username" required>
         </label>
         <label>
           Name
@@ -402,7 +402,7 @@
         </label>
         <label>
           4-digit PIN
-          <input name="pin" type="password" inputmode="numeric" autocomplete="new-password" minlength="4" maxlength="4" pattern="\\d{4}" placeholder="1234" required>
+          <input name="pin" type="password" inputmode="numeric" autocomplete="new-password" minlength="4" maxlength="4" pattern="\\d{4}" placeholder="<PIN>" required>
         </label>
         <button type="submit">Create profile</button>
         <p class="ddobca-chat-status" id="ddobca-profile-status"></p>
