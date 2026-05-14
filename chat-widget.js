@@ -380,7 +380,7 @@
         </label>
         <label>
           4-digit PIN
-          <input name="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="4" maxlength="4" pattern="\\d{4}" placeholder="1234" required>
+          <input name="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="4" maxlength="4" pattern="\\d{4}" placeholder="<PIN>" required>
         </label>
         <button type="submit">Login</button>
         <button class="ddobca-secondary-button" id="ddobca-forgot-pin" type="button">Forgot PIN?</button>
