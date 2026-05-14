@@ -309,6 +309,8 @@ function adminProfile(profile) {
 function adminProfileStatus(profile, activeProfileIds) {
   return {
     id: profile.id,
+    username: profile.username,
+    name: profile.name,
     status: activeProfileIds.has(profile.id) ? "active" : "inactive",
     createdAt: profile.createdAt,
     updatedAt: profile.updatedAt

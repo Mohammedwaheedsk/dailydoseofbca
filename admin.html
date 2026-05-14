@@ -33,7 +33,7 @@
     }
 
     .shell {
-      width: min(1080px, calc(100% - 32px));
+      width: min(1320px, calc(100% - 32px));
       margin: 0 auto;
       padding: 30px 0 46px;
     }
@@ -67,15 +67,21 @@
       line-height: 1.6;
     }
 
-    .grid {
+    .admin-layout {
       display: grid;
-      grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
       gap: 20px;
     }
 
-    .stack {
+    .control-grid {
       display: grid;
+      grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
       gap: 20px;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+      gap: 18px;
     }
 
     .panel {
@@ -86,6 +92,29 @@
       -webkit-backdrop-filter: blur(22px);
       padding: 22px;
       box-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .panel.compact {
+      padding: 18px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 1.18rem;
+    }
+
+    .panel-header p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
     }
 
     form {
@@ -183,6 +212,40 @@
       padding-right: 2px;
     }
 
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .profile-groups {
+      display: grid;
+      gap: 14px;
+    }
+
+    .profile-row {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.045);
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .profile-row strong {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .profile-row .meta {
+      display: grid;
+      gap: 3px;
+      margin-top: 8px;
+      color: #d9dee8;
+    }
+
     .message {
       border: 1px solid var(--border);
       background: rgba(0, 0, 0, 0.22);
@@ -277,7 +340,10 @@
 
     @media (max-width: 820px) {
       nav,
-      .row {
+      .row,
+      .settings-grid,
+      .control-grid,
+      .dashboard-grid {
         grid-template-columns: 1fr;
       }
 
@@ -286,7 +352,13 @@
         flex-direction: column;
       }
 
-      .grid {
+      .metric-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .metric-row {
         grid-template-columns: 1fr;
       }
     }
@@ -303,9 +375,44 @@
     <h1>Admin</h1>
     <p class="lead">Use this page only on the full-stack Node host. GitHub Pages can show the page, but it cannot run the protected API behind it.</p>
 
-    <div class="grid">
-      <div class="stack">
-        <section class="panel">
+    <div class="admin-layout">
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Overview</h2>
+            <p>Live profile and chat summary.</p>
+          </div>
+          <button id="load-chat" type="button">Refresh dashboard</button>
+        </div>
+        <div class="metric-row">
+          <div class="metric">
+            <span>Total profiles</span>
+            <strong id="chat-profile-count">0</strong>
+          </div>
+          <div class="metric">
+            <span>Active users</span>
+            <strong id="chat-active-profile-count">0</strong>
+          </div>
+          <div class="metric">
+            <span>Inactive users</span>
+            <strong id="chat-inactive-profile-count">0</strong>
+          </div>
+          <div class="metric">
+            <span>24-hour messages</span>
+            <strong id="chat-message-count">0</strong>
+          </div>
+        </div>
+        <p class="status" id="chat-status" role="status"></p>
+      </section>
+
+      <div class="control-grid">
+        <section class="panel compact">
+          <div class="panel-header">
+            <div>
+              <h2>Site Settings</h2>
+              <p>Admin token and landing page.</p>
+            </div>
+          </div>
           <form id="site-config-form">
             <label>
               Admin token
@@ -329,7 +436,14 @@
           </form>
         </section>
 
-        <section class="panel">
+        <section class="panel compact">
+          <div class="panel-header">
+            <div>
+              <h2>Notification Banner</h2>
+              <p>Control the site-wide notification.</p>
+            </div>
+            <button id="load-notification" type="button">Load</button>
+          </div>
           <form id="notification-form">
             <label class="check">
               <input id="active" name="active" type="checkbox">
@@ -368,45 +482,48 @@
       </div>
 
       <section class="panel">
-        <div class="toolbar">
-          <button id="load-messages" type="button">Load messages</button>
-          <button id="load-notification" type="button">Load notification</button>
-          <button id="load-site-config" type="button">Load landing page</button>
+        <div class="panel-header">
+          <div>
+            <h2>Users</h2>
+            <p>Created profiles grouped by recent activity. PINs are hidden.</p>
+          </div>
         </div>
-        <p class="status" id="messages-status" role="status"></p>
-        <div class="messages" id="messages"></div>
+        <div class="profile-groups" id="chat-profiles"></div>
       </section>
 
       <section class="panel">
-        <div class="toolbar">
-          <button id="load-chat" type="button">Load 24-hour chat</button>
-        </div>
-        <div class="metric-row">
-          <div class="metric">
-            <span>Total profiles created</span>
-            <strong id="chat-profile-count">0</strong>
-          </div>
-          <div class="metric">
-            <span>Active users</span>
-            <strong id="chat-active-profile-count">0</strong>
-          </div>
-          <div class="metric">
-            <span>Inactive users</span>
-            <strong id="chat-inactive-profile-count">0</strong>
-          </div>
-          <div class="metric">
-            <span>24-hour messages</span>
-            <strong id="chat-message-count">0</strong>
+        <div class="panel-header">
+          <div>
+            <h2>Messages</h2>
+            <p>Public chat messages from the current 24-hour window.</p>
           </div>
         </div>
-        <p class="status" id="chat-status" role="status"></p>
-        <h2 class="admin-section-title">Profile activity</h2>
-        <div class="messages" id="chat-profiles"></div>
-        <h2 class="admin-section-title">Admin notifications</h2>
-        <div class="messages" id="admin-notifications"></div>
-        <h2 class="admin-section-title">24-hour chat messages</h2>
         <div class="messages" id="chat-messages"></div>
       </section>
+
+      <div class="settings-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Notifications</h2>
+              <p>Profile and PIN-help notifications for admin.</p>
+            </div>
+          </div>
+          <div class="messages" id="admin-notifications"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Contact Messages</h2>
+              <p>Messages submitted from the contact page.</p>
+            </div>
+            <button id="load-messages" type="button">Load</button>
+          </div>
+          <p class="status" id="messages-status" role="status"></p>
+          <div class="messages" id="messages"></div>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -623,11 +740,14 @@
     }
 
     function profileStatusHtml(profile) {
-      const shortId = String(profile.id || "").slice(0, 10);
       const status = profile.status === "active" ? "active" : "inactive";
       return `
-        <div class="message">
-          <strong><span class="status-badge ${status}">${status}</span> Profile ${escapeHtml(shortId)}</strong>
+        <div class="profile-row">
+          <strong><span class="status-badge ${status}">${status}</span> ${escapeHtml(profile.name || "Unnamed user")}</strong>
+          <div class="meta">
+            <span>Username: @${escapeHtml(profile.username || "")}</span>
+            <span>PIN: hidden</span>
+          </div>
           <small>Created: ${escapeHtml(profile.createdAt)}</small>
           <button class="danger-button" type="button" data-delete-profile="${escapeHtml(profile.id)}">Delete profile</button>
         </div>
@@ -700,7 +820,6 @@
 
     document.getElementById("load-messages").addEventListener("click", loadMessages);
     document.getElementById("load-notification").addEventListener("click", loadNotification);
-    document.getElementById("load-site-config").addEventListener("click", loadSiteConfig);
     document.getElementById("load-chat").addEventListener("click", loadChat);
     loadSiteConfig().catch((error) => setStatus(siteConfigStatus, error.message, "error"));
     loadNotification().catch((error) => setStatus(notificationStatus, error.message, "error"));
