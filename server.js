@@ -360,6 +360,43 @@ app.post("/api/chat/messages", async (req, res, next) => {
   }
 });
 
+app.get("/api/admin/chat", requireAdminToken, async (req, res, next) => {
+  try {
+    const profiles = await readJson(CHAT_PROFILES_FILE, []);
+    const messages = await readFreshChatMessages();
+    res.json({
+      ok: true,
+      profileCount: profiles.length,
+      profiles: profiles.map(publicProfile),
+      messages
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.delete("/api/admin/chat/messages/:messageId", requireAdminToken, async (req, res, next) => {
+  try {
+    await withChatWriteLock(async () => {
+      const messageId = cleanText(req.params.messageId, 80);
+      const messages = await readFreshChatMessages();
+      const nextMessages = messages.filter((message) => message.id !== messageId);
+
+      if (nextMessages.length === messages.length) {
+        return res.status(404).json({
+          ok: false,
+          error: "Message not found."
+        });
+      }
+
+      await writeJson(CHAT_MESSAGES_FILE, nextMessages);
+      res.json({ ok: true, deletedId: messageId });
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/api/messages", requireAdminToken, async (req, res, next) => {
   try {
     const messages = await readJson(MESSAGES_FILE, []);
