@@ -209,6 +209,40 @@
       white-space: pre-wrap;
     }
 
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.22);
+      padding: 14px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .metric strong {
+      font-size: 1.7rem;
+    }
+
+    .danger-button {
+      border-color: rgba(251, 113, 133, 0.45);
+      background: rgba(251, 113, 133, 0.1);
+      color: #fecdd3;
+      margin-top: 12px;
+    }
+
     @media (max-width: 820px) {
       nav,
       .row {
@@ -225,6 +259,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
   <div class="shell">
@@ -309,6 +344,24 @@
         <p class="status" id="messages-status" role="status"></p>
         <div class="messages" id="messages"></div>
       </section>
+
+      <section class="panel">
+        <div class="toolbar">
+          <button id="load-chat" type="button">Load live chat</button>
+        </div>
+        <div class="metric-row">
+          <div class="metric">
+            <span>User profiles</span>
+            <strong id="chat-profile-count">0</strong>
+          </div>
+          <div class="metric">
+            <span>Live messages</span>
+            <strong id="chat-message-count">0</strong>
+          </div>
+        </div>
+        <p class="status" id="chat-status" role="status"></p>
+        <div class="messages" id="chat-messages"></div>
+      </section>
     </div>
   </div>
 
@@ -319,7 +372,12 @@
     const siteConfigStatus = document.getElementById("site-config-status");
     const notificationStatus = document.getElementById("notification-status");
     const messagesStatus = document.getElementById("messages-status");
+    const chatStatus = document.getElementById("chat-status");
     const messagesEl = document.getElementById("messages");
+    const chatMessagesEl = document.getElementById("chat-messages");
+    const chatProfileCountEl = document.getElementById("chat-profile-count");
+    const chatMessageCountEl = document.getElementById("chat-message-count");
+    let chatRefreshTimer = null;
 
     tokenInput.value = localStorage.getItem("ddobca-admin-token") || "";
     tokenInput.addEventListener("change", () => {
@@ -435,6 +493,60 @@
       }
     }
 
+    async function loadChat() {
+      setStatus(chatStatus, "Loading live chat...");
+      chatMessagesEl.innerHTML = "";
+      localStorage.setItem("ddobca-admin-token", tokenInput.value);
+
+      try {
+        const response = await fetch("/api/admin/chat", { headers: authHeaders() });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to load live chat.");
+
+        chatProfileCountEl.textContent = data.profileCount;
+        chatMessageCountEl.textContent = data.messages.length;
+
+        if (!data.messages.length) {
+          chatMessagesEl.innerHTML = "<p>No live chat messages yet.</p>";
+        } else {
+          chatMessagesEl.innerHTML = data.messages.slice().reverse().map((item) => `
+            <article class="message">
+              <strong>${escapeHtml(item.name)} (@${escapeHtml(item.username)})</strong>
+              <small>${escapeHtml(item.createdAt)}</small>
+              <p>${escapeHtml(item.message)}</p>
+              <button class="danger-button" type="button" data-delete-message="${escapeHtml(item.id)}">Delete message</button>
+            </article>
+          `).join("");
+
+          chatMessagesEl.querySelectorAll("[data-delete-message]").forEach((button) => {
+            button.addEventListener("click", () => deleteChatMessage(button.dataset.deleteMessage));
+          });
+        }
+
+        setStatus(chatStatus, "Live chat loaded.", "ok");
+      } catch (error) {
+        setStatus(chatStatus, error.message, "error");
+      }
+    }
+
+    async function deleteChatMessage(messageId) {
+      setStatus(chatStatus, "Deleting message...");
+      localStorage.setItem("ddobca-admin-token", tokenInput.value);
+
+      try {
+        const response = await fetch(`/api/admin/chat/messages/${encodeURIComponent(messageId)}`, {
+          method: "DELETE",
+          headers: authHeaders()
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to delete message.");
+        setStatus(chatStatus, "Message deleted.", "ok");
+        await loadChat();
+      } catch (error) {
+        setStatus(chatStatus, error.message, "error");
+      }
+    }
+
     function escapeHtml(value) {
       return String(value || "").replace(/[&<>"']/g, (character) => ({
         "&": "&amp;",
@@ -448,8 +560,13 @@
     document.getElementById("load-messages").addEventListener("click", loadMessages);
     document.getElementById("load-notification").addEventListener("click", loadNotification);
     document.getElementById("load-site-config").addEventListener("click", loadSiteConfig);
+    document.getElementById("load-chat").addEventListener("click", loadChat);
     loadSiteConfig().catch((error) => setStatus(siteConfigStatus, error.message, "error"));
     loadNotification().catch((error) => setStatus(notificationStatus, error.message, "error"));
+    loadChat().catch((error) => setStatus(chatStatus, error.message, "error"));
+    chatRefreshTimer = window.setInterval(() => {
+      if (tokenInput.value) loadChat();
+    }, 10000);
   </script>
 </body>
 </html>
