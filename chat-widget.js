@@ -309,7 +309,7 @@
       state.isOpen = !state.isOpen;
       widget.classList.toggle("open", state.isOpen);
       render();
-      if (state.isOpen) loadMessages();
+      if (state.isOpen && state.profile) loadMessages();
     });
 
     widget.querySelector(".ddobca-chat-close").addEventListener("click", () => {
@@ -455,6 +455,15 @@
     render();
   }
 
+  function resetProfileWithMessage(message) {
+    localStorage.removeItem(PROFILE_KEY);
+    state.profile = null;
+    state.authMode = "login";
+    render();
+    const status = document.getElementById("ddobca-profile-status");
+    if (status) status.textContent = message;
+  }
+
   async function loadMessages() {
     if (!state.profile) return;
     const messagesEl = document.getElementById("ddobca-messages");
@@ -488,6 +497,11 @@
 
   async function sendMessage(event) {
     event.preventDefault();
+    if (!state.profile) {
+      resetProfileWithMessage("Create or login to your profile before chatting.");
+      return;
+    }
+
     const form = event.currentTarget;
     const input = form.elements.message;
     const text = input.value.trim();
@@ -508,7 +522,14 @@
       await loadMessages();
     } catch (error) {
       input.value = text;
-      alert(error.message);
+      if (/create your profile/i.test(error.message)) {
+        resetProfileWithMessage("Please login again to send messages.");
+      } else {
+        const messagesEl = document.getElementById("ddobca-messages");
+        if (messagesEl) {
+          messagesEl.innerHTML = `<p class="ddobca-empty">${escapeHtml(error.message)}</p>`;
+        }
+      }
     }
   }
 
