@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SEO Assignments</title>
+
+    <!-- Favicons (same as main) -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="mylogo-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="mylogo-64x64.png" sizes="64x64" type="image/png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0f172a">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root{ --bg-dark:#0f172a; --accent:#38bdf8; }
+        body{ font-family: 'Inter',sans-serif; background:var(--bg-dark); color:#f8fafc; margin:0; -webkit-font-smoothing:antialiased; }
+        .glass{ background:rgba(15,23,42,0.6); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,0.06); }
+        .glass-strong{ background:rgba(30,41,59,0.75); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border:1px solid rgba(56,189,248,0.08); }
+        .container{ max-width:1100px; margin:0 auto; padding:28px 18px; }
+        .blob-cont{ position:fixed; inset:0; z-index:-1; pointer-events:none; }
+        .blob{ position:absolute; border-radius:50%; filter:blur(80px); opacity:0.35; }
+        .blob-1{ top:-12%; left:-8%; width:420px; height:420px; background:#0ea5e9; }
+        .blob-2{ bottom:-14%; right:-10%; width:520px; height:520px; background:#6366f1; }
+
+        header{ position:fixed; left:0; right:0; top:0; z-index:40; }
+        header .bar{ height:72px; display:flex; align-items:center; justify-content:center; }
+        header img.logo{ width:40px; height:40px; border-radius:6px; object-fit:contain; margin-right:10px; }
+        header .title{ font-weight:800; font-size:18px; color:#fff; }
+        header .title .accent{ color:var(--accent); }
+
+        main{ padding-top:110px; padding-bottom:40px; }
+        .hero{ text-align:center; margin-bottom:18px; }
+        .hero h1{ font-size:28px; margin:0 0 6px; background:linear-gradient(90deg,#fff,#bae6fd); -webkit-background-clip:text; color:transparent; font-weight:800; }
+        .hero p{ margin:0; color:#cbd5e1; font-size:14px; }
+
+        /* Assignments list */
+        .assign-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin-top:22px; }
+        .assign-card{ padding:18px; border-radius:14px; transition:transform .18s ease, box-shadow .18s ease; }
+        .assign-card:hover{ transform:translateY(-6px); box-shadow:0 10px 30px rgba(0,0,0,0.4); }
+        .assign-card h3{ margin:0 0 8px; font-size:16px; }
+        .assign-card p{ margin:0; color:#9aa8b9; font-size:13px; }
+        .assign-meta{ margin-top:12px; display:flex; gap:8px; align-items:center; justify-content:space-between; }
+        .badge{ font-size:12px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,0.04); color:#cfeefe; }
+        .cta{ background:linear-gradient(90deg,#38bdf8,#60a5fa); color:#052c40; padding:8px 12px; border-radius:10px; font-weight:700; }
+
+        /* Action buttons area (above footer) */
+        .actions{ margin:28px auto; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+        .btn-ghost{ padding:12px 18px; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); color:#fff; display:inline-flex; gap:8px; align-items:center; }
+        .btn-primary{ padding:12px 18px; border-radius:12px; background:linear-gradient(90deg,#38bdf8,#60a5fa); color:#052c40; font-weight:700; display:inline-flex; gap:8px; align-items:center; }
+
+        footer{ margin-top:32px; text-align:center; padding:28px 18px; color:#9aa8b9; border-top:1px solid rgba(255,255,255,0.04); }
+        footer a.premium{ display:inline-block; margin-top:10px; padding:10px 18px; border-radius:999px; background:linear-gradient(90deg,#38bdf8,#60a5fa); color:#052c40; font-weight:700; }
+
+        /* responsive */
+        @media (max-width:640px){ .container{ padding:18px; } header .bar{ height:64px; } .hero h1{ font-size:20px; } .assign-grid{ gap:12px; } }
+    </style>
+</head>
+<body>
+
+    <div class="blob-cont" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <header>
+        <div class="bar glass">
+            <div style="display:flex;align-items:center;">
+                <img src="mylogo.png" srcset="mylogo-1x.png 1x, mylogo-2x.png 2x" alt="logo" class="logo">
+                <div class="title"><span class="accent">Daily Dose of </span>BCA</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>SEO Assignments</h1>
+            <p>Your current and upcoming assignments — organized and easy to access.</p>
+        </section>
+
+        <section>
+            <div class="assign-grid">
+                <!-- Example cards: replace or dynamically populate -->
+                <div class="assign-card glass-strong">
+                    <h3>SEO — Assignment 1</h3>
+                    <p>--TOPIC--.</p>
+                    <div class="assign-meta">
+                        <div class="badge">Given on: Nov xx, 20xx</div>
+                        <div class="badge">Due: Nov xx, 20xx</div>
+                        <a href="-----------------------------" class="cta">Open</a>
+                    </div>
+                </div>
+                <div class="assign-card glass-strong">
+                    <h3>SEO — Assignment 2</h3>
+                    <p>--TOPIC--.</p>
+                    <div class="assign-meta">
+                        <div class="badge">Given on: Nov xx, 20xx</div>
+                        <div class="badge">Due: Nov xx, 20xx</div>
+                        <a href="-----------------------------" class="cta">Open</a>
+                    </div>
+                </div>
+
+                <div class="assign-card glass-strong">
+                    <h3>SEO — Assignment 3</h3>
+                    <p>--TOPIC--.</p>
+                    <div class="assign-meta">
+                        <div class="badge">Given on: Nov xx, 20xx</div>
+                        <div class="badge">Due: Nov xx, 20xx</div>
+                        <a href="-----------------------------" class="cta">Open</a>
+                    </div>
+                </div>
+
+                <div class="assign-card glass-strong">
+                    <h3>SEO — Assignment 4</h3>
+                    <p>--TOPIC--.</p>
+                    <div class="assign-meta">
+                        <div class="badge">Given on: Nov xx, 20xx</div>
+                        <div class="badge">Due: Nov xx, 20xx</div>
+                        <a href="-----------------------------" class="cta">Open</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Action buttons moved here (same style as main page) -->
+        <div class="actions">
+            <a href="https://mohammedwaheedsk.github.io/dailydoseofbca/" class="btn-ghost" aria-label="Home">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect></svg>
+                <span>Home</span>
+            </a>
+
+            <a href="4record.html" class="btn-primary" aria-label="Record Work">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#052c40" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Record Work</span>
+            </a>
+        </div>
+
+        <!-- Footer (same theme) -->
+        <footer>
+            <p>Get personalised class chatbot, class materials crafted especially for you.</p>
+            <a href="exclusive.html" class="premium">Premium Content</a>
+            <div style="margin-top:12px; font-size:12px; color:rgba(255,255,255,0.6);">&copy; 2024 Learning Hub. All rights reserved (Maybe).</div>
+        </footer>
+    </main>
+
+</body>
+</html>
