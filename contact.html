@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact DailyDoseofBCA for notes, assignments, and student support.">
+  <title>Contact | DailyDoseofBCA</title>
+  <link rel="icon" href="mylogo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --panel: rgba(255, 255, 255, 0.07);
+      --panel-strong: rgba(255, 255, 255, 0.11);
+      --border: rgba(255, 255, 255, 0.16);
+      --text: #f7f7fb;
+      --muted: #b4bac7;
+      --accent: #2dd4bf;
+      --accent-2: #60a5fa;
+      --danger: #fb7185;
+      --ok: #86efac;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(45, 212, 191, 0.18), transparent 32rem),
+        radial-gradient(circle at 80% 8%, rgba(96, 165, 250, 0.2), transparent 26rem),
+        linear-gradient(135deg, #0d0f14, #151923 48%, #10151f);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 42px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 44px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a,
+    .button {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover,
+    .button:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .intro,
+    .form-panel,
+    .contact-card {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+    }
+
+    .intro {
+      padding: 28px;
+      border-radius: 8px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 6vw, 4.2rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .contact-card {
+      padding: 18px;
+      border-radius: 8px;
+    }
+
+    .contact-card strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 7px;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+    }
+
+    .contact-card a,
+    .contact-card span {
+      color: var(--text);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .form-panel {
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    form {
+      display: grid;
+      gap: 15px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(0, 0, 0, 0.28);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.16);
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 46px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #061018;
+      border: 0;
+    }
+
+    .status {
+      min-height: 22px;
+      margin: 2px 0 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    footer {
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html">
+        <img src="mylogo.png" alt="">
+        <span>DailyDoseofBCA</span>
+      </a>
+      <div class="nav-links">
+        <a href="bca-sem5.html">Semesters</a>
+        <a href="about.html">About</a>
+        <a href="admin.html">Admin</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="intro">
+        <h1>Contact</h1>
+        <p>Send notes updates, assignment requests, broken link reports, or collaboration messages. If the site is running with the Node backend, this form saves your message directly.</p>
+
+        <div class="contact-list" aria-label="Contact details">
+          <div class="contact-card">
+            <strong>Email</strong>
+            <a href="mailto:dailydoseofbca@gmail.com">dailydoseofbca@gmail.com</a>
+          </div>
+          <div class="contact-card">
+            <strong>Phone</strong>
+            <a href="tel:+916301000409">+91 630 100 0409</a>
+          </div>
+          <div class="contact-card">
+            <strong>WhatsApp</strong>
+            <a href="https://api.whatsapp.com/send?phone=916301000409&text=Hello,%20I%20would%20like%20to%20get%20in%20touch!" target="_blank" rel="noreferrer">Open chat</a>
+          </div>
+          <div class="contact-card">
+            <strong>Location</strong>
+            <span>Guntur, Andhra Pradesh</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-panel" aria-label="Contact form">
+        <form id="contact-form">
+          <label>
+            Name
+            <input name="name" autocomplete="name" required>
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required>
+          </label>
+          <label>
+            Subject
+            <input name="subject" value="DailyDoseofBCA message">
+          </label>
+          <label>
+            Message
+            <textarea name="message" required></textarea>
+          </label>
+          <button class="button" type="submit">Send message</button>
+          <p class="status" id="form-status" role="status"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer>&copy; 2026 DailyDoseofBCA</footer>
+  </div>
+
+  <script>
+    const form = document.getElementById("contact-form");
+    const statusEl = document.getElementById("form-status");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      statusEl.className = "status";
+      statusEl.textContent = "Sending...";
+
+      const payload = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to send message.");
+
+        form.reset();
+        statusEl.className = "status ok";
+        statusEl.textContent = data.message;
+      } catch (error) {
+        const mailto = `mailto:dailydoseofbca@gmail.com?subject=${encodeURIComponent(payload.subject || "DailyDoseofBCA message")}&body=${encodeURIComponent(`${payload.message || ""}\n\nFrom: ${payload.name || ""} <${payload.email || ""}>`)}`;
+        statusEl.className = "status error";
+        statusEl.innerHTML = `The backend is not available on this host. <a href="${mailto}">Send by email instead</a>.`;
+      }
+    });
+  </script>
+</body>
+</html>
