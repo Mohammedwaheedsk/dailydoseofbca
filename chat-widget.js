@@ -319,6 +319,69 @@
         font-size: 0.74rem;
       }
 
+      .ddobca-viewer {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        background: rgba(3, 6, 12, 0.96);
+        color: #fff;
+      }
+
+      .ddobca-viewer-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .ddobca-viewer-title {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 800;
+      }
+
+      .ddobca-viewer-close {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        padding: 9px 12px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .ddobca-viewer-body {
+        min-height: 0;
+        display: grid;
+        place-items: center;
+        padding: 12px;
+      }
+
+      .ddobca-viewer-body img,
+      .ddobca-viewer-body video {
+        max-width: 100%;
+        max-height: calc(100vh - 76px);
+        object-fit: contain;
+      }
+
+      .ddobca-viewer-body audio {
+        width: min(560px, calc(100vw - 32px));
+      }
+
+      .ddobca-viewer-body iframe {
+        width: 100%;
+        height: calc(100vh - 76px);
+        border: 0;
+        border-radius: 8px;
+        background: #fff;
+      }
+
       .ddobca-chat-foot {
         padding: 12px;
         border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -837,13 +900,7 @@
       if (!response.ok || !data.ok) throw new Error(data.error || "Media is no longer available.");
       markMediaViewed(messageId);
       const media = data.media;
-      const opened = window.open("", "_blank", "noopener");
-      if (opened) {
-        opened.document.write(mediaDocument(media));
-        opened.document.close();
-      } else {
-        window.location.href = media.data;
-      }
+      showMediaViewer(media);
       await loadMessages();
     } catch (error) {
       const messagesEl = document.getElementById("ddobca-messages");
@@ -851,30 +908,31 @@
     }
   }
 
-  function mediaDocument(media) {
+  function showMediaViewer(media) {
+    const oldViewer = document.getElementById("ddobca-media-viewer");
+    if (oldViewer) oldViewer.remove();
+
+    const viewer = document.createElement("div");
+    viewer.id = "ddobca-media-viewer";
+    viewer.className = "ddobca-viewer";
+
     const title = escapeHtml(media.name || "Media");
-    let body = `<a href="${escapeHtml(media.data)}" download="${title}">Download ${title}</a>`;
+    let body = `<a class="ddobca-media-button" href="${escapeHtml(media.data)}" download="${title}">Download ${title}</a>`;
     if (media.kind === "image") body = `<img src="${escapeHtml(media.data)}" alt="${title}">`;
     if (media.kind === "video") body = `<video src="${escapeHtml(media.data)}" controls autoplay></video>`;
     if (media.kind === "audio") body = `<audio src="${escapeHtml(media.data)}" controls autoplay></audio>`;
     if (media.kind === "pdf") body = `<iframe src="${escapeHtml(media.data)}" title="${title}"></iframe>`;
-    return `
-      <!doctype html>
-      <html>
-        <head>
-          <title>${title}</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <style>
-            body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #05070a; color: #fff; font-family: system-ui, sans-serif; }
-            img, video { max-width: 100%; max-height: 100vh; }
-            audio { width: min(560px, calc(100vw - 32px)); }
-            iframe { width: 100vw; height: 100vh; border: 0; background: #fff; }
-            a { color: #7dd3fc; font-weight: 800; }
-          </style>
-        </head>
-        <body>${body}</body>
-      </html>
+
+    viewer.innerHTML = `
+      <div class="ddobca-viewer-head">
+        <div class="ddobca-viewer-title">${title}</div>
+        <button class="ddobca-viewer-close" type="button">Close</button>
+      </div>
+      <div class="ddobca-viewer-body">${body}</div>
     `;
+
+    document.body.appendChild(viewer);
+    viewer.querySelector(".ddobca-viewer-close").addEventListener("click", () => viewer.remove());
   }
 
   async function sendMessage(event) {
