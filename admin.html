@@ -723,7 +723,8 @@
             <article class="message">
               <strong>${escapeHtml(item.name)} (@${escapeHtml(item.username)})</strong>
               <small>${escapeHtml(item.createdAt)}</small>
-              <p>${escapeHtml(item.message)}</p>
+              <p>${escapeHtml(item.message || "")}</p>
+              ${item.media ? `<span class="detail-line">Media: ${escapeHtml(item.media.kind || "file")} ${item.viewOnce ? "(view once)" : ""}</span>` : ""}
               <button class="danger-button" type="button" data-delete-message="${escapeHtml(item.id)}">Delete message</button>
             </article>
           `).join("");

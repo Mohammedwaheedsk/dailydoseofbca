@@ -17,6 +17,7 @@ const ADMIN_NOTIFICATIONS_FILE = path.join(DATA_DIR, "admin-notifications.json")
 const NOTIFICATION_FILE = path.join(ROOT_DIR, "notification-config.json");
 const SITE_CONFIG_FILE = path.join(ROOT_DIR, "site-config.json");
 const CHAT_MESSAGE_TTL_MS = 24 * 60 * 60 * 1000;
+const CHAT_MEDIA_MAX_BYTES = 8 * 1024 * 1024;
 const db = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
@@ -26,8 +27,8 @@ const db = process.env.DATABASE_URL
 let chatWriteQueue = Promise.resolve();
 
 app.disable("x-powered-by");
-app.use(express.json({ limit: "80kb" }));
-app.use(express.urlencoded({ extended: true, limit: "80kb" }));
+app.use(express.json({ limit: "12mb" }));
+app.use(express.urlencoded({ extended: true, limit: "12mb" }));
 
 async function readJson(filePath, fallback) {
   try {
@@ -81,6 +82,8 @@ function chatMessageFromRow(row) {
     username: row.username,
     name: row.name,
     message: row.message,
+    media: row.media,
+    viewOnce: Boolean(row.view_once),
     createdAt: row.created_at
   };
 }
@@ -116,6 +119,8 @@ async function ensureDatabase() {
       username text not null,
       name text not null,
       message text not null,
+      media jsonb,
+      view_once boolean default false,
       created_at timestamptz not null
     );
 
@@ -142,6 +147,8 @@ async function ensureDatabase() {
     create index if not exists chat_messages_created_at_idx on chat_messages(created_at);
     create index if not exists admin_notifications_created_at_idx on admin_notifications(created_at);
   `);
+  await queryDb("alter table chat_messages add column if not exists media jsonb");
+  await queryDb("alter table chat_messages add column if not exists view_once boolean default false");
 }
 
 async function readContactMessages() {
@@ -289,6 +296,48 @@ function cleanPin(value) {
   return String(value || "").replace(/\D/g, "").slice(0, 4);
 }
 
+function cleanMedia(value) {
+  if (!value || typeof value !== "object") return null;
+
+  const kind = cleanText(value.kind, 20);
+  const allowedKinds = new Set(["image", "video", "audio", "pdf"]);
+  const name = cleanText(value.name, 140);
+  const mimeType = cleanText(value.mimeType, 100);
+  const data = String(value.data || "");
+  const size = Number(value.size || 0);
+
+  if (!allowedKinds.has(kind) || !name || !mimeType || !data.startsWith("data:")) {
+    return null;
+  }
+
+  if (!Number.isFinite(size) || size <= 0 || size > CHAT_MEDIA_MAX_BYTES) {
+    const error = new Error("Media file must be 8 MB or smaller.");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  if (data.length > Math.ceil(CHAT_MEDIA_MAX_BYTES * 1.45)) {
+    const error = new Error("Media file is too large.");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const allowedMime = (
+    mimeType.startsWith("image/") ||
+    mimeType.startsWith("video/") ||
+    mimeType.startsWith("audio/") ||
+    mimeType === "application/pdf"
+  );
+
+  if (!allowedMime) {
+    const error = new Error("Only images, videos, audio files, and PDFs can be sent.");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return { kind, name, mimeType, size, data };
+}
+
 function publicProfile(profile) {
   return {
     id: profile.id,
@@ -375,9 +424,18 @@ async function writeChatMessages(messages) {
 async function saveChatMessage(message) {
   if (db) {
     await queryDb(
-      `insert into chat_messages (id, profile_id, username, name, message, created_at)
-       values ($1, $2, $3, $4, $5, $6)`,
-      [message.id, message.profileId, message.username, message.name, message.message, message.createdAt]
+      `insert into chat_messages (id, profile_id, username, name, message, media, view_once, created_at)
+       values ($1, $2, $3, $4, $5, $6::jsonb, $7, $8)`,
+      [
+        message.id,
+        message.profileId,
+        message.username,
+        message.name,
+        message.message,
+        message.media ? JSON.stringify(message.media) : null,
+        Boolean(message.viewOnce),
+        message.createdAt
+      ]
     );
     await queryDb("delete from chat_messages where created_at < now() - interval '24 hours'");
     return;
@@ -386,6 +444,41 @@ async function saveChatMessage(message) {
   const messages = await readFreshChatMessages();
   messages.push(message);
   await writeChatMessages(messages.slice(-300));
+}
+
+async function openViewOnceMedia(messageId, profileId) {
+  if (db) {
+    const result = await queryDb(
+      "select media, view_once from chat_messages where id = $1 and media is not null",
+      [messageId]
+    );
+    if (!result.rows.length) return null;
+    const message = result.rows[0];
+    const media = message.media;
+    if (message.view_once) {
+      await queryDb(
+        `update chat_messages
+         set media = null, message = '[View-once media opened]'
+         where id = $1`,
+        [messageId]
+      );
+    }
+    return media;
+  }
+
+  const messages = await readFreshChatMessages();
+  const index = messages.findIndex((message) => message.id === messageId && message.media);
+  if (index === -1) return null;
+  const media = messages[index].media;
+  if (messages[index].viewOnce) {
+    messages[index] = {
+      ...messages[index],
+      media: null,
+      message: "[View-once media opened]"
+    };
+    await writeChatMessages(messages);
+  }
+  return media;
 }
 
 async function deleteChatMessageById(messageId) {
@@ -662,6 +755,8 @@ app.post("/api/chat/messages", async (req, res, next) => {
     await withChatWriteLock(async () => {
       const profileId = cleanText(req.body.profileId, 80);
       const text = cleanText(req.body.message, 500);
+      const media = cleanMedia(req.body.media);
+      const viewOnce = Boolean(req.body.viewOnce);
       const profiles = await readProfiles();
       const profile = profiles.find((item) => item.id === profileId);
 
@@ -672,10 +767,10 @@ app.post("/api/chat/messages", async (req, res, next) => {
         });
       }
 
-      if (!text) {
+      if (!text && !media) {
         return res.status(400).json({
           ok: false,
-          error: "Message cannot be empty."
+          error: "Message or media is required."
         });
       }
 
@@ -685,12 +780,31 @@ app.post("/api/chat/messages", async (req, res, next) => {
         username: profile.username,
         name: profile.name,
         message: text,
+        media,
+        viewOnce,
         createdAt: new Date().toISOString()
       };
 
       await saveChatMessage(message);
       res.status(201).json({ ok: true, message });
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/chat/messages/:messageId/open-media", async (req, res, next) => {
+  try {
+    const messageId = cleanText(req.params.messageId, 80);
+    const profileId = cleanText(req.body.profileId, 80);
+    const media = await openViewOnceMedia(messageId, profileId);
+    if (!media) {
+      return res.status(404).json({
+        ok: false,
+        error: "Media is no longer available."
+      });
+    }
+    res.json({ ok: true, media });
   } catch (error) {
     next(error);
   }
@@ -812,9 +926,9 @@ app.use((req, res) => {
 
 app.use((error, req, res, next) => {
   console.error(error);
-  res.status(500).json({
+  res.status(error.statusCode || 500).json({
     ok: false,
-    error: "Something went wrong on the server."
+    error: error.statusCode ? error.message : "Something went wrong on the server."
   });
 });
 

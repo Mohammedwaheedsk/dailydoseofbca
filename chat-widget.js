@@ -1,5 +1,7 @@
 (function () {
   const PROFILE_KEY = "ddobca-chat-profile";
+  const VIEWED_MEDIA_KEY = "ddobca-viewed-media";
+  const MAX_MEDIA_BYTES = 8 * 1024 * 1024;
   const POLL_MS = 8000;
   let pollTimer = null;
 
@@ -20,6 +22,24 @@
   function saveProfile(profile) {
     state.profile = profile;
     localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  }
+
+  function readViewedMedia() {
+    try {
+      return JSON.parse(localStorage.getItem(VIEWED_MEDIA_KEY) || "[]");
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function markMediaViewed(messageId) {
+    const viewed = new Set(readViewedMedia());
+    viewed.add(messageId);
+    localStorage.setItem(VIEWED_MEDIA_KEY, JSON.stringify([...viewed].slice(-500)));
+  }
+
+  function hasViewedMedia(messageId) {
+    return readViewedMedia().includes(messageId);
   }
 
   function escapeHtml(value) {
@@ -253,13 +273,96 @@
         white-space: pre-wrap;
       }
 
+      .ddobca-media {
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .ddobca-media img,
+      .ddobca-media video {
+        width: 100%;
+        max-height: 220px;
+        border-radius: 8px;
+        object-fit: contain;
+        background: rgba(0, 0, 0, 0.28);
+      }
+
+      .ddobca-media audio {
+        width: 100%;
+      }
+
+      .ddobca-media-button {
+        border: 1px solid rgba(56, 189, 248, 0.28);
+        border-radius: 8px;
+        padding: 9px 10px;
+        background: rgba(56, 189, 248, 0.12);
+        color: #7dd3fc;
+        font-weight: 800;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .ddobca-view-once-note {
+        color: #fbbf24;
+        font-size: 0.74rem;
+      }
+
       .ddobca-chat-foot {
         padding: 12px;
         border-top: 1px solid rgba(255, 255, 255, 0.12);
       }
 
       .ddobca-message-form {
-        grid-template-columns: 1fr auto;
+        grid-template-columns: auto auto 1fr auto;
+        align-items: center;
+      }
+
+      .ddobca-attach-button,
+      .ddobca-camera-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .ddobca-message-form input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .ddobca-send-options {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        color: #a8b0bf;
+        font-size: 0.78rem;
+      }
+
+      .ddobca-send-options label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .ddobca-file-name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .ddobca-empty {
@@ -297,7 +400,7 @@
       <div class="ddobca-chat-head">
         <div class="ddobca-chat-title">
           <strong>Messages</strong>
-          <span>Chat with Classmates | 24 hrs messages</span>
+          <span>Public chat, messages clear after 24 hours</span>
         </div>
         <div class="ddobca-chat-actions">
           <button class="ddobca-chat-logout" type="button">Logout</button>
@@ -364,11 +467,26 @@
     body.innerHTML = '<div class="ddobca-messages" id="ddobca-messages"><p class="ddobca-empty">Loading messages...</p></div>';
     foot.innerHTML = `
       <form class="ddobca-message-form" id="ddobca-message-form">
-        <input name="message" maxlength="500" autocomplete="off" placeholder="Message as ${escapeHtml(state.profile.name)}" required>
+        <label class="ddobca-attach-button" title="Attach file">
+          +
+          <input name="media" type="file" accept="image/*,video/*,audio/*,application/pdf">
+        </label>
+        <label class="ddobca-camera-button" title="Take photo">
+          Cam
+          <input name="camera" type="file" accept="image/*" capture="environment">
+        </label>
+        <input name="message" maxlength="500" autocomplete="off" placeholder="Message as ${escapeHtml(state.profile.name)}">
         <button type="submit">Send</button>
+        <div class="ddobca-send-options">
+          <span class="ddobca-file-name" id="ddobca-file-name">No file selected</span>
+          <label><input name="viewOnce" type="checkbox"> View once</label>
+        </div>
       </form>
     `;
-    document.getElementById("ddobca-message-form").addEventListener("submit", sendMessage);
+    const messageForm = document.getElementById("ddobca-message-form");
+    messageForm.addEventListener("submit", sendMessage);
+    messageForm.elements.media.addEventListener("change", updateSelectedFileName);
+    messageForm.elements.camera.addEventListener("change", updateSelectedFileName);
   }
 
   function loginFormHtml() {
@@ -517,10 +635,15 @@
           return `
             <article class="ddobca-message${mine}">
               <div class="ddobca-message-meta">${escapeHtml(item.name)} (@${escapeHtml(item.username)}) - ${escapeHtml(formatTime(item.createdAt))}</div>
-              <div class="ddobca-message-text">${escapeHtml(item.message)}</div>
+              ${item.message ? `<div class="ddobca-message-text">${escapeHtml(item.message)}</div>` : ""}
+              ${mediaHtml(item)}
             </article>
           `;
         }).join("");
+
+        messagesEl.querySelectorAll("[data-open-media]").forEach((button) => {
+          button.addEventListener("click", () => openMedia(button.dataset.openMedia));
+        });
       }
 
       const body = document.getElementById("ddobca-chat-body");
@@ -528,6 +651,136 @@
     } catch (error) {
       messagesEl.innerHTML = `<p class="ddobca-empty">${escapeHtml(error.message)}</p>`;
     }
+  }
+
+  function updateSelectedFileName(event) {
+    const label = document.getElementById("ddobca-file-name");
+    const file = event.currentTarget.files && event.currentTarget.files[0];
+    const form = document.getElementById("ddobca-message-form");
+    if (file && form) {
+      const otherInputName = event.currentTarget.name === "camera" ? "media" : "camera";
+      if (form.elements[otherInputName]) form.elements[otherInputName].value = "";
+    }
+    if (!label) return;
+    label.textContent = file ? file.name : "No file selected";
+  }
+
+  function mediaKind(file) {
+    if (!file) return "";
+    if (file.type.startsWith("image/")) return "image";
+    if (file.type.startsWith("video/")) return "video";
+    if (file.type.startsWith("audio/")) return "audio";
+    if (file.type === "application/pdf") return "pdf";
+    return "";
+  }
+
+  function fileToDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("Could not read the selected file."));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function selectedMediaPayload(file) {
+    if (!file) return null;
+    const kind = mediaKind(file);
+    if (!kind) throw new Error("Only images, videos, audio files, and PDFs can be sent.");
+    if (file.size > MAX_MEDIA_BYTES) throw new Error("Media file must be 8 MB or smaller.");
+    return {
+      kind,
+      name: file.name,
+      mimeType: file.type,
+      size: file.size,
+      data: await fileToDataUrl(file)
+    };
+  }
+
+  function mediaHtml(item) {
+    const media = item.media;
+    if (!media) return "";
+    if (item.viewOnce && hasViewedMedia(item.id)) {
+      return '<div class="ddobca-view-once-note">View-once media already opened on this device.</div>';
+    }
+
+    if (item.viewOnce) {
+      return `
+        <div class="ddobca-media">
+          <button class="ddobca-media-button" type="button" data-open-media="${escapeHtml(item.id)}">Open view-once ${escapeHtml(media.kind || "media")}</button>
+          <span class="ddobca-view-once-note">This media can be opened once.</span>
+        </div>
+      `;
+    }
+
+    if (media.kind === "image") {
+      return `<div class="ddobca-media"><img src="${escapeHtml(media.data)}" alt="${escapeHtml(media.name)}"></div>`;
+    }
+
+    if (media.kind === "video") {
+      return `<div class="ddobca-media"><video src="${escapeHtml(media.data)}" controls></video></div>`;
+    }
+
+    if (media.kind === "audio") {
+      return `<div class="ddobca-media"><audio src="${escapeHtml(media.data)}" controls></audio></div>`;
+    }
+
+    if (media.kind === "pdf") {
+      return `<div class="ddobca-media"><a class="ddobca-media-button" href="${escapeHtml(media.data)}" target="_blank" rel="noopener">Open PDF: ${escapeHtml(media.name)}</a></div>`;
+    }
+
+    return "";
+  }
+
+  async function openMedia(messageId) {
+    try {
+      const response = await fetch(`/api/chat/messages/${encodeURIComponent(messageId)}/open-media`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: state.profile ? state.profile.id : "" })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Media is no longer available.");
+      markMediaViewed(messageId);
+      const media = data.media;
+      const opened = window.open("", "_blank", "noopener");
+      if (opened) {
+        opened.document.write(mediaDocument(media));
+        opened.document.close();
+      } else {
+        window.location.href = media.data;
+      }
+      await loadMessages();
+    } catch (error) {
+      const messagesEl = document.getElementById("ddobca-messages");
+      if (messagesEl) messagesEl.innerHTML = `<p class="ddobca-empty">${escapeHtml(error.message)}</p>`;
+    }
+  }
+
+  function mediaDocument(media) {
+    const title = escapeHtml(media.name || "Media");
+    let body = `<a href="${escapeHtml(media.data)}" download="${title}">Download ${title}</a>`;
+    if (media.kind === "image") body = `<img src="${escapeHtml(media.data)}" alt="${title}">`;
+    if (media.kind === "video") body = `<video src="${escapeHtml(media.data)}" controls autoplay></video>`;
+    if (media.kind === "audio") body = `<audio src="${escapeHtml(media.data)}" controls autoplay></audio>`;
+    if (media.kind === "pdf") body = `<iframe src="${escapeHtml(media.data)}" title="${title}"></iframe>`;
+    return `
+      <!doctype html>
+      <html>
+        <head>
+          <title>${title}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #05070a; color: #fff; font-family: system-ui, sans-serif; }
+            img, video { max-width: 100%; max-height: 100vh; }
+            audio { width: min(560px, calc(100vw - 32px)); }
+            iframe { width: 100vw; height: 100vh; border: 0; background: #fff; }
+            a { color: #7dd3fc; font-weight: 800; }
+          </style>
+        </head>
+        <body>${body}</body>
+      </html>
+    `;
   }
 
   async function sendMessage(event) {
@@ -539,21 +792,30 @@
 
     const form = event.currentTarget;
     const input = form.elements.message;
+    const fileInput = form.elements.media.files[0] ? form.elements.media : form.elements.camera;
     const text = input.value.trim();
-    if (!text) return;
+    const file = fileInput.files && fileInput.files[0];
+    if (!text && !file) return;
 
     input.value = "";
     try {
+      const media = await selectedMediaPayload(file);
       const response = await fetch("/api/chat/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           profileId: state.profile.id,
-          message: text
+          message: text,
+          media,
+          viewOnce: Boolean(form.elements.viewOnce.checked)
         })
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Could not send message.");
+      form.elements.media.value = "";
+      form.elements.camera.value = "";
+      form.elements.viewOnce.checked = false;
+      updateSelectedFileName({ currentTarget: fileInput });
       await loadMessages();
     } catch (error) {
       input.value = text;
