@@ -354,24 +354,56 @@
 
       .ddobca-send-options {
         grid-column: 1 / -1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: none;
         gap: 10px;
         color: #a8b0bf;
         font-size: 0.78rem;
       }
 
-      .ddobca-send-options label {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
+      .ddobca-send-options.has-file {
+        display: grid;
       }
 
-      .ddobca-file-name {
+      .ddobca-media-preview {
+        display: grid;
+        gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 9px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .ddobca-media-preview img,
+      .ddobca-media-preview video {
+        width: 100%;
+        max-height: 150px;
+        border-radius: 8px;
+        object-fit: contain;
+        background: rgba(0, 0, 0, 0.24);
+      }
+
+      .ddobca-media-preview audio {
+        width: 100%;
+      }
+
+      .ddobca-preview-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .ddobca-preview-name {
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .ddobca-view-once-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         white-space: nowrap;
       }
 
@@ -487,9 +519,9 @@
         </label>
         <input name="message" maxlength="500" autocomplete="off" placeholder="Message as ${escapeHtml(state.profile.name)}">
         <button type="submit">Send</button>
-        <div class="ddobca-send-options">
-          <span class="ddobca-file-name" id="ddobca-file-name">No file selected</span>
-          <label><input name="viewOnce" type="checkbox"> View once</label>
+        <div class="ddobca-send-options" id="ddobca-send-options">
+          <div class="ddobca-media-preview" id="ddobca-media-preview"></div>
+          <label class="ddobca-view-once-toggle"><input name="viewOnce" type="checkbox"> View once</label>
         </div>
       </form>
     `;
@@ -665,15 +697,48 @@
   }
 
   function updateSelectedFileName(event) {
-    const label = document.getElementById("ddobca-file-name");
+    const options = document.getElementById("ddobca-send-options");
+    const preview = document.getElementById("ddobca-media-preview");
     const file = event.currentTarget.files && event.currentTarget.files[0];
     const form = document.getElementById("ddobca-message-form");
     if (file && form) {
       const otherInputName = event.currentTarget.name === "camera" ? "media" : "camera";
       if (form.elements[otherInputName]) form.elements[otherInputName].value = "";
     }
-    if (!label) return;
-    label.textContent = file ? file.name : "No file selected";
+    renderSelectedMediaPreview(file, options, preview);
+  }
+
+  function renderSelectedMediaPreview(file, options, preview) {
+    if (!options || !preview) return;
+    if (!file) {
+      options.classList.remove("has-file");
+      preview.innerHTML = "";
+      return;
+    }
+
+    options.classList.add("has-file");
+    const kind = mediaKind(file);
+    const objectUrl = URL.createObjectURL(file);
+    const name = escapeHtml(file.name);
+    let previewMedia = `<a class="ddobca-media-button" href="${objectUrl}" target="_blank" rel="noopener">Preview ${name}</a>`;
+
+    if (kind === "image") {
+      previewMedia = `<img src="${objectUrl}" alt="${name}">`;
+    } else if (kind === "video") {
+      previewMedia = `<video src="${objectUrl}" controls></video>`;
+    } else if (kind === "audio") {
+      previewMedia = `<audio src="${objectUrl}" controls></audio>`;
+    } else if (kind === "pdf") {
+      previewMedia = `<a class="ddobca-media-button" href="${objectUrl}" target="_blank" rel="noopener">Preview PDF</a>`;
+    }
+
+    preview.innerHTML = `
+      ${previewMedia}
+      <div class="ddobca-preview-meta">
+        <span class="ddobca-preview-name">${name}</span>
+        <span>${Math.max(1, Math.round(file.size / 1024))} KB</span>
+      </div>
+    `;
   }
 
   function mediaKind(file) {
@@ -844,7 +909,11 @@
       form.elements.media.value = "";
       form.elements.camera.value = "";
       form.elements.viewOnce.checked = false;
-      updateSelectedFileName({ currentTarget: fileInput });
+      renderSelectedMediaPreview(
+        null,
+        document.getElementById("ddobca-send-options"),
+        document.getElementById("ddobca-media-preview")
+      );
       await loadMessages();
     } catch (error) {
       input.value = text;

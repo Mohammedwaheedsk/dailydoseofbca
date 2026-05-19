@@ -501,31 +501,13 @@ async function openViewOnceMedia(messageId, profileId) {
     );
     if (!result.rows.length) return null;
     const message = result.rows[0];
-    const media = message.media;
-    if (message.view_once) {
-      await queryDb(
-        `update chat_messages
-         set media = null, message = '[View-once media opened]'
-         where id = $1`,
-        [messageId]
-      );
-    }
-    return media;
+    return message.media;
   }
 
   const messages = await readFreshChatMessages();
   const index = messages.findIndex((message) => message.id === messageId && message.media);
   if (index === -1) return null;
-  const media = messages[index].media;
-  if (messages[index].viewOnce) {
-    messages[index] = {
-      ...messages[index],
-      media: null,
-      message: "[View-once media opened]"
-    };
-    await writeChatMessages(messages);
-  }
-  return media;
+  return messages[index].media;
 }
 
 async function deleteChatMessageById(messageId) {
