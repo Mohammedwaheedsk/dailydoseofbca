@@ -367,7 +367,12 @@ function isExpiredMessage(message) {
 async function readFreshChatMessages() {
   if (db) {
     await queryDb("delete from chat_messages where created_at < now() - interval '24 hours'");
-    const result = await queryDb("select * from chat_messages order by created_at asc limit 300");
+    const result = await queryDb(`
+      select id, profile_id, username, name, message, seen_by, created_at
+      from chat_messages
+      order by created_at asc
+      limit 300
+    `);
     return result.rows.map(chatMessageFromRow);
   }
 
