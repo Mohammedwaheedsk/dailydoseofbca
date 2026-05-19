@@ -84,6 +84,7 @@ function chatMessageFromRow(row) {
     message: row.message,
     media: row.media,
     viewOnce: Boolean(row.view_once),
+    seenBy: Array.isArray(row.seen_by) ? row.seen_by : [],
     createdAt: row.created_at
   };
 }
@@ -121,6 +122,7 @@ async function ensureDatabase() {
       message text not null,
       media jsonb,
       view_once boolean default false,
+      seen_by jsonb default '[]'::jsonb,
       created_at timestamptz not null
     );
 
@@ -149,6 +151,7 @@ async function ensureDatabase() {
   `);
   await queryDb("alter table chat_messages add column if not exists media jsonb");
   await queryDb("alter table chat_messages add column if not exists view_once boolean default false");
+  await queryDb("alter table chat_messages add column if not exists seen_by jsonb default '[]'::jsonb");
 }
 
 async function readContactMessages() {
@@ -424,8 +427,8 @@ async function writeChatMessages(messages) {
 async function saveChatMessage(message) {
   if (db) {
     await queryDb(
-      `insert into chat_messages (id, profile_id, username, name, message, media, view_once, created_at)
-       values ($1, $2, $3, $4, $5, $6::jsonb, $7, $8)`,
+      `insert into chat_messages (id, profile_id, username, name, message, media, view_once, seen_by, created_at)
+       values ($1, $2, $3, $4, $5, $6::jsonb, $7, $8::jsonb, $9)`,
       [
         message.id,
         message.profileId,
@@ -434,6 +437,7 @@ async function saveChatMessage(message) {
         message.message,
         message.media ? JSON.stringify(message.media) : null,
         Boolean(message.viewOnce),
+        JSON.stringify(message.seenBy || []),
         message.createdAt
       ]
     );
@@ -444,6 +448,49 @@ async function saveChatMessage(message) {
   const messages = await readFreshChatMessages();
   messages.push(message);
   await writeChatMessages(messages.slice(-300));
+}
+
+async function markChatMessagesSeen(profileId) {
+  if (!profileId) return;
+  const profiles = await readProfiles();
+  const profile = profiles.find((item) => item.id === profileId);
+  if (!profile) return;
+
+  const viewer = {
+    profileId: profile.id,
+    name: profile.name,
+    username: profile.username,
+    seenAt: new Date().toISOString()
+  };
+
+  const messages = await readFreshChatMessages();
+  const updatedMessages = [];
+
+  for (const message of messages) {
+    if (message.profileId === profile.id) {
+      updatedMessages.push(message);
+      continue;
+    }
+
+    const seenBy = Array.isArray(message.seenBy) ? message.seenBy : [];
+    if (seenBy.some((seen) => seen.profileId === profile.id)) {
+      updatedMessages.push(message);
+      continue;
+    }
+
+    const nextSeenBy = [...seenBy, viewer].slice(-200);
+    const nextMessage = { ...message, seenBy: nextSeenBy };
+    updatedMessages.push(nextMessage);
+
+    if (db) {
+      await queryDb("update chat_messages set seen_by = $1::jsonb where id = $2", [
+        JSON.stringify(nextSeenBy),
+        message.id
+      ]);
+    }
+  }
+
+  if (!db) await writeChatMessages(updatedMessages);
 }
 
 async function openViewOnceMedia(messageId, profileId) {
@@ -743,8 +790,12 @@ app.post("/api/chat/forgot-pin", async (req, res, next) => {
 
 app.get("/api/chat/messages", async (req, res, next) => {
   try {
-    const messages = await readFreshChatMessages();
-    res.json({ ok: true, messages });
+    const profileId = cleanText(req.query.profileId, 80);
+    await withChatWriteLock(async () => {
+      await markChatMessagesSeen(profileId);
+      const messages = await readFreshChatMessages();
+      res.json({ ok: true, messages });
+    });
   } catch (error) {
     next(error);
   }
@@ -782,6 +833,7 @@ app.post("/api/chat/messages", async (req, res, next) => {
         message: text,
         media,
         viewOnce,
+        seenBy: [],
         createdAt: new Date().toISOString()
       };
 

@@ -273,6 +273,16 @@
         white-space: pre-wrap;
       }
 
+      .ddobca-seen {
+        justify-self: end;
+        max-width: 100%;
+        color: #a8b0bf;
+        font-size: 0.7rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+        text-align: right;
+      }
+
       .ddobca-media {
         display: grid;
         gap: 8px;
@@ -623,7 +633,7 @@
     if (!messagesEl) return;
 
     try {
-      const response = await fetch(`/api/chat/messages?v=${Date.now()}`);
+      const response = await fetch(`/api/chat/messages?profileId=${encodeURIComponent(state.profile.id)}&v=${Date.now()}`);
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Could not load messages.");
 
@@ -637,6 +647,7 @@
               <div class="ddobca-message-meta">${escapeHtml(item.name)} (@${escapeHtml(item.username)}) - ${escapeHtml(formatTime(item.createdAt))}</div>
               ${item.message ? `<div class="ddobca-message-text">${escapeHtml(item.message)}</div>` : ""}
               ${mediaHtml(item)}
+              ${seenHtml(item)}
             </article>
           `;
         }).join("");
@@ -730,6 +741,24 @@
     }
 
     return "";
+  }
+
+  function seenHtml(item) {
+    const seenBy = (Array.isArray(item.seenBy) ? item.seenBy : [])
+      .filter((seen) => seen && seen.profileId !== item.profileId && seen.name);
+    if (!seenBy.length) return "";
+
+    const names = [...new Map(seenBy.map((seen) => [seen.profileId, seen.name])).values()];
+    let label = "";
+    if (names.length === 1) {
+      label = names[0];
+    } else if (names.length <= 3) {
+      label = names.join(", ");
+    } else {
+      label = `${names[0]}, ${names[1]} +${names.length - 2}`;
+    }
+
+    return `<div class="ddobca-seen">Seen by ${escapeHtml(label)}</div>`;
   }
 
   async function openMedia(messageId) {
