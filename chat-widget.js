@@ -297,7 +297,7 @@
       <div class="ddobca-chat-head">
         <div class="ddobca-chat-title">
           <strong>Messages</strong>
-          <span>Public chat, messages clear after 24 hours</span>
+          <span>Chat with Classmates | 24 hrs messages</span>
         </div>
         <div class="ddobca-chat-actions">
           <button class="ddobca-chat-logout" type="button">Logout</button>
