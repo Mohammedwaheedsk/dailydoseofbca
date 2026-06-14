@@ -7,7 +7,7 @@ let NOTIFICATION_CONFIG = {
     expireSeconds: 24
 };
 
-let lastMessage = "";
+let lastConfigString = "";
 
 async function fetchConfig() {
     try {
@@ -18,18 +18,29 @@ async function fetchConfig() {
         if (!fallbackResponse.ok) throw new Error('Failed to fetch config');
         
         const config = await fallbackResponse.json();
+        const configString = JSON.stringify(config);
         
-        // If message has changed, or if it's the first load
-        if (config.message !== lastMessage) {
+        // If config has changed, or if it's the first load
+        if (configString !== lastConfigString) {
             NOTIFICATION_CONFIG = config;
-            lastMessage = config.message;
+            lastConfigString = configString;
             
-            // If the notification element exists, we should update it or resh-show it
             const existingNotif = document.getElementById('noir-notif');
+            
+            // If the notification was turned off but is currently showing, remove it
+            if (!config.active) {
+                if (existingNotif) {
+                    existingNotif.classList.remove('active');
+                    setTimeout(() => existingNotif.remove(), 600);
+                }
+                return;
+            }
+            
+            // If the notification element exists, we should update it
             if (existingNotif) {
-                // If it's active but the message changed, update text
-                const textElem = existingNotif.querySelector('.notif-text');
-                if (textElem) textElem.textContent = config.message;
+                // To apply icon, link, and text changes safely, we rebuild the notification
+                existingNotif.remove();
+                showNoirNotification();
             } else {
                 // Otherwise show it
                 showNoirNotification();

@@ -7,805 +7,775 @@
   <title>Admin | DailyDoseofBCA</title>
   <link rel="icon" href="mylogo.png" type="image/png">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
     :root {
-      --bg: #10131a;
-      --panel: rgba(255, 255, 255, 0.08);
-      --border: rgba(255, 255, 255, 0.15);
-      --text: #f8fafc;
-      --muted: #a8b0bf;
-      --accent: #38bdf8;
-      --ok: #86efac;
-      --danger: #fb7185;
+      --bg-dark: #0b0f19;
+      --bg-light: #111827;
+      --sidebar-bg: rgba(17, 24, 39, 0.75);
+      --panel-bg: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      --accent-glow: rgba(59, 130, 246, 0.5);
+      --success: #10b981;
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.1);
+      --warning: #f59e0b;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-dark);
       min-height: 100vh;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28rem),
-        linear-gradient(135deg, #10131a, #171b24);
-    }
-
-    .shell {
-      width: min(1320px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 30px 0 46px;
-    }
-
-    nav {
       display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: center;
-      margin-bottom: 30px;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+      background-attachment: fixed;
+      overflow-x: hidden;
     }
 
-    a {
-      color: inherit;
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    /* Layout */
+    .app-container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
     }
 
     .brand {
-      font-weight: 800;
+      padding: 32px 24px;
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      flex: 1;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(4px);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: var(--accent-gradient);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .sidebar-footer {
+      padding: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 40px;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: clamp(2rem, 6vw, 3.6rem);
-      letter-spacing: 0;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
     }
 
     .lead {
-      margin: 0 0 24px;
-      color: var(--muted);
-      line-height: 1.6;
+      color: var(--text-muted);
+      font-size: 1rem;
     }
 
-    .admin-layout {
-      display: grid;
-      gap: 20px;
+    /* Views */
+    .view {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
     }
 
-    .control-grid {
-      display: grid;
-      grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
-      gap: 20px;
+    .view.active {
+      display: block;
     }
 
-    .settings-grid {
-      display: grid;
-      grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
-      gap: 18px;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Panels & Cards */
     .panel {
+      background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--panel);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      padding: 22px;
-      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
-    }
-
-    .panel.compact {
-      padding: 18px;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .panel-header {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 16px;
     }
 
     .panel-header h2 {
-      margin: 0;
-      font-size: 1.18rem;
+      font-size: 1.25rem;
+      font-weight: 700;
     }
 
-    .panel-header p {
-      margin: 5px 0 0;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
-    form {
+    /* Metrics Grid */
+    .metric-grid {
       display: grid;
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .metric-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Forms & Inputs */
+    .form-group {
+      margin-bottom: 16px;
     }
 
     label {
-      display: grid;
-      gap: 8px;
-      color: var(--muted);
-      font-weight: 700;
+      display: block;
       font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
-    input,
-    textarea,
-    select {
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
       width: 100%;
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-      border-radius: 8px;
-      padding: 12px 13px;
-      font: inherit;
+      color: var(--text-main);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 
     textarea {
-      min-height: 110px;
+      min-height: 100px;
       resize: vertical;
     }
 
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .check {
+    .checkbox-group {
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: var(--text);
-    }
-
-    .check input {
-      width: 18px;
-      height: 18px;
-    }
-
-    button,
-    .link-button {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 11px 14px;
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      font-weight: 800;
+      gap: 12px;
       cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #3b82f6;
+    }
+
+    .grid-2-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
       text-decoration: none;
     }
 
-    button.primary {
-      border: 0;
-      color: #071018;
-      background: linear-gradient(135deg, var(--accent), #86efac);
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+    .btn-primary:hover {
+      box-shadow: 0 6px 16px var(--accent-glow);
+      transform: translateY(-2px);
     }
 
-    .status {
-      min-height: 22px;
-      color: var(--muted);
-      font-size: 0.92rem;
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-main);
     }
 
-    .status.ok {
-      color: var(--ok);
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
     }
 
-    .status.error {
+    .btn-danger {
+      background: var(--danger-bg);
+      border: 1px solid rgba(239, 68, 68, 0.3);
       color: var(--danger);
+      padding: 6px 12px;
+      font-size: 0.85rem;
     }
 
-    .messages {
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* List / Messages */
+    .list-container {
       display: grid;
       gap: 12px;
-      max-height: 560px;
-      overflow: auto;
-      padding-right: 2px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 8px;
     }
 
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
-      gap: 18px;
-      align-items: start;
-    }
-
-    .profile-groups {
-      display: grid;
-      gap: 14px;
-    }
-
-    .profile-row {
+    .list-item {
+      background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.045);
-      padding: 12px;
-      margin-top: 10px;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background 0.2s;
     }
 
-    .profile-row strong {
+    .list-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .list-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .list-item-title {
+      font-weight: 700;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
     }
 
-    .profile-row .meta {
-      display: grid;
-      gap: 3px;
-      margin-top: 8px;
-      color: #d9dee8;
+    .list-item-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
     }
 
-    .message {
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.22);
-      border-radius: 8px;
-      padding: 14px;
-    }
-
-    .message strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .message small {
-      color: var(--muted);
-      display: block;
-      margin-bottom: 10px;
-      overflow-wrap: anywhere;
-    }
-
-    .message p {
-      margin: 0;
-      color: #d9dee8;
-      line-height: 1.55;
+    .list-item-content {
+      color: #d1d5db;
+      line-height: 1.6;
       white-space: pre-wrap;
+      font-size: 0.95rem;
     }
 
-    .metric-row {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    .list-item-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    /* Status Badges */
+    .badge {
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge.active { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge.inactive { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+    .badge.info { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+
+    /* Toast Notification */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
       gap: 12px;
-      margin-bottom: 14px;
+      z-index: 1000;
     }
 
-    .metric {
+    .toast {
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      background: rgba(17, 24, 39, 0.9);
+      backdrop-filter: blur(10px);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.22);
-      padding: 14px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateX(120%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .metric span {
-      display: block;
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 6px;
+    .toast.show {
+      transform: translateX(0);
     }
 
-    .metric strong {
-      font-size: 1.7rem;
+    .toast.success { border-left: 4px solid var(--success); }
+    .toast.error { border-left: 4px solid var(--danger); }
+    .toast.info { border-left: 4px solid #3b82f6; }
+
+    /* Mobile Nav Toggle */
+    .mobile-nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 100;
     }
 
-    .admin-section-title {
-      margin: 22px 0 10px;
-      color: var(--text);
-      font-size: 1rem;
-    }
-
-    .detail-line {
-      display: block;
-      color: #d9dee8;
-      margin: 4px 0;
-      overflow-wrap: anywhere;
-    }
-
-    .status-badge {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 4px 9px;
-      font-size: 0.78rem;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .status-badge.active {
-      background: rgba(134, 239, 172, 0.14);
-      color: #bbf7d0;
-    }
-
-    .status-badge.inactive {
-      background: rgba(168, 176, 191, 0.14);
-      color: #cbd5e1;
-    }
-
-    .danger-button {
-      border-color: rgba(251, 113, 133, 0.45);
-      background: rgba(251, 113, 133, 0.1);
-      color: #fecdd3;
-      margin-top: 12px;
-    }
-
-    @media (max-width: 820px) {
-      nav,
-      .row,
-      .settings-grid,
-      .control-grid,
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-
-      nav {
-        align-items: flex-start;
+    @media (max-width: 1024px) {
+      .app-container {
         flex-direction: column;
       }
-
-      .metric-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        width: 280px;
       }
-    }
-
-    @media (max-width: 520px) {
-      .metric-row {
-        grid-template-columns: 1fr;
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main-content {
+        padding: 20px;
+        padding-top: 80px;
+      }
+      .mobile-nav-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+      }
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
       }
     }
   </style>
-  <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
-  <div class="shell">
-    <nav>
-      <a class="brand" href="index.html">DailyDoseofBCA Admin</a>
-      <a class="link-button" href="contact.html">Contact page</a>
-    </nav>
 
-    <h1>Admin</h1>
-    <p class="lead">Use this page only on the full-stack Node host. GitHub Pages can show the page, but it cannot run the protected API behind it.</p>
+  <button class="mobile-nav-toggle" id="mobile-menu-btn">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+  </button>
 
-    <div class="admin-layout">
-      <section class="panel">
-        <div class="panel-header">
+  <div class="app-container">
+    <aside class="sidebar" id="sidebar">
+      <a href="index.html" class="brand">DailyDoseofBCA</a>
+      <nav class="nav-links">
+        <a class="nav-item active" data-view="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" data-view="users">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Users & Chat
+        </a>
+        <a class="nav-item" data-view="messages">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Contact Messages
+        </a>
+        <a class="nav-item" data-view="settings">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Settings
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <label style="font-size:0.8rem; margin-bottom: 4px;">Admin Token</label>
+        <input id="token" type="password" autocomplete="off" placeholder="Enter Token" style="padding: 8px 12px; font-size:0.9rem; background: rgba(0,0,0,0.5);">
+      </div>
+    </aside>
+
+    <main class="main-content">
+      
+      <!-- VIEW: DASHBOARD -->
+      <div id="view-dashboard" class="view active">
+        <div class="header-top">
           <div>
-            <h2>Overview</h2>
-            <p>Live profile and chat summary.</p>
+            <h1>Dashboard</h1>
+            <p class="lead">Overview of live profile and chat activity.</p>
           </div>
-          <button id="load-chat" type="button">Refresh dashboard</button>
+          <button class="btn btn-secondary" id="btn-refresh-dash">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+            Refresh
+          </button>
         </div>
-        <div class="metric-row">
-          <div class="metric">
-            <span>Total profiles</span>
-            <strong id="chat-profile-count">0</strong>
-          </div>
-          <div class="metric">
-            <span>Active users</span>
-            <strong id="chat-active-profile-count">0</strong>
-          </div>
-          <div class="metric">
-            <span>Inactive users</span>
-            <strong id="chat-inactive-profile-count">0</strong>
-          </div>
-          <div class="metric">
-            <span>24-hour messages</span>
-            <strong id="chat-message-count">0</strong>
-          </div>
-        </div>
-        <p class="status" id="chat-status" role="status"></p>
-      </section>
 
-      <div class="control-grid">
-        <section class="panel compact">
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="metric-title">Total Profiles</div>
+            <div class="metric-value" id="dash-total-profiles">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Active Users</div>
+            <div class="metric-value" id="dash-active-users">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Inactive Users</div>
+            <div class="metric-value" id="dash-inactive-users">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">24h Messages</div>
+            <div class="metric-value" id="dash-total-messages">0</div>
+          </div>
+        </div>
+
+        <div class="panel">
           <div class="panel-header">
-            <div>
-              <h2>Site Settings</h2>
-              <p>Admin token and landing page.</p>
+            <h2>Admin Notifications</h2>
+          </div>
+          <div class="list-container" id="admin-notifications-list">
+            <p style="color: var(--text-muted)">Loading notifications...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: USERS & CHAT -->
+      <div id="view-users" class="view">
+        <div class="header-top">
+          <div>
+            <h1>Users & Chat</h1>
+            <p class="lead">Manage user profiles and moderate 24-hour public chat messages.</p>
+          </div>
+          <button class="btn btn-secondary" id="btn-refresh-chat">Refresh Chat</button>
+        </div>
+
+        <div class="grid-2-col" style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <!-- Profiles -->
+          <div class="panel" style="margin-bottom:0">
+            <div class="panel-header">
+              <h2>User Profiles</h2>
+            </div>
+            <div class="list-container" id="users-list">
+              <p style="color: var(--text-muted)">Loading users...</p>
             </div>
           </div>
-          <form id="site-config-form">
-            <label>
-              Admin token
-              <input id="token" type="password" autocomplete="off" placeholder="ADMIN_TOKEN from your host">
-            </label>
-            <label>
-              Landing page
-              <select id="landingPage" name="landingPage">
-                <option value="bca-sem1.html">Semester 1</option>
-                <option value="bca-sem2.html">Semester 2</option>
-                <option value="bca-sem3.html">Semester 3</option>
-                <option value="bca-sem4.html">Semester 4</option>
-                <option value="bca-sem5.html">Semester 5</option>
-                <option value="bca-sem6.html">Semester 6</option>
-                <option value="about.html">About</option>
-                <option value="contact.html">Contact</option>
-              </select>
-            </label>
-            <button class="primary" type="submit">Save landing page</button>
-            <p class="status" id="site-config-status" role="status"></p>
-          </form>
-        </section>
 
-        <section class="panel compact">
-          <div class="panel-header">
-            <div>
+          <!-- Messages -->
+          <div class="panel" style="margin-bottom:0">
+            <div class="panel-header">
+              <h2>Chat Messages</h2>
+            </div>
+            <div class="list-container" id="chat-messages-list">
+              <p style="color: var(--text-muted)">Loading messages...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: CONTACT MESSAGES -->
+      <div id="view-messages" class="view">
+        <div class="header-top">
+          <div>
+            <h1>Contact Messages</h1>
+            <p class="lead">Messages submitted by users via the contact form.</p>
+          </div>
+          <button class="btn btn-secondary" id="btn-refresh-contact">Load Messages</button>
+        </div>
+
+        <div class="panel">
+          <div class="list-container" id="contact-messages-list">
+            <p style="color: var(--text-muted)">Click "Load Messages" to fetch data.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: SETTINGS -->
+      <div id="view-settings" class="view">
+        <div class="header-top">
+          <div>
+            <h1>Settings</h1>
+            <p class="lead">Configure global site settings and notification banners.</p>
+          </div>
+        </div>
+
+        <div class="grid-2-col" style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Site Configuration</h2>
+            </div>
+            <form id="site-config-form">
+              <div class="form-group">
+                <label>Landing Page</label>
+                <select id="landingPage" name="landingPage">
+                  <option value="bca-sem1.html">Semester 1</option>
+                  <option value="bca-sem2.html">Semester 2</option>
+                  <option value="bca-sem3.html">Semester 3</option>
+                  <option value="bca-sem4.html">Semester 4</option>
+                  <option value="bca-sem5.html">Semester 5</option>
+                  <option value="bca-sem6.html">Semester 6</option>
+                  <option value="about.html">About</option>
+                  <option value="contact.html">Contact</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" type="submit">Save Site Settings</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
               <h2>Notification Banner</h2>
-              <p>Control the site-wide notification.</p>
             </div>
-            <button id="load-notification" type="button">Load</button>
-          </div>
-          <form id="notification-form">
-            <label class="check">
-              <input id="active" name="active" type="checkbox">
-              Show notification
-            </label>
-            <label>
-              Message
-              <textarea id="message" name="message" required></textarea>
-            </label>
-            <div class="row">
-            <label>
-              Type
-              <select id="type" name="type">
-                <option value="info">Info</option>
-                <option value="success">Success</option>
-                <option value="warning">Warning</option>
-              </select>
-            </label>
-            <label>
-              Hide again after seconds
-              <input id="expireSeconds" name="expireSeconds" type="number" min="5" max="604800" value="5">
-            </label>
-            </div>
-            <label>
-              Link
-              <input id="link" name="link" placeholder="bca-sem4.html">
-            </label>
-            <label>
-              Icon
-              <input id="icon" name="icon" placeholder="Optional emoji or image path">
-            </label>
-            <button class="primary" type="submit">Save notification</button>
-            <p class="status" id="notification-status" role="status"></p>
-          </form>
-        </section>
-      </div>
+            <form id="notification-form">
+              <div class="form-group checkbox-group">
+                <input id="active" name="active" type="checkbox">
+                <label for="active" style="margin:0">Enable site-wide notification</label>
+              </div>
+              
+              <div class="form-group">
+                <label>Message Content</label>
+                <textarea id="message" name="message" required placeholder="Enter notification text..."></textarea>
+              </div>
+              
+              <div class="grid-2-col" style="margin-bottom:16px;">
+                <div class="form-group" style="margin:0">
+                  <label>Banner Type</label>
+                  <select id="type" name="type">
+                    <option value="info">Info</option>
+                    <option value="success">Success</option>
+                    <option value="warning">Warning</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin:0">
+                  <label>Auto-hide (Seconds)</label>
+                  <input id="expireSeconds" name="expireSeconds" type="number" min="5" max="604800" value="5">
+                </div>
+              </div>
 
-      <section class="panel">
-        <div class="panel-header">
-          <div>
-            <h2>Users</h2>
-            <p>Created profiles grouped by recent activity. PINs are hidden.</p>
+              <div class="form-group">
+                <label>Link URL (Optional)</label>
+                <input id="link" name="link" type="text" placeholder="e.g. bca-sem4.html">
+              </div>
+
+              <div class="form-group">
+                <label>Icon (Emoji or Path)</label>
+                <input id="icon" name="icon" type="text" placeholder="Optional">
+              </div>
+              
+              <button class="btn btn-primary" type="submit">Save Notification</button>
+            </form>
           </div>
         </div>
-        <div class="profile-groups" id="chat-profiles"></div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-header">
-          <div>
-            <h2>Messages</h2>
-            <p>Public chat messages from the current 24-hour window.</p>
-          </div>
-        </div>
-        <div class="messages" id="chat-messages"></div>
-      </section>
-
-      <div class="settings-grid">
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Notifications</h2>
-              <p>Profile and PIN-help notifications for admin.</p>
-            </div>
-          </div>
-          <div class="messages" id="admin-notifications"></div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Contact Messages</h2>
-              <p>Messages submitted from the contact page.</p>
-            </div>
-            <button id="load-messages" type="button">Load</button>
-          </div>
-          <p class="status" id="messages-status" role="status"></p>
-          <div class="messages" id="messages"></div>
-        </section>
       </div>
-    </div>
+
+    </main>
   </div>
 
+  <div id="toast-container"></div>
+
   <script>
+    // --- Navigation & UI Logic ---
+    const navItems = document.querySelectorAll('.nav-item');
+    const views = document.querySelectorAll('.view');
+    const sidebar = document.getElementById('sidebar');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        const viewId = item.getAttribute('data-view');
+        
+        // Update Nav
+        navItems.forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+
+        // Update Views
+        views.forEach(v => v.classList.remove('active'));
+        document.getElementById(`view-${viewId}`).classList.add('active');
+
+        // Close sidebar on mobile
+        if(window.innerWidth <= 1024) {
+          sidebar.classList.remove('open');
+        }
+
+        // Auto load specific data for views if needed
+        if(viewId === 'messages' && document.getElementById('contact-messages-list').innerHTML.includes('Click')) {
+          loadMessages();
+        }
+      });
+    });
+
+    mobileMenuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+
+    // --- Toast Notification System ---
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      let icon = '';
+      if(type==='success') icon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+      if(type==='error') icon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+      if(type==='info') icon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+
+      toast.innerHTML = `${icon} <span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 10);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // --- Core API & Data Logic ---
     const tokenInput = document.getElementById("token");
-    const siteConfigForm = document.getElementById("site-config-form");
-    const notificationForm = document.getElementById("notification-form");
-    const siteConfigStatus = document.getElementById("site-config-status");
-    const notificationStatus = document.getElementById("notification-status");
-    const messagesStatus = document.getElementById("messages-status");
-    const chatStatus = document.getElementById("chat-status");
-    const messagesEl = document.getElementById("messages");
-    const chatProfilesEl = document.getElementById("chat-profiles");
-    const adminNotificationsEl = document.getElementById("admin-notifications");
-    const chatMessagesEl = document.getElementById("chat-messages");
-    const chatProfileCountEl = document.getElementById("chat-profile-count");
-    const chatActiveProfileCountEl = document.getElementById("chat-active-profile-count");
-    const chatInactiveProfileCountEl = document.getElementById("chat-inactive-profile-count");
-    const chatMessageCountEl = document.getElementById("chat-message-count");
     let chatRefreshTimer = null;
 
     tokenInput.value = localStorage.getItem("ddobca-admin-token") || "";
     tokenInput.addEventListener("change", () => {
       localStorage.setItem("ddobca-admin-token", tokenInput.value);
+      loadChat();
     });
-
-    function setStatus(element, text, type = "") {
-      element.className = `status ${type}`;
-      element.textContent = text;
-    }
 
     function authHeaders() {
       return {
         "Authorization": `Bearer ${tokenInput.value}`,
         "Content-Type": "application/json"
       };
-    }
-
-    async function loadNotification() {
-      setStatus(notificationStatus, "Loading...");
-      const response = await fetch("/api/notifications");
-      const config = await response.json();
-      document.getElementById("active").checked = Boolean(config.active);
-      document.getElementById("message").value = config.message || "";
-      document.getElementById("type").value = config.type || "info";
-      document.getElementById("expireSeconds").value = config.expireSeconds || 5;
-      document.getElementById("link").value = config.link || "#";
-      document.getElementById("icon").value = config.icon || "";
-      setStatus(notificationStatus, "Notification loaded.", "ok");
-    }
-
-    async function loadSiteConfig() {
-      setStatus(siteConfigStatus, "Loading...");
-      const response = await fetch("/api/site-config");
-      const config = await response.json();
-      document.getElementById("landingPage").value = config.landingPage || "bca-sem5.html";
-      setStatus(siteConfigStatus, "Landing page loaded.", "ok");
-    }
-
-    siteConfigForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      setStatus(siteConfigStatus, "Saving...");
-      localStorage.setItem("ddobca-admin-token", tokenInput.value);
-
-      try {
-        const response = await fetch("/api/site-config", {
-          method: "PUT",
-          headers: authHeaders(),
-          body: JSON.stringify({
-            landingPage: document.getElementById("landingPage").value
-          })
-        });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to save landing page.");
-        setStatus(siteConfigStatus, "Landing page saved.", "ok");
-      } catch (error) {
-        setStatus(siteConfigStatus, error.message, "error");
-      }
-    });
-
-    notificationForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      setStatus(notificationStatus, "Saving...");
-      localStorage.setItem("ddobca-admin-token", tokenInput.value);
-
-      const payload = {
-        active: document.getElementById("active").checked,
-        message: document.getElementById("message").value,
-        type: document.getElementById("type").value,
-        expireSeconds: document.getElementById("expireSeconds").value,
-        link: document.getElementById("link").value,
-        icon: document.getElementById("icon").value
-      };
-
-      try {
-        const response = await fetch("/api/notifications", {
-          method: "PUT",
-          headers: authHeaders(),
-          body: JSON.stringify(payload)
-        });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to save notification.");
-        setStatus(notificationStatus, "Notification saved.", "ok");
-      } catch (error) {
-        setStatus(notificationStatus, error.message, "error");
-      }
-    });
-
-    async function loadMessages() {
-      setStatus(messagesStatus, "Loading...");
-      messagesEl.innerHTML = "";
-      localStorage.setItem("ddobca-admin-token", tokenInput.value);
-
-      try {
-        const response = await fetch("/api/messages", { headers: authHeaders() });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to load messages.");
-
-        if (!data.messages.length) {
-          messagesEl.innerHTML = "<p>No saved messages yet.</p>";
-        } else {
-          messagesEl.innerHTML = data.messages.map((item) => `
-            <article class="message">
-              <strong>${escapeHtml(item.subject || "Message")}</strong>
-              <small>${escapeHtml(item.name)} &lt;${escapeHtml(item.email)}&gt; - ${escapeHtml(item.createdAt)}</small>
-              <p>${escapeHtml(item.message)}</p>
-            </article>
-          `).join("");
-        }
-        setStatus(messagesStatus, `${data.messages.length} message(s) loaded.`, "ok");
-      } catch (error) {
-        setStatus(messagesStatus, error.message, "error");
-      }
-    }
-
-    async function loadChat() {
-      setStatus(chatStatus, "Loading 24-hour chat...");
-      chatProfilesEl.innerHTML = "";
-      adminNotificationsEl.innerHTML = "";
-      chatMessagesEl.innerHTML = "";
-      localStorage.setItem("ddobca-admin-token", tokenInput.value);
-
-      try {
-        const response = await fetch("/api/admin/chat", { headers: authHeaders() });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to load 24-hour chat.");
-
-        chatProfileCountEl.textContent = data.profileCount;
-        chatActiveProfileCountEl.textContent = data.activeProfileCount || 0;
-        chatInactiveProfileCountEl.textContent = data.inactiveProfileCount || 0;
-        chatMessageCountEl.textContent = data.messages.length;
-
-        if (!data.profiles.length) {
-          chatProfilesEl.innerHTML = "<p>No profiles created yet.</p>";
-        } else {
-          const activeProfiles = data.profiles.filter((profile) => profile.status === "active");
-          const inactiveProfiles = data.profiles.filter((profile) => profile.status !== "active");
-          chatProfilesEl.innerHTML = `
-            <article class="message">
-              <strong>Active users</strong>
-              <small>Users who sent a message in the current 24-hour chat window.</small>
-              ${activeProfiles.length ? activeProfiles.map(profileStatusHtml).join("") : "<p>No active users right now.</p>"}
-            </article>
-            <article class="message">
-              <strong>Inactive users</strong>
-              <small>Profiles created, but no message in the current 24-hour chat window.</small>
-              ${inactiveProfiles.length ? inactiveProfiles.map(profileStatusHtml).join("") : "<p>No inactive users right now.</p>"}
-            </article>
-          `;
-
-          chatProfilesEl.querySelectorAll("[data-delete-profile]").forEach((button) => {
-            button.addEventListener("click", () => deleteChatProfile(button.dataset.deleteProfile));
-          });
-        }
-
-        if (!data.notifications.length) {
-          adminNotificationsEl.innerHTML = "<p>No admin notifications yet.</p>";
-        } else {
-          adminNotificationsEl.innerHTML = data.notifications.map((notification) => `
-            <article class="message">
-              <strong>${escapeHtml(notification.title || "Admin notification")}</strong>
-              <small>${escapeHtml(notification.createdAt)}</small>
-              <p>${escapeHtml(notification.message || "")}</p>
-              <button class="danger-button" type="button" data-delete-notification="${escapeHtml(notification.id)}">Dismiss notification</button>
-            </article>
-          `).join("");
-
-          adminNotificationsEl.querySelectorAll("[data-delete-notification]").forEach((button) => {
-            button.addEventListener("click", () => deleteAdminNotification(button.dataset.deleteNotification));
-          });
-        }
-
-        if (!data.messages.length) {
-          chatMessagesEl.innerHTML = "<p>No messages in the current 24-hour chat window.</p>";
-        } else {
-          chatMessagesEl.innerHTML = data.messages.slice().reverse().map((item) => `
-            <article class="message">
-              <strong>${escapeHtml(item.name)} (@${escapeHtml(item.username)})</strong>
-              <small>${escapeHtml(item.createdAt)}</small>
-              <p>${escapeHtml(item.message || "")}</p>
-              <button class="danger-button" type="button" data-delete-message="${escapeHtml(item.id)}">Delete message</button>
-            </article>
-          `).join("");
-
-          chatMessagesEl.querySelectorAll("[data-delete-message]").forEach((button) => {
-            button.addEventListener("click", () => deleteChatMessage(button.dataset.deleteMessage));
-          });
-        }
-
-        setStatus(chatStatus, "24-hour chat loaded.", "ok");
-      } catch (error) {
-        setStatus(chatStatus, error.message, "error");
-      }
-    }
-
-    function profileStatusHtml(profile) {
-      const status = profile.status === "active" ? "active" : "inactive";
-      return `
-        <div class="profile-row">
-          <strong><span class="status-badge ${status}">${status}</span> ${escapeHtml(profile.name || "Unnamed user")}</strong>
-          <div class="meta">
-            <span>Username: @${escapeHtml(profile.username || "")}</span>
-            <span>PIN: hidden</span>
-          </div>
-          <small>Created: ${escapeHtml(profile.createdAt)}</small>
-          <button class="danger-button" type="button" data-delete-profile="${escapeHtml(profile.id)}">Delete profile</button>
-        </div>
-      `;
-    }
-
-    async function deleteChatProfile(profileId) {
-      setStatus(chatStatus, "Deleting profile...");
-      localStorage.setItem("ddobca-admin-token", tokenInput.value);
-
-      try {
-        const response = await fetch(`/api/admin/chat/profiles/${encodeURIComponent(profileId)}`, {
-          method: "DELETE",
-          headers: authHeaders()
-        });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to delete profile.");
-        setStatus(chatStatus, "Profile deleted.", "ok");
-        await loadChat();
-      } catch (error) {
-        setStatus(chatStatus, error.message, "error");
-      }
-    }
-
-    async function deleteAdminNotification(notificationId) {
-      setStatus(chatStatus, "Dismissing notification...");
-      localStorage.setItem("ddobca-admin-token", tokenInput.value);
-
-      try {
-        const response = await fetch(`/api/admin/notifications/${encodeURIComponent(notificationId)}`, {
-          method: "DELETE",
-          headers: authHeaders()
-        });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to dismiss notification.");
-        setStatus(chatStatus, "Notification dismissed.", "ok");
-        await loadChat();
-      } catch (error) {
-        setStatus(chatStatus, error.message, "error");
-      }
-    }
-
-    async function deleteChatMessage(messageId) {
-      setStatus(chatStatus, "Deleting message...");
-      localStorage.setItem("ddobca-admin-token", tokenInput.value);
-
-      try {
-        const response = await fetch(`/api/admin/chat/messages/${encodeURIComponent(messageId)}`, {
-          method: "DELETE",
-          headers: authHeaders()
-        });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to delete message.");
-        setStatus(chatStatus, "Message deleted.", "ok");
-        await loadChat();
-      } catch (error) {
-        setStatus(chatStatus, error.message, "error");
-      }
     }
 
     function escapeHtml(value) {
@@ -818,15 +788,258 @@
       })[character]);
     }
 
-    document.getElementById("load-messages").addEventListener("click", loadMessages);
-    document.getElementById("load-notification").addEventListener("click", loadNotification);
-    document.getElementById("load-chat").addEventListener("click", loadChat);
-    loadSiteConfig().catch((error) => setStatus(siteConfigStatus, error.message, "error"));
-    loadNotification().catch((error) => setStatus(notificationStatus, error.message, "error"));
-    loadChat().catch((error) => setStatus(chatStatus, error.message, "error"));
-    chatRefreshTimer = window.setInterval(() => {
+    // Load Settings
+    async function loadSiteConfig() {
+      try {
+        const response = await fetch("/api/site-config");
+        const config = await response.json();
+        document.getElementById("landingPage").value = config.landingPage || "bca-sem5.html";
+      } catch (e) {
+        showToast("Failed to load site config", "error");
+      }
+    }
+
+    async function loadNotification() {
+      try {
+        const response = await fetch("/api/notifications");
+        const config = await response.json();
+        document.getElementById("active").checked = Boolean(config.active);
+        document.getElementById("message").value = config.message || "";
+        document.getElementById("type").value = config.type || "info";
+        document.getElementById("expireSeconds").value = config.expireSeconds || 5;
+        document.getElementById("link").value = config.link || "";
+        document.getElementById("icon").value = config.icon || "";
+      } catch (e) {
+        showToast("Failed to load notification config", "error");
+      }
+    }
+
+    // Save Settings
+    document.getElementById("site-config-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch("/api/site-config", {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ landingPage: document.getElementById("landingPage").value })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error);
+        showToast("Site settings saved!", "success");
+      } catch (err) {
+        showToast(err.message || "Unable to save settings.", "error");
+      }
+    });
+
+    document.getElementById("notification-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        active: document.getElementById("active").checked,
+        message: document.getElementById("message").value,
+        type: document.getElementById("type").value,
+        expireSeconds: document.getElementById("expireSeconds").value,
+        link: document.getElementById("link").value,
+        icon: document.getElementById("icon").value
+      };
+      try {
+        const response = await fetch("/api/notifications", {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error);
+        showToast("Notification banner updated!", "success");
+      } catch (err) {
+        showToast(err.message || "Unable to save notification.", "error");
+      }
+    });
+
+    // Load Chat & Users & Dashboard Metrics
+    async function loadChat() {
+      if(!tokenInput.value) return;
+      
+      const dashProfiles = document.getElementById("dash-total-profiles");
+      const dashActive = document.getElementById("dash-active-users");
+      const dashInactive = document.getElementById("dash-inactive-users");
+      const dashMessages = document.getElementById("dash-total-messages");
+      
+      const usersList = document.getElementById("users-list");
+      const chatMessagesList = document.getElementById("chat-messages-list");
+      const adminNotifList = document.getElementById("admin-notifications-list");
+
+      try {
+        const response = await fetch("/api/admin/chat", { headers: authHeaders() });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "Unable to load chat data.");
+
+        // Update Dashboard Metrics
+        dashProfiles.textContent = data.profileCount || 0;
+        dashActive.textContent = data.activeProfileCount || 0;
+        dashInactive.textContent = data.inactiveProfileCount || 0;
+        dashMessages.textContent = data.messages ? data.messages.length : 0;
+
+        // Render Users
+        if (!data.profiles || !data.profiles.length) {
+          usersList.innerHTML = "<p style='color:var(--text-muted)'>No profiles created yet.</p>";
+        } else {
+          usersList.innerHTML = data.profiles.map(profile => {
+            const statusClass = profile.status === "active" ? "active" : "inactive";
+            return `
+              <div class="list-item">
+                <div class="list-item-header">
+                  <div class="list-item-title">
+                    <span class="badge ${statusClass}">${statusClass}</span>
+                    ${escapeHtml(profile.name || "Unnamed")}
+                  </div>
+                  <div class="list-item-meta">@${escapeHtml(profile.username || "")}</div>
+                </div>
+                <div class="list-item-meta">Created: ${escapeHtml(profile.createdAt)}</div>
+                <div class="list-item-actions">
+                  <button class="btn btn-danger" onclick="deleteProfile('${escapeHtml(profile.id)}')">Delete</button>
+                </div>
+              </div>
+            `;
+          }).join("");
+        }
+
+        // Render Chat Messages
+        if (!data.messages || !data.messages.length) {
+          chatMessagesList.innerHTML = "<p style='color:var(--text-muted)'>No messages in 24h window.</p>";
+        } else {
+          chatMessagesList.innerHTML = data.messages.slice().reverse().map(msg => `
+            <div class="list-item">
+              <div class="list-item-header">
+                <div class="list-item-title">${escapeHtml(msg.name)} (@${escapeHtml(msg.username)})</div>
+                <div class="list-item-meta">${escapeHtml(msg.createdAt)}</div>
+              </div>
+              <div class="list-item-content">${escapeHtml(msg.message)}</div>
+              <div class="list-item-actions">
+                <button class="btn btn-danger" onclick="deleteMessage('${escapeHtml(msg.id)}')">Delete</button>
+              </div>
+            </div>
+          `).join("");
+        }
+
+        // Render Admin Notifications
+        if (!data.notifications || !data.notifications.length) {
+          adminNotifList.innerHTML = "<p style='color:var(--text-muted)'>No admin notifications.</p>";
+        } else {
+          adminNotifList.innerHTML = data.notifications.map(notif => `
+            <div class="list-item">
+              <div class="list-item-header">
+                <div class="list-item-title">
+                  <span class="badge info">System</span>
+                  ${escapeHtml(notif.title || "Alert")}
+                </div>
+                <div class="list-item-meta">${escapeHtml(notif.createdAt)}</div>
+              </div>
+              <div class="list-item-content">${escapeHtml(notif.message)}</div>
+              <div class="list-item-actions">
+                <button class="btn btn-secondary" onclick="dismissNotification('${escapeHtml(notif.id)}')">Dismiss</button>
+              </div>
+            </div>
+          `).join("");
+        }
+
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    }
+
+    // Load Contact Messages
+    async function loadMessages() {
+      if(!tokenInput.value) {
+        showToast("Admin token required", "error");
+        return;
+      }
+      const list = document.getElementById("contact-messages-list");
+      list.innerHTML = "<p style='color:var(--text-muted)'>Loading...</p>";
+      
+      try {
+        const response = await fetch("/api/messages", { headers: authHeaders() });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error);
+
+        if (!data.messages || !data.messages.length) {
+          list.innerHTML = "<p style='color:var(--text-muted)'>No contact messages found.</p>";
+        } else {
+          list.innerHTML = data.messages.map(msg => `
+            <div class="list-item">
+              <div class="list-item-header">
+                <div class="list-item-title">${escapeHtml(msg.subject || "No Subject")}</div>
+                <div class="list-item-meta">${escapeHtml(msg.createdAt)}</div>
+              </div>
+              <div class="list-item-meta">From: ${escapeHtml(msg.name)} &lt;${escapeHtml(msg.email)}&gt;</div>
+              <div class="list-item-content" style="margin-top:8px">${escapeHtml(msg.message)}</div>
+            </div>
+          `).join("");
+        }
+      } catch (err) {
+        list.innerHTML = `<p style="color:var(--danger)">Error: ${escapeHtml(err.message)}</p>`;
+        showToast(err.message, "error");
+      }
+    }
+
+    // Delete Actions (exposed to global scope for onclick)
+    window.deleteProfile = async function(id) {
+      if(!confirm("Are you sure you want to delete this profile?")) return;
+      try {
+        const res = await fetch(`/api/admin/chat/profiles/${encodeURIComponent(id)}`, { method: "DELETE", headers: authHeaders() });
+        const data = await res.json();
+        if(!res.ok || !data.ok) throw new Error(data.error);
+        showToast("Profile deleted", "success");
+        loadChat();
+      } catch(e) { showToast(e.message, "error"); }
+    };
+
+    window.deleteMessage = async function(id) {
+      if(!confirm("Are you sure you want to delete this message?")) return;
+      try {
+        const res = await fetch(`/api/admin/chat/messages/${encodeURIComponent(id)}`, { method: "DELETE", headers: authHeaders() });
+        const data = await res.json();
+        if(!res.ok || !data.ok) throw new Error(data.error);
+        showToast("Message deleted", "success");
+        loadChat();
+      } catch(e) { showToast(e.message, "error"); }
+    };
+
+    window.dismissNotification = async function(id) {
+      try {
+        const res = await fetch(`/api/admin/notifications/${encodeURIComponent(id)}`, { method: "DELETE", headers: authHeaders() });
+        const data = await res.json();
+        if(!res.ok || !data.ok) throw new Error(data.error);
+        showToast("Notification dismissed", "info");
+        loadChat();
+      } catch(e) { showToast(e.message, "error"); }
+    };
+
+    // Event Listeners for explicit refreshes
+    document.getElementById("btn-refresh-dash").addEventListener("click", () => {
+      loadChat();
+      showToast("Dashboard refreshed", "info");
+    });
+    document.getElementById("btn-refresh-chat").addEventListener("click", () => {
+      loadChat();
+      showToast("Chat refreshed", "info");
+    });
+    document.getElementById("btn-refresh-contact").addEventListener("click", () => {
+      loadMessages();
+      showToast("Messages refreshed", "info");
+    });
+
+    // Init
+    loadSiteConfig();
+    loadNotification();
+    if(tokenInput.value) {
+      loadChat();
+    }
+    
+    // Auto refresh chat data every 15s if token exists
+    chatRefreshTimer = setInterval(() => {
       if (tokenInput.value) loadChat();
-    }, 10000);
+    }, 15000);
+
   </script>
 </body>
 </html>
