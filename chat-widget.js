@@ -300,6 +300,7 @@
     button.id = "ddobca-chat-button";
     button.type = "button";
     button.textContent = "Messages";
+    button.style.display = "none"; // Hide as requested
 
     const widget = document.createElement("aside");
     widget.id = "ddobca-chat";
@@ -322,16 +323,27 @@
     document.body.appendChild(button);
     document.body.appendChild(widget);
 
-    button.addEventListener("click", () => {
+    window.toggleDdobcaChat = () => {
       state.isOpen = !state.isOpen;
       widget.classList.toggle("open", state.isOpen);
       render();
       if (state.isOpen && state.profile) loadMessages();
-    });
+    };
+
+    window.openDdobcaChat = () => {
+      if (!state.isOpen) window.toggleDdobcaChat();
+    };
+
+    button.addEventListener("click", window.toggleDdobcaChat);
 
     widget.querySelector(".ddobca-chat-close").addEventListener("click", () => {
       state.isOpen = false;
       widget.classList.remove("open");
+      
+      // Also update bottom nav if it's available
+      if (typeof window.resetNavToHome === 'function') {
+        window.resetNavToHome();
+      }
     });
 
     widget.querySelector(".ddobca-chat-logout").addEventListener("click", logoutProfile);

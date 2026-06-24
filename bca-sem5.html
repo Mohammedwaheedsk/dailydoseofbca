@@ -487,6 +487,80 @@
       display: block; /* Ensure it's a block container for the track */
     }
 
+    /* Master-Detail UI inside Home */
+    .home-menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding-bottom: 20px;
+    }
+    .home-menu-btn {
+      background: rgba(30, 30, 30, 0.8);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px 25px;
+      border-radius: 20px;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .home-menu-btn:hover, .home-menu-btn:active {
+      background: rgba(60, 60, 60, 0.5);
+      transform: translateY(-2px);
+    }
+    .home-menu-btn::after {
+      content: '→';
+      font-size: 1.5rem;
+      opacity: 0.5;
+    }
+    .home-section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 15px;
+    }
+    .back-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 1.2rem;
+    }
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .home-section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .home-detail-view {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .home-detail-view.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
     .slider-track {
       display: flex;
       height: 100%;
@@ -530,80 +604,122 @@
   <div class="slider-viewport" id="viewport">
     <div class="slider-track" id="track">
 
-      <!-- PAGE 1: NOTES -->
-      <div class="slide">
-        <div class="card">
-          <div class="card-header">
-            <div class="subject-group"><span class="subject">PHP</span></div>
+      <!-- PAGE 1: HOME (Master-Detail View) -->
+      <div class="slide" id="slide-home">
+        
+        <!-- MAIN MENU -->
+        <div id="home-main-menu" class="home-detail-view active">
+          <div class="home-menu-buttons">
+            <button class="home-menu-btn" onclick="showHomeSection('notes')">Notes</button>
+            <button class="home-menu-btn" onclick="showHomeSection('assignments')">Assignments</button>
+            <button class="home-menu-btn" onclick="showHomeSection('lab')">Lab Records</button>
           </div>
-          <p class="description">Notes for PHP.</p>
-          <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
         </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="subject-group"><span class="subject">WEB</span></div>
-          </div>
-          <p class="description">Notes for WEB.</p>
-          <a href="#" class="action-btn">Open PDF</a>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="subject-group"><span class="subject">Cloud Computing</span></div>
-          </div>
-          <p class="description">Notes for Cloud Computing.</p>
-          <a href="#" class="action-btn">Open PDF</a>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="subject-group"><span class="subject">Software Testing</span></div>
-          </div>
-          <p class="description">Notes for Software Testing.</p>
-          <a href="#" class="action-btn">Open PDF</a>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="subject-group"><span class="subject">Email Marketing</span></div>
-          </div>
-          <p class="description">Notes for Email Marketing.</p>
-          <a href="#" class="action-btn">Open PDF</a>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="subject-group"><span class="subject">Mobile Marketing</span></div>
-          </div>
-          <p class="description">Notes for Mobile Marketing.</p>
-          <a href="#" class="action-btn">Open PDF</a>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="subject-group"><span class="subject">EVS</span></div>
-          </div>
-          <p class="description">Notes for EVS.</p>
-          <a href="#" class="action-btn">Open PDF</a>
-        </div>
-      </div>
 
-      <!-- PAGE 2: ASSIGNMENTS -->
-      <div class="slide">
-        <div class="card" onclick="toggleAccordion(this)">
-          <div class="card-header">
-            <div class="subject-group">
-              <span class="subject">PHP Assignment</span>
-              <span class="topic-preview">Topic: PHP</span>
+        <!-- NOTES SECTION -->
+        <div id="home-notes-section" class="home-detail-view">
+          <div class="home-section-header">
+            <button class="back-btn" onclick="showHomeSection('menu')">←</button>
+            <h2 class="home-section-title">Notes</h2>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="subject-group"><span class="subject">PHP</span></div>
+            </div>
+            <p class="description">Notes for PHP.</p>
+            <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="subject-group"><span class="subject">WEB</span></div>
+            </div>
+            <p class="description">Notes for WEB.</p>
+            <a href="#" class="action-btn">Open PDF</a>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="subject-group"><span class="subject">Cloud Computing</span></div>
+            </div>
+            <p class="description">Notes for Cloud Computing.</p>
+            <a href="#" class="action-btn">Open PDF</a>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="subject-group"><span class="subject">Software Testing</span></div>
+            </div>
+            <p class="description">Notes for Software Testing.</p>
+            <a href="#" class="action-btn">Open PDF</a>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="subject-group"><span class="subject">Email Marketing</span></div>
+            </div>
+            <p class="description">Notes for Email Marketing.</p>
+            <a href="#" class="action-btn">Open PDF</a>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="subject-group"><span class="subject">Mobile Marketing</span></div>
+            </div>
+            <p class="description">Notes for Mobile Marketing.</p>
+            <a href="#" class="action-btn">Open PDF</a>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="subject-group"><span class="subject">EVS</span></div>
+            </div>
+            <p class="description">Notes for EVS.</p>
+            <a href="#" class="action-btn">Open PDF</a>
+          </div>
+        </div>
+
+        <!-- ASSIGNMENTS SECTION -->
+        <div id="home-assignments-section" class="home-detail-view">
+          <div class="home-section-header">
+            <button class="back-btn" onclick="showHomeSection('menu')">←</button>
+            <h2 class="home-section-title">Assignments</h2>
+          </div>
+          <div class="card" onclick="toggleAccordion(this)">
+            <div class="card-header">
+              <div class="subject-group">
+                <span class="subject">PHP Assignment</span>
+                <span class="topic-preview">Topic: PHP</span>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <p class="description">PHP Assignment details to be added.</p>
+              <a href="#" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
             </div>
           </div>
-          <div class="accordion-content">
-            <p class="description">PHP Assignment details to be added.</p>
-            <a href="#" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+        </div>
+
+        <!-- LAB RECORDS SECTION -->
+        <div id="home-lab-section" class="home-detail-view">
+          <div class="home-section-header">
+            <button class="back-btn" onclick="showHomeSection('menu')">←</button>
+            <h2 class="home-section-title">Lab Records</h2>
           </div>
+          <div class="card" style="opacity: 0.5;">
+            <div class="card-header"><span class="subject">To Be Added</span></div>
+            <p class="description">Lab Manuals for Semester 5 will be available soon.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PAGE 2: TEACHERS -->
+      <div class="slide">
+        <div class="card" style="opacity: 0.5;">
+          <div class="card-header"><span class="subject">Teachers</span></div>
+          <p class="description">Teachers directory coming soon.</p>
         </div>
       </div>
 
-      <!-- PAGE 3: LAB WORK -->
+      <!-- PAGE 3: MESSAGES -->
       <div class="slide">
         <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">To Be Added</span></div>
-          <p class="description">Lab Manuals for Semester 5 will be available soon.</p>
+          <div class="card-header"><span class="subject">Messages</span></div>
+          <p class="description">Opening chat widget...</p>
         </div>
       </div>
 
@@ -826,6 +942,28 @@
       initDimensions();
       snapToPosition();
     });
+
+    // Sub-view functionality for Home tab
+    function showHomeSection(section) {
+      // Hide all detail views
+      document.querySelectorAll('.home-detail-view').forEach(view => {
+        view.classList.remove('active');
+      });
+
+      // Show the requested section
+      if (section === 'menu') {
+        document.getElementById('home-main-menu').classList.add('active');
+      } else if (section === 'notes') {
+        document.getElementById('home-notes-section').classList.add('active');
+      } else if (section === 'assignments') {
+        document.getElementById('home-assignments-section').classList.add('active');
+      } else if (section === 'lab') {
+        document.getElementById('home-lab-section').classList.add('active');
+      }
+
+      // Scroll to top of the slide
+      document.getElementById('slide-home').scrollTop = 0;
+    }
 
     // Initial Call
     window.onload = function () {
