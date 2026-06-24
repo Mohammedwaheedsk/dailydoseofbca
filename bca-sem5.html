@@ -292,79 +292,76 @@
       pointer-events: auto;
       position: relative;
       width: 100%;
-      height: 72px;
-      background: rgba(20, 20, 22, 0.12);
-      backdrop-filter: blur(50px) saturate(180%);
-      -webkit-backdrop-filter: blur(50px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 40px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+      height: 68px;
+      background: rgba(18, 18, 20, 0.15);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 36px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
       display: flex;
       align-items: center;
-      padding: 0 5px; 
+      padding: 0 5px;
       box-sizing: border-box;
       overflow: visible;
     }
 
     /* Gliding Highlight Knob */
-        .nav-knob {
+    .nav-knob {
       position: absolute;
       left: 5px;
       top: 5px;
       bottom: 5px;
-      width: calc((100% - 10px) / 5);
-      background: rgba(255, 255, 255, 0.12);
+      width: calc((100% - 10px) / 4);
+      background: rgba(255,255,255,0.1);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-radius: 32px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 
-        inset 0 1px 0 rgba(255,255,255,0.4),
-        0 0 0 0 rgba(120, 180, 255, 0),
-        0 4px 20px rgba(0, 0, 0, 0.5);
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        0 4px 20px rgba(0,0,0,0.4);
       z-index: 1;
-      transition: box-shadow 0.2s ease, transform 0.15s ease;
+      transition: box-shadow 0.25s ease, transform 0.15s ease;
     }
 
     .nav-knob.dragging {
-      transform: scaleY(1.08);
+      transform: scaleY(1.1);
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.5),
-        0 0 0 6px rgba(150, 200, 255, 0.18),
-        0 0 30px 8px rgba(100, 180, 255, 0.25),
-        0 -2px 6px rgba(0, 220, 255, 0.4),
-        0 2px 6px rgba(180, 100, 255, 0.4),
-        0 8px 30px rgba(0, 0, 0, 0.6);
+        0 0 0 5px rgba(140,190,255,0.15),
+        0 0 28px 6px rgba(90,170,255,0.22),
+        0 -2px 8px rgba(0,210,255,0.35),
+        0 2px 8px rgba(160,90,255,0.35),
+        0 8px 24px rgba(0,0,0,0.55);
     }
 
-        .nav-item {
+    .nav-item {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.45);
       z-index: 2;
       cursor: pointer;
       height: 100%;
-      transition: color 0.3s ease;
-      white-space: nowrap;
+      transition: color 0.25s ease;
+      font-size: 0.72rem;
+      font-weight: 600;
+      gap: 3px;
+      user-select: none;
     }
 
-    .nav-item .nav-icon {
-      width: 26px;
-      height: 26px;
-      margin-bottom: 2px;
-      stroke: rgba(255,255,255,0.5);
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      stroke: rgba(255,255,255,0.45);
       fill: none;
-      transition: all 0.3s ease;
-    }
-
-    .nav-label {
-      font-size: 0.65rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .nav-item.active {
@@ -373,34 +370,33 @@
 
     .nav-item.active .nav-icon {
       stroke: #fff;
-      fill: rgba(255,255,255,0.2);
     }
 
         .sem-button {
       margin-left: 10px;
-      height: 72px;
-      padding: 0 15px;
+      height: 68px;
+      padding: 0 18px;
       flex-shrink: 0;
-      background: rgba(20, 20, 22, 0.12);
-      backdrop-filter: blur(50px) saturate(180%);
-      -webkit-backdrop-filter: blur(50px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 32px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+      background: rgba(18, 18, 20, 0.15);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
       color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 700;
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       pointer-events: auto;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.15s;
     }
-    
+
     .sem-button:active {
-      transform: scale(0.95);
-      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0.94);
+      background: rgba(255,255,255,0.18);
     }
 
         .sem-menu {
@@ -498,96 +494,271 @@
       display: block; /* Ensure it's a block container for the track */
     }
 
-    /* Master-Detail UI inside Home */
-    .home-menu-buttons {
+    /* ---- CHAT SLIDE STYLES ---- */
+    .chat-slide {
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      padding-bottom: 20px;
+      height: 100%;
+      overflow: hidden;
+      padding: 0 !important;
     }
-    .home-menu-btn {
-      background: rgba(30, 30, 30, 0.8);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 20px 25px;
-      border-radius: 20px;
-      color: #fff;
-      font-size: 1.2rem;
-      font-weight: 600;
+    .chat-header-bar {
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    .chat-header-bar h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .chat-header-bar p {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 2px;
+    }
+    /* Auth form */
+    .chat-auth-wrap {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .chat-tab-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .chat-tab-btn {
+      padding: 11px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.55);
+      font-weight: 700;
+      font-size: 0.9rem;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      transition: all 0.2s;
     }
-    .home-menu-btn:hover, .home-menu-btn:active {
-      background: rgba(60, 60, 60, 0.5);
-      transform: translateY(-2px);
-    }
-    .home-menu-btn::after {
-      content: '→';
-      font-size: 1.5rem;
-      opacity: 0.5;
-    }
-    .home-section-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      gap: 15px;
-    }
-    .back-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+    .chat-tab-btn.active {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.2);
       color: #fff;
+    }
+    .chat-input-field {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .chat-input-field:focus {
+      border-color: rgba(255,255,255,0.25);
+    }
+    .chat-input-field::placeholder { color: rgba(255,255,255,0.3); }
+    .chat-submit-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: #000;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .chat-submit-btn:active { opacity: 0.8; }
+    .chat-err { font-size: 0.8rem; color: #ff6b7a; min-height: 16px; }
+    /* Chat messages area */
+    .chat-main {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-logged-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .chat-user-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-avatar {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #000;
+      flex-shrink: 0;
+    }
+    .chat-user-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+    }
+    .chat-logout-btn {
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.78rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
-      font-size: 1.2rem;
     }
-    .back-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
+    .chat-messages-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      -webkit-overflow-scrolling: touch;
     }
-    .home-section-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 0;
+    /* Message bubbles */
+    .msg-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
     }
-    .home-detail-view {
-      display: none;
-      animation: fadeIn 0.3s ease;
+    .msg-row.mine {
+      flex-direction: row-reverse;
     }
-    .home-detail-view.active {
-      display: block;
+    .msg-avatar-sm {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
+    .msg-row.mine .msg-avatar-sm {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: #000;
+    }
+    .msg-bubble-group {
+      max-width: 72%;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .msg-sender {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 2px;
+      padding: 0 4px;
+    }
+    .msg-row.mine .msg-sender { text-align: right; }
+    .msg-bubble {
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: #fff;
+      word-break: break-word;
+      white-space: pre-wrap;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-bottom-left-radius: 4px;
+    }
+    .msg-row.mine .msg-bubble {
+      background: linear-gradient(135deg, #4facfe 0%, #00d4ff 100%);
+      border: none;
+      color: #000;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 18px;
+    }
+    .msg-time {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.28);
+      padding: 0 4px;
+    }
+    .msg-row.mine .msg-time { text-align: right; }
+    /* Send bar */
+    .chat-send-bar {
+      display: flex;
+      gap: 10px;
+      padding: 12px 20px 20px;
+      flex-shrink: 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      align-items: center;
+    }
+    .chat-send-input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 0.92rem;
+      outline: none;
+    }
+    .chat-send-input::placeholder { color: rgba(255,255,255,0.3); }
+    .chat-send-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: #000;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s;
+    }
+    .chat-send-btn:active { transform: scale(0.9); }
+    .chat-empty {
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.9rem;
+      margin: auto;
+      padding: 40px 20px;
     }
 
     .slider-track {
       display: flex;
       height: 100%;
-      width: 500% !important; /* 5 pages */
-      flex-shrink: 0; /* PREVENT SQUASHING */
+      width: 400% !important; /* 4 pages */
+      flex-shrink: 0;
       will-change: transform;
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .slide {
-      flex: 0 0 20%; /* Force exactly 1/5 width for 5 slides */
-      width: 20%;
+      flex: 0 0 25%; /* exactly 1/4 width */
+      width: 25%;
       height: 100%;
       overflow-y: auto;
       padding: 20px;
-      padding-bottom: 150px;
+      padding-bottom: 140px;
       box-sizing: border-box;
       -webkit-overflow-scrolling: touch;
     }
@@ -615,176 +786,134 @@
   <div class="slider-viewport" id="viewport">
     <div class="slider-track" id="track">
 
-      <!-- PAGE 1: HOME (Master-Detail View) -->
-      <div class="slide" id="slide-home">
-        
-        <!-- MAIN MENU -->
-        <div id="home-main-menu" class="home-detail-view active">
-          <div class="home-menu-buttons">
-            <button class="home-menu-btn" onclick="showHomeSection('notes')">Notes</button>
-            <button class="home-menu-btn" onclick="showHomeSection('assignments')">Assignments</button>
-            <button class="home-menu-btn" onclick="showHomeSection('lab')">Lab Records</button>
-          </div>
-        </div>
-
-        <!-- NOTES SECTION -->
-        <div id="home-notes-section" class="home-detail-view">
-          <div class="home-section-header">
-            <button class="back-btn" onclick="showHomeSection('menu')">←</button>
-            <h2 class="home-section-title">Notes</h2>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="subject-group"><span class="subject">PHP</span></div>
-            </div>
-            <p class="description">Notes for PHP.</p>
-            <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="subject-group"><span class="subject">WEB</span></div>
-            </div>
-            <p class="description">Notes for WEB.</p>
-            <a href="#" class="action-btn">Open PDF</a>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="subject-group"><span class="subject">Cloud Computing</span></div>
-            </div>
-            <p class="description">Notes for Cloud Computing.</p>
-            <a href="#" class="action-btn">Open PDF</a>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="subject-group"><span class="subject">Software Testing</span></div>
-            </div>
-            <p class="description">Notes for Software Testing.</p>
-            <a href="#" class="action-btn">Open PDF</a>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="subject-group"><span class="subject">Email Marketing</span></div>
-            </div>
-            <p class="description">Notes for Email Marketing.</p>
-            <a href="#" class="action-btn">Open PDF</a>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="subject-group"><span class="subject">Mobile Marketing</span></div>
-            </div>
-            <p class="description">Notes for Mobile Marketing.</p>
-            <a href="#" class="action-btn">Open PDF</a>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="subject-group"><span class="subject">EVS</span></div>
-            </div>
-            <p class="description">Notes for EVS.</p>
-            <a href="#" class="action-btn">Open PDF</a>
-          </div>
-        </div>
-
-        <!-- ASSIGNMENTS SECTION -->
-        <div id="home-assignments-section" class="home-detail-view">
-          <div class="home-section-header">
-            <button class="back-btn" onclick="showHomeSection('menu')">←</button>
-            <h2 class="home-section-title">Assignments</h2>
-          </div>
-          <div class="card" onclick="toggleAccordion(this)">
-            <div class="card-header">
-              <div class="subject-group">
-                <span class="subject">PHP Assignment</span>
-                <span class="topic-preview">Topic: PHP</span>
-              </div>
-            </div>
-            <div class="accordion-content">
-              <p class="description">PHP Assignment details to be added.</p>
-              <a href="#" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- LAB RECORDS SECTION -->
-        <div id="home-lab-section" class="home-detail-view">
-          <div class="home-section-header">
-            <button class="back-btn" onclick="showHomeSection('menu')">←</button>
-            <h2 class="home-section-title">Lab Records</h2>
-          </div>
-          <div class="card" style="opacity: 0.5;">
-            <div class="card-header"><span class="subject">To Be Added</span></div>
-            <p class="description">Lab Manuals for Semester 5 will be available soon.</p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- PAGE 2: TEACHERS -->
+      <!-- PAGE 1: NOTES -->
       <div class="slide">
-        <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">Teachers</span></div>
-          <p class="description">Teachers directory coming soon.</p>
+        <div class="card">
+          <div class="card-header">
+            <div class="subject-group"><span class="subject">PHP</span></div>
+          </div>
+          <p class="description">Notes for PHP.</p>
+          <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="subject-group"><span class="subject">WEB</span></div>
+          </div>
+          <p class="description">Notes for WEB.</p>
+          <a href="#" class="action-btn">Open PDF</a>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="subject-group"><span class="subject">Cloud Computing</span></div>
+          </div>
+          <p class="description">Notes for Cloud Computing.</p>
+          <a href="#" class="action-btn">Open PDF</a>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="subject-group"><span class="subject">Software Testing</span></div>
+          </div>
+          <p class="description">Notes for Software Testing.</p>
+          <a href="#" class="action-btn">Open PDF</a>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="subject-group"><span class="subject">Email Marketing</span></div>
+          </div>
+          <p class="description">Notes for Email Marketing.</p>
+          <a href="#" class="action-btn">Open PDF</a>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="subject-group"><span class="subject">Mobile Marketing</span></div>
+          </div>
+          <p class="description">Notes for Mobile Marketing.</p>
+          <a href="#" class="action-btn">Open PDF</a>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="subject-group"><span class="subject">EVS</span></div>
+          </div>
+          <p class="description">Notes for EVS.</p>
+          <a href="#" class="action-btn">Open PDF</a>
         </div>
       </div>
 
-      <!-- PAGE 3: MESSAGES (Inline Chat) -->
-      <div class="slide" id="slide-messages">
-        <div id="inline-chat-wrap" style="height:100%; display:flex; flex-direction:column; gap:0;">
-          <!-- Chat header -->
-          <div style="padding:10px 0 14px; flex-shrink:0;">
-            <div style="font-size:1.3rem;font-weight:700;">Messages</div>
-            <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-top:2px;">Public chat · clears every 24h</div>
-          </div>
-          <!-- Auth panel (shown when not logged in) -->
-          <div id="ic-auth" style="display:flex;flex-direction:column;gap:12px;">
-            <div id="ic-tabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <button id="ic-tab-login" onclick="icSwitchTab('login')" style="padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.15);color:#fff;font-weight:700;cursor:pointer;">Login</button>
-              <button id="ic-tab-signup" onclick="icSwitchTab('signup')" style="padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-weight:700;cursor:pointer;">Sign Up</button>
-            </div>
-            <div id="ic-login-form">
-              <div style="display:flex;flex-direction:column;gap:10px;">
-                <input id="ic-login-user" placeholder="Username or Name" autocomplete="username" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
-                <input id="ic-login-pin" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
-                <button onclick="icLogin()" style="padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#38bdf8,#86efac);color:#061018;font-weight:800;font-size:1rem;cursor:pointer;">Login</button>
-              </div>
-            </div>
-            <div id="ic-signup-form" style="display:none;">
-              <div style="display:flex;flex-direction:column;gap:10px;">
-                <input id="ic-su-username" placeholder="Username (letters/numbers)" autocomplete="username" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
-                <input id="ic-su-name" placeholder="Your Name" autocomplete="name" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
-                <input id="ic-su-pin" type="password" inputmode="numeric" maxlength="4" placeholder="Create 4-digit PIN" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
-                <button onclick="icSignup()" style="padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#38bdf8,#86efac);color:#061018;font-weight:800;font-size:1rem;cursor:pointer;">Create Account</button>
-              </div>
-            </div>
-            <p id="ic-auth-status" style="color:#fb7185;font-size:0.82rem;min-height:16px;"></p>
-          </div>
-          <!-- Chat panel (shown when logged in) -->
-          <div id="ic-chat" style="display:none;flex-direction:column;height:100%;min-height:0;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-shrink:0;">
-              <span id="ic-logged-as" style="font-size:0.85rem;color:rgba(255,255,255,0.5);"></span>
-              <button onclick="icLogout()" style="padding:6px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:#fff;font-weight:700;font-size:0.8rem;cursor:pointer;">Logout</button>
-            </div>
-            <div id="ic-messages-list" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:8px;"></div>
-            <div style="display:flex;gap:8px;margin-top:10px;flex-shrink:0;">
-              <input id="ic-msg-input" placeholder="Message..." maxlength="500" style="flex:1;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;" onkeydown="if(event.key==='Enter')icSend();">
-              <button onclick="icSend()" style="padding:12px 16px;border-radius:14px;border:none;background:linear-gradient(135deg,#38bdf8,#86efac);color:#061018;font-weight:800;cursor:pointer;">↑</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PAGE 4: UPDATES -->
+      <!-- PAGE 2: ASSIGNMENTS -->
       <div class="slide">
-        <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">Updates</span></div>
-          <p class="description">Updates and notifications.</p>
+        <div class="card" onclick="toggleAccordion(this)">
+          <div class="card-header">
+            <div class="subject-group">
+              <span class="subject">PHP Assignment</span>
+              <span class="topic-preview">Topic: PHP</span>
+            </div>
+          </div>
+          <div class="accordion-content">
+            <p class="description">PHP Assignment details to be added.</p>
+            <a href="#" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+          </div>
         </div>
       </div>
 
-      <!-- PAGE 5: YOU -->
+      <!-- PAGE 3: LAB WORK -->
       <div class="slide">
-        <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">Profile</span></div>
-          <p class="description">Your profile settings.</p>
+        <div class="card" style="opacity:0.6;">
+          <div class="card-header"><span class="subject">To Be Added</span></div>
+          <p class="description">Lab Manuals for Semester 5 will be available soon.</p>
+        </div>
+      </div>
+
+      <!-- PAGE 4: CHATS -->
+      <div class="slide chat-slide" style="padding:0;">
+        <!-- Header -->
+        <div class="chat-header-bar">
+          <h2>Chats</h2>
+          <p>BCA Public Chat &middot; messages clear after 24h</p>
+        </div>
+
+        <!-- AUTH FORM -->
+        <div class="chat-auth-wrap" id="ic-auth">
+          <div class="chat-tab-row">
+            <button id="ic-tab-login" class="chat-tab-btn active" onclick="icSwitchTab('login')">Login</button>
+            <button id="ic-tab-signup" class="chat-tab-btn" onclick="icSwitchTab('signup')">Sign Up</button>
+          </div>
+
+          <div id="ic-login-form">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <input id="ic-login-user" class="chat-input-field" placeholder="Username or Name" autocomplete="username">
+              <input id="ic-login-pin" class="chat-input-field" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN">
+              <button class="chat-submit-btn" onclick="icLogin()">Login</button>
+            </div>
+          </div>
+
+          <div id="ic-signup-form" style="display:none;">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <input id="ic-su-username" class="chat-input-field" placeholder="Username (a-z, 0-9)" autocomplete="username">
+              <input id="ic-su-name" class="chat-input-field" placeholder="Display Name" autocomplete="name">
+              <input id="ic-su-pin" class="chat-input-field" type="password" inputmode="numeric" maxlength="4" placeholder="Create a 4-digit PIN">
+              <button class="chat-submit-btn" onclick="icSignup()">Create Account</button>
+            </div>
+          </div>
+
+          <p class="chat-err" id="ic-auth-status"></p>
+        </div>
+
+        <!-- CHAT AREA -->
+        <div class="chat-main" id="ic-chat">
+          <div class="chat-logged-bar">
+            <div class="chat-user-pill">
+              <div class="chat-avatar" id="ic-avatar-initials">?</div>
+              <span class="chat-user-name" id="ic-logged-as"></span>
+            </div>
+            <button class="chat-logout-btn" onclick="icLogout()">Log out</button>
+          </div>
+          <div class="chat-messages-scroll" id="ic-messages-list"></div>
+          <div class="chat-send-bar">
+            <input id="ic-msg-input" class="chat-send-input" placeholder="Message..." maxlength="500" onkeydown="if(event.key==='Enter')icSend();">
+            <button class="chat-send-btn" onclick="icSend()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -793,32 +922,29 @@
 
   <!-- BOTTOM FLOATING NAV -->
   <div class="nav-wrapper">
-    <div class="nav-center-wrap" style="position: relative; width: calc(100% - 70px); max-width: 400px; display: flex;">
+    <div class="nav-center-wrap" style="position:relative;width:calc(100% - 70px);max-width:380px;display:flex;">
       <div class="nav-container" id="nav-container">
         <div class="nav-knob" id="nav-knob"></div>
+
         <div class="nav-item active" data-index="0">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-          <span class="nav-label">Home</span>
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Notes</span>
         </div>
         <div class="nav-item" data-index="1">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          <span class="nav-label">Teachers</span>
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>Assign</span>
         </div>
         <div class="nav-item" data-index="2">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          <span class="nav-label">Messages</span>
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>Lab</span>
         </div>
         <div class="nav-item" data-index="3">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12a10 10 0 1 0 10-10"></path><path d="M12 2v4"></path><circle cx="12" cy="12" r="10"></circle></svg>
-          <span class="nav-label">Updates</span>
-        </div>
-        <div class="nav-item" data-index="4">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span class="nav-label">You</span>
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Chats</span>
         </div>
       </div>
-      
-      <!-- Mini Menu Box for Semesters -->
+
+      <!-- Semester Picker -->
       <div class="sem-menu" id="sem-menu">
         <a href="bca-sem1.html" class="sem-menu-btn">Sem 1</a>
         <a href="bca-sem2.html" class="sem-menu-btn">Sem 2</a>
@@ -828,17 +954,13 @@
         <a href="bca-sem6.html" class="sem-menu-btn">Sem 6</a>
       </div>
     </div>
-    
-    <div class="sem-button" id="sem-btn">Sem</div>
 
+    <div class="sem-button" id="sem-btn">Sem</div>
   </div>
 
-  <script>
-    /* ROBUST NAV LOGIC 
-      1. Drag Nav Knob -> Moves Content
-      2. Click Nav Item -> Jumps Content
-    */
 
+  <script>
+    /* NAV LOGIC - 4 tabs: Notes | Assign | Lab | Chats */
     const navContainer = document.getElementById('nav-container');
     const navKnob = document.getElementById('nav-knob');
     const track = document.getElementById('track');
@@ -849,19 +971,15 @@
     let isDragging = false;
     let navWidth, knobWidth, maxTranslate;
 
-    // Initialize sizes
     function initDimensions() {
       navWidth = navContainer.clientWidth;
-      // Padding 5px left + 5px right = 10px total padding logic
-      knobWidth = (navWidth - 10) / 5;
+      knobWidth = (navWidth - 10) / 4;
       maxTranslate = navWidth - 10 - knobWidth;
     }
 
-    // --- TOUCH / MOUSE EVENTS ---
     navContainer.addEventListener('touchstart', dragStart, { passive: false });
     navContainer.addEventListener('touchmove', dragMove, { passive: false });
     navContainer.addEventListener('touchend', dragEnd);
-
     navContainer.addEventListener('mousedown', dragStart);
     window.addEventListener('mousemove', dragMove);
     window.addEventListener('mouseup', dragEnd);
@@ -873,108 +991,52 @@
         navKnob.style.transition = 'none';
         navKnob.classList.add('dragging');
         track.style.transition = 'none';
-        navContainer.style.transition = 'none';
       }
     }
 
     function dragMove(e) {
       if (!isDragging) return;
       e.preventDefault();
-
       const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
       const navRect = navContainer.getBoundingClientRect();
-
-      // Relative X inside the nav bar
-      // 5px is left padding offset
       let offsetX = clientX - navRect.left - 5 - (knobWidth / 2);
-
-      // Clamp
       if (offsetX < 0) offsetX = 0;
       if (offsetX > maxTranslate) offsetX = maxTranslate;
-
-      // Move Knob
       navKnob.style.transform = `translateX(${offsetX}px)`;
-      
-
-      // Move Content (Map Nav% to Content%)
       const percentage = offsetX / maxTranslate;
-
-      // We scroll 5 pages, so total scrollable width is 4 * ViewportWidth
       const slideWidth = viewport.clientWidth;
-      const totalContentScroll = slideWidth * 4;
-
-      const contentTranslate = percentage * -totalContentScroll;
-      track.style.transform = `translateX(${contentTranslate}px)`;
-
-      highlightNavText(percentage);
+      track.style.transform = `translateX(${percentage * -slideWidth * 3}px)`;
+      // Highlight whichever zone we're in
+      const idx = Math.min(3, Math.floor(percentage * 4));
+      navItems.forEach((item, i) => item.classList.toggle('active', i === idx));
     }
 
     function dragEnd(e) {
       if (!isDragging) return;
       isDragging = false;
       navKnob.classList.remove('dragging');
-
-      // Snap logic
-      const currentKnobTransform = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41;
-      const percentage = currentKnobTransform / maxTranslate;
-
-      if (percentage < 0.2) currentIndex = 0;
-      else if (percentage < 0.4) currentIndex = 1;
-      else if (percentage < 0.6) currentIndex = 2;
-      else if (percentage < 0.8) currentIndex = 3;
-      else currentIndex = 4;
-
+      const mat = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform);
+      const pct = mat.m41 / maxTranslate;
+      currentIndex = Math.round(pct * 3);
+      if (currentIndex < 0) currentIndex = 0;
+      if (currentIndex > 3) currentIndex = 3;
       snapToPosition();
     }
 
-    // Click Support
     navItems.forEach((item, index) => {
-      item.addEventListener('click', () => {
-        currentIndex = index;
-        snapToPosition();
-      });
+      item.addEventListener('click', () => { currentIndex = index; snapToPosition(); });
     });
 
     function snapToPosition() {
       initDimensions();
-
-      // 1. Snap Knob
-      const preciseKnobX = ((navWidth - 10) / 5) * currentIndex;
+      const knobX = ((navWidth - 10) / 4) * currentIndex;
       navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      navKnob.style.transform = `translateX(${preciseKnobX}px)`;
-      
-
-      // 2. Snap Content
+      navKnob.style.transform = `translateX(${knobX}px)`;
       const slideWidth = viewport.clientWidth;
-      const contentX = currentIndex * -slideWidth;
       track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      track.style.transform = `translateX(${contentX}px)`;
-
-      // 3. Highlight
-      navItems.forEach((item, idx) => {
-        if (idx === currentIndex) {
-          item.classList.add('active');
-        } else {
-          item.classList.remove('active');
-        }
-      });
-    }
-
-    function highlightNavText(pct) {
-      let activeIdx = 0;
-      if (pct < 0.2) activeIdx = 0;
-      else if (pct < 0.4) activeIdx = 1;
-      else if (pct < 0.6) activeIdx = 2;
-      else if (pct < 0.8) activeIdx = 3;
-      else activeIdx = 4;
-
-      navItems.forEach((item, idx) => {
-        if (idx === activeIdx) {
-          item.classList.add('active');
-        } else {
-          item.classList.remove('active');
-        }
-      });
+      track.style.transform = `translateX(${currentIndex * -slideWidth}px)`;
+      navItems.forEach((item, idx) => item.classList.toggle('active', idx === currentIndex));
+      if (currentIndex === 3 && typeof icRefresh === 'function') icRefresh();
     }
 
     function toggleAccordion(card) {
@@ -983,88 +1045,46 @@
         content.style.maxHeight = null;
         content.classList.remove('open');
       } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+        content.style.maxHeight = content.scrollHeight + 'px';
         content.classList.add('open');
       }
     }
 
-    // Handle Resize
-    window.addEventListener('resize', () => {
-      initDimensions();
-      snapToPosition();
+    window.addEventListener('resize', () => { initDimensions(); snapToPosition(); });
+    window.onload = () => { initDimensions(); snapToPosition(); };
+
+    // SEM BUTTON LOGIC
+    const semBtn = document.getElementById('sem-btn');
+    const semMenu = document.getElementById('sem-menu');
+    semBtn.addEventListener('click', (e) => { e.stopPropagation(); semMenu.classList.toggle('open'); });
+    document.addEventListener('click', (e) => {
+      if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) semMenu.classList.remove('open');
     });
-
-    // Sub-view functionality for Home tab
-    function showHomeSection(section) {
-      // Hide all detail views
-      document.querySelectorAll('.home-detail-view').forEach(view => {
-        view.classList.remove('active');
-      });
-
-      // Show the requested section
-      if (section === 'menu') {
-        document.getElementById('home-main-menu').classList.add('active');
-      } else if (section === 'notes') {
-        document.getElementById('home-notes-section').classList.add('active');
-      } else if (section === 'assignments') {
-        document.getElementById('home-assignments-section').classList.add('active');
-      } else if (section === 'lab') {
-        document.getElementById('home-lab-section').classList.add('active');
-      }
-
-      // Scroll to top of the slide
-      document.getElementById('slide-home').scrollTop = 0;
-    }
-
-    // When Messages tab (index 2) is selected, start polling chat
-    const origSnapToPosition = snapToPosition;
-    function snapToPosition() {
-      initDimensions();
-      const preciseKnobX = ((navWidth - 10) / 5) * currentIndex;
-      navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      navKnob.style.transform = `translateX(${preciseKnobX}px)`;
-      const slideWidth = viewport.clientWidth;
-      const contentX = currentIndex * -slideWidth;
-      track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      track.style.transform = `translateX(${contentX}px)`;
-      navItems.forEach((item, idx) => {
-        if (idx === currentIndex) item.classList.add('active');
-        else item.classList.remove('active');
-      });
-      // If navigating to messages tab, refresh chat
-      if (currentIndex === 2 && typeof icRefresh === 'function') icRefresh();
-    }
-
-    // Initial Call
-    window.onload = function () {
-      initDimensions();
-      snapToPosition();
-    };
+    semMenu.addEventListener('click', (e) => e.stopPropagation());
 
     // ===== INLINE CHAT LOGIC =====
     const IC_KEY = 'ddobca-chat-profile';
     let icProfile = null;
     let icPollTimer = null;
-
     try { icProfile = JSON.parse(localStorage.getItem(IC_KEY) || 'null'); } catch(e) { icProfile = null; }
 
     function icSwitchTab(tab) {
       document.getElementById('ic-login-form').style.display = tab === 'login' ? 'block' : 'none';
       document.getElementById('ic-signup-form').style.display = tab === 'signup' ? 'block' : 'none';
-      document.getElementById('ic-tab-login').style.background = tab === 'login' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
-      document.getElementById('ic-tab-signup').style.background = tab === 'signup' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
-      document.getElementById('ic-tab-login').style.color = tab === 'login' ? '#fff' : 'rgba(255,255,255,0.6)';
-      document.getElementById('ic-tab-signup').style.color = tab === 'signup' ? '#fff' : 'rgba(255,255,255,0.6)';
+      document.getElementById('ic-tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('ic-tab-signup').classList.toggle('active', tab === 'signup');
     }
 
     function icShowChat() {
       document.getElementById('ic-auth').style.display = 'none';
       const chatEl = document.getElementById('ic-chat');
       chatEl.style.display = 'flex';
-      document.getElementById('ic-logged-as').textContent = 'Chatting as ' + icProfile.name;
+      const initials = (icProfile.name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+      document.getElementById('ic-avatar-initials').textContent = initials;
+      document.getElementById('ic-logged-as').textContent = icProfile.name;
       icRefresh();
       clearInterval(icPollTimer);
-      icPollTimer = setInterval(icRefresh, 15000);
+      icPollTimer = setInterval(icRefresh, 12000);
     }
 
     function icShowAuth() {
@@ -1115,6 +1135,12 @@
       icShowAuth();
     }
 
+    function icFormatTime(ts) {
+      if (!ts) return '';
+      const d = new Date(ts);
+      return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    }
+
     async function icRefresh() {
       if (!icProfile) return;
       const list = document.getElementById('ic-messages-list');
@@ -1123,17 +1149,25 @@
         const r = await fetch('/api/chat/messages?profileId=' + encodeURIComponent(icProfile.id) + '&v=' + Date.now());
         const d = await r.json();
         if (!r.ok || !d.ok) return;
-        if (!d.messages.length) {
-          list.innerHTML = '<p style="color:rgba(255,255,255,0.4);text-align:center;margin:auto;">No messages yet. Say hello!</p>';
+        if (!d.messages || !d.messages.length) {
+          list.innerHTML = '<div class="chat-empty">No messages yet.<br>Be the first to say hello! 👋</div>';
         } else {
+          const wasAtBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 60;
           list.innerHTML = d.messages.map(m => {
             const mine = m.profileId === icProfile.id;
-            return `<div style="padding:10px 12px;border-radius:14px;background:${mine ? 'rgba(56,189,248,0.18)' : 'rgba(255,255,255,0.08)'};border:1px solid ${mine ? 'rgba(56,189,248,0.3)' : 'rgba(255,255,255,0.1)'}">
-              <div style="font-size:0.72rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">${m.name} (@${m.username})</div>
-              <div style="color:#fff;line-height:1.4;overflow-wrap:anywhere;white-space:pre-wrap;">${m.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+            const initials = (m.name || '?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+            const txt = (m.message||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const time = icFormatTime(m.createdAt);
+            return `<div class="msg-row${mine ? ' mine' : ''}">
+              <div class="msg-avatar-sm">${initials}</div>
+              <div class="msg-bubble-group">
+                ${!mine ? `<div class="msg-sender">${m.name}</div>` : ''}
+                <div class="msg-bubble">${txt}</div>
+                <div class="msg-time">${time}</div>
+              </div>
             </div>`;
           }).join('');
-          list.scrollTop = list.scrollHeight;
+          if (wasAtBottom) list.scrollTop = list.scrollHeight;
         }
       } catch(e) {}
     }
@@ -1152,28 +1186,7 @@
       } catch(e) { input.value = text; }
     }
 
-    // Init chat state
     if (icProfile) { icShowChat(); } else { icShowAuth(); }
-
-    // SEM BUTTON LOGIC
-    const semBtn = document.getElementById('sem-btn');
-    const semMenu = document.getElementById('sem-menu');
-
-    semBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      semMenu.classList.toggle('open');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) {
-        semMenu.classList.remove('open');
-      }
-    });
-
-    // Prevent clicks inside menu from bubbling up
-    semMenu.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
   </script>
 
 
