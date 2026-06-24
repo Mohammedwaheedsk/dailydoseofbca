@@ -26,6 +26,17 @@ const db = process.env.DATABASE_URL
 let chatWriteQueue = Promise.resolve();
 
 app.disable("x-powered-by");
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json({ limit: "80kb" }));
 app.use(express.urlencoded({ extended: true, limit: "80kb" }));
 
