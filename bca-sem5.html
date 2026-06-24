@@ -521,7 +521,7 @@
     .chat-auth-wrap {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 20px 20px 140px 20px;
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -583,6 +583,7 @@
       display: none;
       flex-direction: column;
       overflow: hidden;
+      padding-bottom: 140px;
     }
     .chat-logged-bar {
       display: flex;
@@ -1027,13 +1028,19 @@
       item.addEventListener('click', () => { currentIndex = index; snapToPosition(); });
     });
 
-    function snapToPosition() {
+    function snapToPosition(animate = true) {
       initDimensions();
       const knobX = ((navWidth - 10) / 4) * currentIndex;
-      navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      if (animate) {
+        navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      } else {
+        navKnob.style.transition = 'none';
+        track.style.transition = 'none';
+      }
+      
       navKnob.style.transform = `translateX(${knobX}px)`;
       const slideWidth = viewport.clientWidth;
-      track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
       track.style.transform = `translateX(${currentIndex * -slideWidth}px)`;
       navItems.forEach((item, idx) => item.classList.toggle('active', idx === currentIndex));
       if (currentIndex === 3 && typeof icRefresh === 'function') icRefresh();
@@ -1050,7 +1057,7 @@
       }
     }
 
-    window.addEventListener('resize', () => { initDimensions(); snapToPosition(); });
+    window.addEventListener('resize', () => { initDimensions(); snapToPosition(false); });
     window.onload = () => { initDimensions(); snapToPosition(); };
 
     // SEM BUTTON LOGIC
@@ -1064,6 +1071,7 @@
 
     // ===== INLINE CHAT LOGIC =====
     const IC_KEY = 'ddobca-chat-profile';
+    const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3001' : '';
     let icProfile = null;
     let icPollTimer = null;
     try { icProfile = JSON.parse(localStorage.getItem(IC_KEY) || 'null'); } catch(e) { icProfile = null; }
@@ -1091,6 +1099,12 @@
       document.getElementById('ic-auth').style.display = 'flex';
       document.getElementById('ic-chat').style.display = 'none';
       clearInterval(icPollTimer);
+      if (window.location.protocol === 'file:') {
+        const status = document.getElementById('ic-auth-status');
+        if (status) {
+          status.innerHTML = '⚠️ Note: Open <a href="http://localhost:3001/' + window.location.pathname.split('/').pop() + '" style="color:#00ffff;text-decoration:underline;">http://localhost:3001</a> in your browser to use chat.';
+        }
+      }
     }
 
     async function icLogin() {
@@ -1100,7 +1114,7 @@
       if (!login || !pin) { status.textContent = 'Enter username and PIN.'; return; }
       status.textContent = 'Logging in...';
       try {
-        const r = await fetch('/api/chat/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({login, pin}) });
+        const r = await fetch(API_BASE + '/api/chat/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({login, pin}) });
         const d = await r.json();
         if (!r.ok || !d.ok) throw new Error(d.error || 'Login failed.');
         icProfile = d.profile;
@@ -1118,7 +1132,7 @@
       if (!username || !name || !pin) { status.textContent = 'Fill all fields.'; return; }
       status.textContent = 'Creating account...';
       try {
-        const r = await fetch('/api/chat/profile', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username, name, pin}) });
+        const r = await fetch(API_BASE + '/api/chat/profile', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username, name, pin}) });
         const d = await r.json();
         if (!r.ok || !d.ok) throw new Error(d.error || 'Signup failed.');
         icProfile = d.profile;
@@ -1146,7 +1160,7 @@
       const list = document.getElementById('ic-messages-list');
       if (!list) return;
       try {
-        const r = await fetch('/api/chat/messages?profileId=' + encodeURIComponent(icProfile.id) + '&v=' + Date.now());
+        const r = await fetch(API_BASE + '/api/chat/messages?profileId=' + encodeURIComponent(icProfile.id) + '&v=' + Date.now());
         const d = await r.json();
         if (!r.ok || !d.ok) return;
         if (!d.messages || !d.messages.length) {
@@ -1179,7 +1193,7 @@
       if (!text) return;
       input.value = '';
       try {
-        const r = await fetch('/api/chat/messages', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({profileId: icProfile.id, message: text}) });
+        const r = await fetch(API_BASE + '/api/chat/messages', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({profileId: icProfile.id, message: text}) });
         const d = await r.json();
         if (!r.ok || !d.ok) { input.value = text; return; }
         icRefresh();
