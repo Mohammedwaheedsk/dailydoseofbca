@@ -288,84 +288,115 @@
       pointer-events: none;
     }
 
-        .nav-container {
+            .nav-container {
       pointer-events: auto;
       position: relative;
       width: 100%;
-      height: 64px;
-      background: rgba(30, 30, 30, 0.8);
-      backdrop-filter: blur(35px);
-      -webkit-backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 32px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      height: 68px;
+      background: rgba(18, 18, 20, 0.15);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 36px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
       display: flex;
       align-items: center;
-      padding: 0 5px; box-sizing: border-box;
+      padding: 0 5px;
+      box-sizing: border-box;
       overflow: visible;
     }
 
     /* Gliding Highlight Knob */
-        .nav-knob {
+    .nav-knob {
       position: absolute;
       left: 5px;
       top: 5px;
       bottom: 5px;
-      width: calc((100% - 10px) / 3);
-      background: rgba(99, 99, 102, 0.4);
-      border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: calc((100% - 10px) / 4);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        0 4px 20px rgba(0,0,0,0.4);
       z-index: 1;
+      transition: box-shadow 0.25s ease, transform 0.15s ease;
     }
 
+    .nav-knob.dragging {
+      transform: scaleY(1.1);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 0 0 5px rgba(140,190,255,0.15),
+        0 0 28px 6px rgba(90,170,255,0.22),
+        0 -2px 8px rgba(0,210,255,0.35),
+        0 2px 8px rgba(160,90,255,0.35),
+        0 8px 24px rgba(0,0,0,0.55);
+    }
 
-    
-        .nav-item {
+    .nav-item {
       flex: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #8e8e93;
+      color: rgba(255,255,255,0.45);
       z-index: 2;
       cursor: pointer;
       height: 100%;
-      transition: color 0.2s;
-      white-space: nowrap;
+      transition: color 0.25s ease;
+      font-size: 0.72rem;
+      font-weight: 600;
+      gap: 3px;
+      user-select: none;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      stroke: rgba(255,255,255,0.45);
+      fill: none;
+      transition: all 0.25s ease;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .nav-item.active {
       color: #fff;
-      font-weight: 600;
     }
 
-        .sem-button {
+    .nav-item.active .nav-icon {
+      stroke: #fff;
+    }
+
+    .sem-button {
       margin-left: 10px;
-      height: 64px;
-      padding: 0 15px;
+      height: 68px;
+      padding: 0 18px;
       flex-shrink: 0;
-      background: rgba(30, 30, 30, 0.8);
-      backdrop-filter: blur(35px);
-      -webkit-backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 32px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      background: rgba(18, 18, 20, 0.15);
+      backdrop-filter: blur(50px) saturate(200%);
+      -webkit-backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
       color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 700;
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       pointer-events: auto;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.15s;
     }
-    
+
     .sem-button:active {
-      transform: scale(0.95);
-      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0.94);
+      background: rgba(255,255,255,0.18);
     }
 
         .sem-menu {
@@ -374,8 +405,8 @@
       left: 0; 
       width: 100%;
       background: rgba(30, 30, 30, 0.95);
-      backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(50px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 20px;
       padding: 15px;
       display: grid;
@@ -466,15 +497,15 @@
     .slider-track {
       display: flex;
       height: 100%;
-      width: 300% !important; /* 3 pages */
+      width: 400% !important; /* 4 pages */
       flex-shrink: 0; /* PREVENT SQUASHING */
       will-change: transform;
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .slide {
-      flex: 0 0 33.333333%; /* Force exactly 1/3 width, no growing or shrinking */
-      width: 33.333333%;
+      flex: 0 0 25%; /* 1/4 */
+      width: 25%;
       height: 100%;
       overflow-y: auto;
       padding: 20px;
@@ -483,6 +514,44 @@
       -webkit-overflow-scrolling: touch;
     }
 
+  
+    /* ---- CHAT SLIDE STYLES ---- */
+    .chat-slide { display:flex;flex-direction:column;height:100%;overflow:hidden;padding:0 !important; }
+    .chat-header-bar { padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0; }
+    .chat-header-bar h2 { font-size:1.4rem;font-weight:800;letter-spacing:-0.3px; }
+    .chat-header-bar p { font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:2px; }
+    .chat-auth-wrap { flex:1;overflow-y:auto;padding: 20px 20px 110px 20px;display:flex;flex-direction:column;gap:14px; }
+    .chat-tab-row { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+    .chat-tab-btn { padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s; }
+    .chat-tab-btn.active { background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2);color:#fff; }
+    .chat-input-field { width:100%;padding:13px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#fff;font-size:0.95rem;outline:none;box-sizing:border-box; }
+    .chat-input-field::placeholder { color:rgba(255,255,255,0.3); }
+    .chat-submit-btn { width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#4facfe,#00f2fe);color:#000;font-weight:800;font-size:1rem;cursor:pointer; }
+    .chat-err { font-size:0.8rem;color:#ff6b7a;min-height:16px; }
+    .chat-main { flex:1;display:none;flex-direction:column;overflow:hidden;padding-bottom: 110px; }
+    .chat-logged-bar { display:flex;justify-content:space-between;align-items:center;padding:10px 20px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0; }
+    .chat-user-pill { display:flex;align-items:center;gap:8px; }
+    .chat-avatar { width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#000;flex-shrink:0; }
+    .chat-user-name { font-size:0.85rem;font-weight:600;color:rgba(255,255,255,0.8); }
+    .chat-logout-btn { padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.5);font-size:0.78rem;font-weight:600;cursor:pointer; }
+    .chat-messages-scroll { flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch; }
+    .msg-row { display:flex;align-items:flex-end;gap:8px; }
+    .msg-row.mine { flex-direction:row-reverse; }
+    .msg-avatar-sm { width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#a18cd1,#fbc2eb);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;flex-shrink:0; }
+    .msg-row.mine .msg-avatar-sm { background:linear-gradient(135deg,#4facfe,#00f2fe);color:#000; }
+    .msg-bubble-group { max-width:72%;display:flex;flex-direction:column;gap:2px; }
+    .msg-sender { font-size:0.68rem;color:rgba(255,255,255,0.4);margin-bottom:2px;padding:0 4px; }
+    .msg-row.mine .msg-sender { text-align:right; }
+    .msg-bubble { padding:10px 14px;border-radius:18px;font-size:0.9rem;line-height:1.45;color:#fff;word-break:break-word;white-space:pre-wrap;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:4px; }
+    .msg-row.mine .msg-bubble { background:linear-gradient(135deg,#4facfe 0%,#00d4ff 100%);border:none;color:#000;border-bottom-right-radius:4px;border-bottom-left-radius:18px; }
+    .msg-time { font-size:0.62rem;color:rgba(255,255,255,0.28);padding:0 4px; }
+    .msg-row.mine .msg-time { text-align:right; }
+    .chat-send-bar { display:flex;gap:10px;padding:12px 20px 20px;flex-shrink:0;border-top:1px solid rgba(255,255,255,0.06);align-items:center; }
+    .chat-send-input { flex:1;padding:12px 16px;border-radius:22px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.07);color:#fff;font-size:0.92rem;outline:none; }
+    .chat-send-input::placeholder { color:rgba(255,255,255,0.3); }
+    .chat-send-btn { width:42px;height:42px;border-radius:50%;border:none;background:linear-gradient(135deg,#4facfe,#00f2fe);color:#000;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform 0.15s; }
+    .chat-send-btn:active { transform:scale(0.9); }
+    .chat-empty { text-align:center;color:rgba(255,255,255,0.3);font-size:0.9rem;margin:auto;padding:40px 20px; }
   </style>
   <link rel="stylesheet" href="responsive.css">
 </head>
@@ -533,19 +602,80 @@
         </div>
       </div>
 
+      <!-- PAGE 4: CHATS -->
+      <div class="slide chat-slide" style="padding:0;">
+        <div class="chat-header-bar">
+          <h2>Chats</h2>
+          <p>BCA Public Chat &middot; messages clear after 24h</p>
+        </div>
+        <!-- AUTH FORM -->
+        <div class="chat-auth-wrap" id="ic-auth">
+          <div class="chat-tab-row">
+            <button id="ic-tab-login" class="chat-tab-btn active" onclick="icSwitchTab('login')">Login</button>
+            <button id="ic-tab-signup" class="chat-tab-btn" onclick="icSwitchTab('signup')">Sign Up</button>
+          </div>
+          <div id="ic-login-form">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <input id="ic-login-user" class="chat-input-field" placeholder="Username or Name" autocomplete="username">
+              <input id="ic-login-pin" class="chat-input-field" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN">
+              <button class="chat-submit-btn" onclick="icLogin()">Login</button>
+            </div>
+          </div>
+          <div id="ic-signup-form" style="display:none;">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <input id="ic-su-username" class="chat-input-field" placeholder="Username (a-z, 0-9)" autocomplete="username">
+              <input id="ic-su-name" class="chat-input-field" placeholder="Display Name" autocomplete="name">
+              <input id="ic-su-pin" class="chat-input-field" type="password" inputmode="numeric" maxlength="4" placeholder="Create a 4-digit PIN">
+              <button class="chat-submit-btn" onclick="icSignup()">Create Account</button>
+            </div>
+          </div>
+          <p class="chat-err" id="ic-auth-status"></p>
+        </div>
+        <!-- CHAT MESSAGES -->
+        <div class="chat-main" id="ic-chat">
+          <div class="chat-logged-bar">
+            <div class="chat-user-pill">
+              <div class="chat-avatar" id="ic-avatar-initials">?</div>
+              <span class="chat-user-name" id="ic-logged-as"></span>
+            </div>
+            <button class="chat-logout-btn" onclick="icLogout()">Log out</button>
+          </div>
+          <div class="chat-messages-scroll" id="ic-messages-list"></div>
+          <div class="chat-send-bar">
+            <input id="ic-msg-input" class="chat-send-input" placeholder="Message..." maxlength="500" onkeydown="if(event.key==='Enter')icSend();">
+            <button class="chat-send-btn" onclick="icSend()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- BOTTOM FLOATING NAV -->
   <div class="nav-wrapper">
     <div class="nav-center-wrap" style="position: relative; width: calc(100% - 90px); max-width: 340px; display: flex;">
-      <div class="nav-container" id="nav-container">
+                        <div class="nav-container" id="nav-container">
         <div class="nav-knob" id="nav-knob"></div>
-        <div class="nav-item active" data-index="0">Notes</div>
-        <div class="nav-item" data-index="1">Assign</div>
-        <div class="nav-item" data-index="2">Lab</div>
+        <div class="nav-item active" data-index="0">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Notes</span>
+        </div>
+        <div class="nav-item" data-index="1">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Assign</span>
+        </div>
+        <div class="nav-item" data-index="2">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>Lab</span>
+        </div>
+        <div class="nav-item" data-index="3">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Chats</span>
+        </div>
       </div>
-      
+
       <!-- Mini Menu Box for Semesters -->
       <div class="sem-menu" id="sem-menu">
         <a href="bca-sem1.html" class="sem-menu-btn">Sem 1</a>
@@ -562,192 +692,221 @@
   </div>
 
   <script>
-    /* ROBUST NAV LOGIC 
-      1. Drag Nav Knob -> Moves Content
-      2. Click Nav Item -> Jumps Content
-    */
-
+    /* === NAV LOGIC — 4 tabs: Notes | Assign | Lab | Chats === */
     const navContainer = document.getElementById('nav-container');
-    const navKnob = document.getElementById('nav-knob');
-    const track = document.getElementById('track');
-    const viewport = document.getElementById('viewport');
-    const navItems = document.querySelectorAll('.nav-item');
-
-    let currentIndex = 0;
-    let isDragging = false;
+    const navKnob     = document.getElementById('nav-knob');
+    const track       = document.getElementById('track');
+    const viewport    = document.getElementById('viewport');
+    const navItems    = document.querySelectorAll('.nav-item');
+    let currentIndex = 0, isDragging = false;
     let navWidth, knobWidth, maxTranslate;
 
-    // Initialize sizes
     function initDimensions() {
-      navWidth = navContainer.clientWidth;
-      // Padding 5px left + 5px right = 10px total padding logic
-      knobWidth = (navWidth - 10) / 3;
+      navWidth     = navContainer.clientWidth;
+      knobWidth    = (navWidth - 10) / 4;
       maxTranslate = navWidth - 10 - knobWidth;
     }
 
-    // --- TOUCH / MOUSE EVENTS ---
     navContainer.addEventListener('touchstart', dragStart, { passive: false });
-    navContainer.addEventListener('touchmove', dragMove, { passive: false });
-    navContainer.addEventListener('touchend', dragEnd);
-
-    navContainer.addEventListener('mousedown', dragStart);
+    navContainer.addEventListener('touchmove',  dragMove,  { passive: false });
+    navContainer.addEventListener('touchend',   dragEnd);
+    navContainer.addEventListener('mousedown',  dragStart);
     window.addEventListener('mousemove', dragMove);
-    window.addEventListener('mouseup', dragEnd);
+    window.addEventListener('mouseup',   dragEnd);
 
     function dragStart(e) {
-      if (e.target.closest('.nav-container')) {
-        isDragging = true;
-        initDimensions();
-        navKnob.style.transition = 'none';
-        track.style.transition = 'none';
-        navContainer.style.transition = 'none';
-      }
+      if (!e.target.closest('.nav-container')) return;
+      isDragging = true;
+      initDimensions();
+      navKnob.style.transition = 'none';
+      navKnob.classList.add('dragging');
+      track.style.transition = 'none';
     }
 
     function dragMove(e) {
       if (!isDragging) return;
       e.preventDefault();
-
-      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-      const navRect = navContainer.getBoundingClientRect();
-
-      // Relative X inside the nav bar
-      // 5px is left padding offset
-      let offsetX = clientX - navRect.left - 5 - (knobWidth / 2);
-
-      // Clamp
-      if (offsetX < 0) offsetX = 0;
-      if (offsetX > maxTranslate) offsetX = maxTranslate;
-
-      // Move Knob
-      navKnob.style.transform = `translateX(${offsetX}px)`;
-      
-
-      // Move Content (Map Nav% to Content%)
-      const percentage = offsetX / maxTranslate;
-
-      // We scroll 3 pages, so total scrollable width is 2 * ViewportWidth
-      const slideWidth = viewport.clientWidth;
-      const totalContentScroll = slideWidth * 2;
-
-      const contentTranslate = percentage * -totalContentScroll;
-      track.style.transform = `translateX(${contentTranslate}px)`;
-
-      highlightNavText(percentage);
+      const cX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      const r   = navContainer.getBoundingClientRect();
+      let off   = cX - r.left - 5 - knobWidth / 2;
+      off = Math.max(0, Math.min(maxTranslate, off));
+      navKnob.style.transform = 'translateX(' + off + 'px)';
+      const pct = off / maxTranslate;
+      track.style.transform = 'translateX(' + (pct * -viewport.clientWidth * 3) + 'px)';
+      const activeIdx = Math.min(3, Math.floor(pct * 4));
+      navItems.forEach((item, i) => item.classList.toggle('active', i === activeIdx));
     }
 
-    function dragEnd(e) {
+    function dragEnd() {
       if (!isDragging) return;
       isDragging = false;
-
-      // Snap logic
-      const currentKnobTransform = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41;
-      const percentage = currentKnobTransform / maxTranslate;
-
-      if (percentage < 0.33) currentIndex = 0;
-      else if (percentage < 0.66) currentIndex = 1;
-      else currentIndex = 2;
-
+      navKnob.classList.remove('dragging');
+      const mat = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform);
+      currentIndex = Math.min(3, Math.max(0, Math.round((mat.m41 / maxTranslate) * 3)));
       snapToPosition();
     }
 
-    // Click Support
-    navItems.forEach((item, index) => {
-      item.addEventListener('click', () => {
-        currentIndex = index;
-        snapToPosition();
-      });
-    });
+    navItems.forEach((item, idx) => item.addEventListener('click', () => { currentIndex = idx; snapToPosition(); }));
 
-    function snapToPosition() {
+    function snapToPosition(animate = true) {
       initDimensions();
-
-      // 1. Snap Knob
-      const preciseKnobX = ((navWidth - 10) / 3) * currentIndex;
-      navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      navKnob.style.transform = `translateX(${preciseKnobX}px)`;
+      const knobX = (navWidth - 10) / 4 * currentIndex;
+      if (animate) {
+        navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      } else {
+        navKnob.style.transition = 'none';
+        track.style.transition = 'none';
+      }
       
-      navContainer.style.transition = '--glow-x 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      navKnob.style.transform  = 'translateX(' + knobX + 'px)';
+      const slideW = viewport.clientWidth;
       
-
-      // 2. Snap Content
-      const slideWidth = viewport.clientWidth;
-      const contentX = currentIndex * -slideWidth;
-      track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      track.style.transform = `translateX(${contentX}px)`;
-
-      // 3. Highlight
-      navItems.forEach((item, idx) => {
-        if (idx === currentIndex) {
-          item.classList.add('active');
-          item.style.color = '#fff';
-        } else {
-          item.classList.remove('active');
-          item.style.color = '#8e8e93';
-        }
-      });
-    }
-
-    function highlightNavText(pct) {
-      let activeIdx = 0;
-      if (pct > 0.33) activeIdx = 1;
-      if (pct > 0.66) activeIdx = 2;
-
-      navItems.forEach((item, idx) => {
-        if (idx === activeIdx) {
-          item.classList.add('active');
-          item.style.color = '#fff';
-        } else {
-          item.classList.remove('active');
-          item.style.color = '#8e8e93';
-        }
-      });
+      track.style.transform  = 'translateX(' + (currentIndex * -slideW) + 'px)';
+      navItems.forEach((item, idx) => item.classList.toggle('active', idx === currentIndex));
+      if (currentIndex === 3 && typeof icRefresh === 'function') icRefresh();
     }
 
     function toggleAccordion(card) {
-      const content = card.querySelector('.accordion-content');
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-        content.classList.remove('open');
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-        content.classList.add('open');
+      const c = card.querySelector('.accordion-content');
+      if (c.style.maxHeight) { c.style.maxHeight = null; c.classList.remove('open'); }
+      else                   { c.style.maxHeight = c.scrollHeight + 'px'; c.classList.add('open'); }
+    }
+
+    window.addEventListener('resize', () => { initDimensions(); snapToPosition(false); });
+    window.onload = () => { initDimensions(); snapToPosition(); };
+
+    /* Semester picker */
+    const semBtn  = document.getElementById('sem-btn');
+    const semMenu = document.getElementById('sem-menu');
+    semBtn.addEventListener('click', (e) => { e.stopPropagation(); semMenu.classList.toggle('open'); });
+    document.addEventListener('click', (e) => { if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) semMenu.classList.remove('open'); });
+    semMenu.addEventListener('click', (e) => e.stopPropagation());
+
+    /* ======== INLINE CHAT ======== */
+    const IC_KEY = 'ddobca-chat-profile';
+    const API_BASE = 'https://waheed-bca-backend.onrender.com';
+    let icProfile = null, icPollTimer = null;
+    try { icProfile = JSON.parse(localStorage.getItem(IC_KEY) || 'null'); } catch (e) { icProfile = null; }
+
+    function icSwitchTab(tab) {
+      document.getElementById('ic-login-form').style.display  = tab === 'login'  ? 'block' : 'none';
+      document.getElementById('ic-signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+      document.getElementById('ic-tab-login').classList.toggle('active',  tab === 'login');
+      document.getElementById('ic-tab-signup').classList.toggle('active', tab === 'signup');
+    }
+
+    function icShowChat() {
+      document.getElementById('ic-auth').style.display = 'none';
+      document.getElementById('ic-chat').style.display = 'flex';
+      const initials = (icProfile.name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+      document.getElementById('ic-avatar-initials').textContent = initials;
+      document.getElementById('ic-logged-as').textContent = icProfile.name;
+      icRefresh();
+      clearInterval(icPollTimer);
+      icPollTimer = setInterval(icRefresh, 12000);
+    }
+
+    function icShowAuth() {
+      document.getElementById('ic-auth').style.display = 'flex';
+      document.getElementById('ic-chat').style.display = 'none';
+      clearInterval(icPollTimer);
+      if (window.location.protocol === 'file:') {
+        const status = document.getElementById('ic-auth-status');
+        if (status) {
+          status.innerHTML = '⚠️ Note: Open <a href="http://localhost:3001/' + window.location.pathname.split('/').pop() + '" style="color:#00ffff;text-decoration:underline;">http://localhost:3001</a> in your browser to use chat.';
+        }
       }
     }
 
-    // Handle Resize
-    window.addEventListener('resize', () => {
-      initDimensions();
-      snapToPosition();
-    });
+    async function icLogin() {
+      const status = document.getElementById('ic-auth-status');
+      const login  = document.getElementById('ic-login-user').value.trim();
+      const pin    = document.getElementById('ic-login-pin').value.trim();
+      if (!login || !pin) { status.textContent = 'Enter username and PIN.'; return; }
+      status.textContent = 'Logging in…';
+      try {
+        const r = await fetch(API_BASE + '/api/chat/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ login, pin }) });
+        const d = await r.json();
+        if (!r.ok || !d.ok) throw new Error(d.error || 'Login failed.');
+        icProfile = d.profile;
+        localStorage.setItem(IC_KEY, JSON.stringify(icProfile));
+        status.textContent = '';
+        icShowChat();
+      } catch (e) { status.textContent = e.message; }
+    }
 
-    // Initial Call
-    window.onload = function () {
-      initDimensions();
-      snapToPosition();
-    };
+    async function icSignup() {
+      const status   = document.getElementById('ic-auth-status');
+      const username = document.getElementById('ic-su-username').value.trim();
+      const name     = document.getElementById('ic-su-name').value.trim();
+      const pin      = document.getElementById('ic-su-pin').value.trim();
+      if (!username || !name || !pin) { status.textContent = 'Fill all fields.'; return; }
+      status.textContent = 'Creating account…';
+      try {
+        const r = await fetch(API_BASE + '/api/chat/profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, name, pin }) });
+        const d = await r.json();
+        if (!r.ok || !d.ok) throw new Error(d.error || 'Signup failed.');
+        icProfile = d.profile;
+        localStorage.setItem(IC_KEY, JSON.stringify(icProfile));
+        status.textContent = '';
+        icShowChat();
+      } catch (e) { status.textContent = e.message; }
+    }
 
-    // SEM BUTTON LOGIC
-    const semBtn = document.getElementById('sem-btn');
-    const semMenu = document.getElementById('sem-menu');
+    function icLogout() {
+      localStorage.removeItem(IC_KEY);
+      icProfile = null;
+      clearInterval(icPollTimer);
+      icShowAuth();
+    }
 
-    semBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      semMenu.classList.toggle('open');
-    });
+    async function icRefresh() {
+      if (!icProfile) return;
+      const list = document.getElementById('ic-messages-list');
+      if (!list) return;
+      try {
+        const r = await fetch(API_BASE + '/api/chat/messages?profileId=' + encodeURIComponent(icProfile.id) + '&v=' + Date.now());
+        const d = await r.json();
+        if (!r.ok || !d.ok) return;
+        if (!d.messages || !d.messages.length) {
+          list.innerHTML = '<div class="chat-empty">No messages yet.<br>Be the first to say hello! 👋</div>';
+        } else {
+          const atBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 60;
+          list.innerHTML = d.messages.map(m => {
+            const mine     = m.profileId === icProfile.id;
+            const initials = (m.name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            const txt      = (m.message || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const time     = m.createdAt ? new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+            return '<div class="msg-row' + (mine ? ' mine' : '') + '">' +
+              '<div class="msg-avatar-sm">' + initials + '</div>' +
+              '<div class="msg-bubble-group">' +
+                (!mine ? '<div class="msg-sender">' + m.name + '</div>' : '') +
+                '<div class="msg-bubble">' + txt + '</div>' +
+                '<div class="msg-time">' + time + '</div>' +
+              '</div></div>';
+          }).join('');
+          if (atBottom) list.scrollTop = list.scrollHeight;
+        }
+      } catch (e) {}
+    }
 
-    document.addEventListener('click', (e) => {
-      if (!semMenu.contains(e.target) && !semBtn.contains(e.target)) {
-        semMenu.classList.remove('open');
-      }
-    });
+    async function icSend() {
+      if (!icProfile) return;
+      const input = document.getElementById('ic-msg-input');
+      const text  = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      try {
+        const r = await fetch(API_BASE + '/api/chat/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profileId: icProfile.id, message: text }) });
+        const d = await r.json();
+        if (!r.ok || !d.ok) { input.value = text; return; }
+        icRefresh();
+      } catch (e) { input.value = text; }
+    }
 
-    // Prevent clicks inside menu from bubbling up
-    semMenu.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
+    if (icProfile) { icShowChat(); } else { icShowAuth(); }
   </script>
-
 
   <!-- NOIR LIVE BACKGROUND -->
   <canvas id="bg-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; pointer-events:none;"></canvas>
@@ -819,6 +978,19 @@
   <!-- NOIR NOTIFICATION SYSTEM -->
   <script src="notifications.js"></script>
   <script src="chat-widget.js"></script>
+
+  <script>
+    // iOS Safari Keyboard Fix: forces layout back to top when keyboard closes
+    document.addEventListener('focusout', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        setTimeout(function() {
+          window.scrollTo(0, 0);
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
+        }, 100);
+      }
+    });
+  </script>
 </body>
 
 </html>
