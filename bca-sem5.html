@@ -293,12 +293,12 @@
       position: relative;
       width: 100%;
       height: 72px;
-      background: rgba(40, 40, 40, 0.4);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(20, 20, 22, 0.12);
+      backdrop-filter: blur(50px) saturate(180%);
+      -webkit-backdrop-filter: blur(50px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 40px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.08);
       display: flex;
       align-items: center;
       padding: 0 5px; 
@@ -313,17 +313,28 @@
       top: 5px;
       bottom: 5px;
       width: calc((100% - 10px) / 5);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: 32px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       box-shadow: 
-        inset 0 1px 0 rgba(255,255,255,0.3),
-        0 -1px 3px rgba(0, 255, 255, 0.3),
-        0 1px 3px rgba(255, 0, 255, 0.3),
-        0 4px 15px rgba(0, 0, 0, 0.4);
+        inset 0 1px 0 rgba(255,255,255,0.4),
+        0 0 0 0 rgba(120, 180, 255, 0),
+        0 4px 20px rgba(0, 0, 0, 0.5);
       z-index: 1;
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+    }
+
+    .nav-knob.dragging {
+      transform: scaleY(1.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 0 0 6px rgba(150, 200, 255, 0.18),
+        0 0 30px 8px rgba(100, 180, 255, 0.25),
+        0 -2px 6px rgba(0, 220, 255, 0.4),
+        0 2px 6px rgba(180, 100, 255, 0.4),
+        0 8px 30px rgba(0, 0, 0, 0.6);
     }
 
         .nav-item {
@@ -370,12 +381,12 @@
       height: 72px;
       padding: 0 15px;
       flex-shrink: 0;
-      background: rgba(40, 40, 40, 0.4);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(20, 20, 22, 0.12);
+      backdrop-filter: blur(50px) saturate(180%);
+      -webkit-backdrop-filter: blur(50px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 32px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.08);
       color: #fff;
       font-weight: 600;
       font-size: 1rem;
@@ -564,15 +575,15 @@
     .slider-track {
       display: flex;
       height: 100%;
-      width: 300% !important; /* 3 pages */
+      width: 500% !important; /* 5 pages */
       flex-shrink: 0; /* PREVENT SQUASHING */
       will-change: transform;
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .slide {
-      flex: 0 0 33.333333%; /* Force exactly 1/3 width, no growing or shrinking */
-      width: 33.333333%;
+      flex: 0 0 20%; /* Force exactly 1/5 width for 5 slides */
+      width: 20%;
       height: 100%;
       overflow-y: auto;
       padding: 20px;
@@ -715,11 +726,49 @@
         </div>
       </div>
 
-      <!-- PAGE 3: MESSAGES -->
-      <div class="slide">
-        <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">Messages</span></div>
-          <p class="description">Opening chat widget...</p>
+      <!-- PAGE 3: MESSAGES (Inline Chat) -->
+      <div class="slide" id="slide-messages">
+        <div id="inline-chat-wrap" style="height:100%; display:flex; flex-direction:column; gap:0;">
+          <!-- Chat header -->
+          <div style="padding:10px 0 14px; flex-shrink:0;">
+            <div style="font-size:1.3rem;font-weight:700;">Messages</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-top:2px;">Public chat · clears every 24h</div>
+          </div>
+          <!-- Auth panel (shown when not logged in) -->
+          <div id="ic-auth" style="display:flex;flex-direction:column;gap:12px;">
+            <div id="ic-tabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <button id="ic-tab-login" onclick="icSwitchTab('login')" style="padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.15);color:#fff;font-weight:700;cursor:pointer;">Login</button>
+              <button id="ic-tab-signup" onclick="icSwitchTab('signup')" style="padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-weight:700;cursor:pointer;">Sign Up</button>
+            </div>
+            <div id="ic-login-form">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <input id="ic-login-user" placeholder="Username or Name" autocomplete="username" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
+                <input id="ic-login-pin" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
+                <button onclick="icLogin()" style="padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#38bdf8,#86efac);color:#061018;font-weight:800;font-size:1rem;cursor:pointer;">Login</button>
+              </div>
+            </div>
+            <div id="ic-signup-form" style="display:none;">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <input id="ic-su-username" placeholder="Username (letters/numbers)" autocomplete="username" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
+                <input id="ic-su-name" placeholder="Your Name" autocomplete="name" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
+                <input id="ic-su-pin" type="password" inputmode="numeric" maxlength="4" placeholder="Create 4-digit PIN" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;width:100%;box-sizing:border-box;">
+                <button onclick="icSignup()" style="padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#38bdf8,#86efac);color:#061018;font-weight:800;font-size:1rem;cursor:pointer;">Create Account</button>
+              </div>
+            </div>
+            <p id="ic-auth-status" style="color:#fb7185;font-size:0.82rem;min-height:16px;"></p>
+          </div>
+          <!-- Chat panel (shown when logged in) -->
+          <div id="ic-chat" style="display:none;flex-direction:column;height:100%;min-height:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-shrink:0;">
+              <span id="ic-logged-as" style="font-size:0.85rem;color:rgba(255,255,255,0.5);"></span>
+              <button onclick="icLogout()" style="padding:6px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:#fff;font-weight:700;font-size:0.8rem;cursor:pointer;">Logout</button>
+            </div>
+            <div id="ic-messages-list" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:8px;"></div>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-shrink:0;">
+              <input id="ic-msg-input" placeholder="Message..." maxlength="500" style="flex:1;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.3);color:#fff;font-size:1rem;" onkeydown="if(event.key==='Enter')icSend();">
+              <button onclick="icSend()" style="padding:12px 16px;border-radius:14px;border:none;background:linear-gradient(135deg,#38bdf8,#86efac);color:#061018;font-weight:800;cursor:pointer;">↑</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -822,6 +871,7 @@
         isDragging = true;
         initDimensions();
         navKnob.style.transition = 'none';
+        navKnob.classList.add('dragging');
         track.style.transition = 'none';
         navContainer.style.transition = 'none';
       }
@@ -862,6 +912,7 @@
     function dragEnd(e) {
       if (!isDragging) return;
       isDragging = false;
+      navKnob.classList.remove('dragging');
 
       // Snap logic
       const currentKnobTransform = new WebKitCSSMatrix(window.getComputedStyle(navKnob).transform).m41;
@@ -965,11 +1016,144 @@
       document.getElementById('slide-home').scrollTop = 0;
     }
 
+    // When Messages tab (index 2) is selected, start polling chat
+    const origSnapToPosition = snapToPosition;
+    function snapToPosition() {
+      initDimensions();
+      const preciseKnobX = ((navWidth - 10) / 5) * currentIndex;
+      navKnob.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      navKnob.style.transform = `translateX(${preciseKnobX}px)`;
+      const slideWidth = viewport.clientWidth;
+      const contentX = currentIndex * -slideWidth;
+      track.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      track.style.transform = `translateX(${contentX}px)`;
+      navItems.forEach((item, idx) => {
+        if (idx === currentIndex) item.classList.add('active');
+        else item.classList.remove('active');
+      });
+      // If navigating to messages tab, refresh chat
+      if (currentIndex === 2 && typeof icRefresh === 'function') icRefresh();
+    }
+
     // Initial Call
     window.onload = function () {
       initDimensions();
       snapToPosition();
     };
+
+    // ===== INLINE CHAT LOGIC =====
+    const IC_KEY = 'ddobca-chat-profile';
+    let icProfile = null;
+    let icPollTimer = null;
+
+    try { icProfile = JSON.parse(localStorage.getItem(IC_KEY) || 'null'); } catch(e) { icProfile = null; }
+
+    function icSwitchTab(tab) {
+      document.getElementById('ic-login-form').style.display = tab === 'login' ? 'block' : 'none';
+      document.getElementById('ic-signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+      document.getElementById('ic-tab-login').style.background = tab === 'login' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
+      document.getElementById('ic-tab-signup').style.background = tab === 'signup' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
+      document.getElementById('ic-tab-login').style.color = tab === 'login' ? '#fff' : 'rgba(255,255,255,0.6)';
+      document.getElementById('ic-tab-signup').style.color = tab === 'signup' ? '#fff' : 'rgba(255,255,255,0.6)';
+    }
+
+    function icShowChat() {
+      document.getElementById('ic-auth').style.display = 'none';
+      const chatEl = document.getElementById('ic-chat');
+      chatEl.style.display = 'flex';
+      document.getElementById('ic-logged-as').textContent = 'Chatting as ' + icProfile.name;
+      icRefresh();
+      clearInterval(icPollTimer);
+      icPollTimer = setInterval(icRefresh, 15000);
+    }
+
+    function icShowAuth() {
+      document.getElementById('ic-auth').style.display = 'flex';
+      document.getElementById('ic-chat').style.display = 'none';
+      clearInterval(icPollTimer);
+    }
+
+    async function icLogin() {
+      const status = document.getElementById('ic-auth-status');
+      const login = document.getElementById('ic-login-user').value.trim();
+      const pin = document.getElementById('ic-login-pin').value.trim();
+      if (!login || !pin) { status.textContent = 'Enter username and PIN.'; return; }
+      status.textContent = 'Logging in...';
+      try {
+        const r = await fetch('/api/chat/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({login, pin}) });
+        const d = await r.json();
+        if (!r.ok || !d.ok) throw new Error(d.error || 'Login failed.');
+        icProfile = d.profile;
+        localStorage.setItem(IC_KEY, JSON.stringify(icProfile));
+        status.textContent = '';
+        icShowChat();
+      } catch(e) { status.textContent = e.message; }
+    }
+
+    async function icSignup() {
+      const status = document.getElementById('ic-auth-status');
+      const username = document.getElementById('ic-su-username').value.trim();
+      const name = document.getElementById('ic-su-name').value.trim();
+      const pin = document.getElementById('ic-su-pin').value.trim();
+      if (!username || !name || !pin) { status.textContent = 'Fill all fields.'; return; }
+      status.textContent = 'Creating account...';
+      try {
+        const r = await fetch('/api/chat/profile', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username, name, pin}) });
+        const d = await r.json();
+        if (!r.ok || !d.ok) throw new Error(d.error || 'Signup failed.');
+        icProfile = d.profile;
+        localStorage.setItem(IC_KEY, JSON.stringify(icProfile));
+        status.textContent = '';
+        icShowChat();
+      } catch(e) { status.textContent = e.message; }
+    }
+
+    function icLogout() {
+      localStorage.removeItem(IC_KEY);
+      icProfile = null;
+      clearInterval(icPollTimer);
+      icShowAuth();
+    }
+
+    async function icRefresh() {
+      if (!icProfile) return;
+      const list = document.getElementById('ic-messages-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/chat/messages?profileId=' + encodeURIComponent(icProfile.id) + '&v=' + Date.now());
+        const d = await r.json();
+        if (!r.ok || !d.ok) return;
+        if (!d.messages.length) {
+          list.innerHTML = '<p style="color:rgba(255,255,255,0.4);text-align:center;margin:auto;">No messages yet. Say hello!</p>';
+        } else {
+          list.innerHTML = d.messages.map(m => {
+            const mine = m.profileId === icProfile.id;
+            return `<div style="padding:10px 12px;border-radius:14px;background:${mine ? 'rgba(56,189,248,0.18)' : 'rgba(255,255,255,0.08)'};border:1px solid ${mine ? 'rgba(56,189,248,0.3)' : 'rgba(255,255,255,0.1)'}">
+              <div style="font-size:0.72rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">${m.name} (@${m.username})</div>
+              <div style="color:#fff;line-height:1.4;overflow-wrap:anywhere;white-space:pre-wrap;">${m.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+            </div>`;
+          }).join('');
+          list.scrollTop = list.scrollHeight;
+        }
+      } catch(e) {}
+    }
+
+    async function icSend() {
+      if (!icProfile) return;
+      const input = document.getElementById('ic-msg-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      try {
+        const r = await fetch('/api/chat/messages', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({profileId: icProfile.id, message: text}) });
+        const d = await r.json();
+        if (!r.ok || !d.ok) { input.value = text; return; }
+        icRefresh();
+      } catch(e) { input.value = text; }
+    }
+
+    // Init chat state
+    if (icProfile) { icShowChat(); } else { icShowAuth(); }
 
     // SEM BUTTON LOGIC
     const semBtn = document.getElementById('sem-btn');
