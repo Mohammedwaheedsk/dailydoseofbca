@@ -516,7 +516,7 @@
 
   
     /* ---- CHAT SLIDE STYLES ---- */
-    .chat-slide { display:flex;flex-direction:column;height:100%;overflow:hidden;padding:0 !important; }
+    .chat-slide { background-color: #000; /* Added for solid background */  display:flex;flex-direction:column;height:100%;overflow:hidden;padding:0 !important; }
     .chat-header-bar { padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0; }
     .chat-header-bar h2 { font-size:1.4rem;font-weight:800;letter-spacing:-0.3px; }
     .chat-header-bar p { font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:2px; }
@@ -977,16 +977,35 @@
   <script src="chat-widget.js"></script>
 
   <script>
-    // iOS Safari Keyboard Fix: forces layout back to top when keyboard closes
-    document.addEventListener('focusout', function(e) {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-        setTimeout(function() {
+    // Advanced Keyboard layout fix for iOS/Android
+    let initialHeight = window.innerHeight;
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => { initialHeight = window.innerHeight; }, 200);
+    });
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => {
+        const currentHeight = window.visualViewport.height;
+        const isKeyboardOpen = currentHeight < initialHeight * 0.85;
+        
+        const chatMains = document.querySelectorAll('.chat-main');
+        chatMains.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '10px' : '110px'; });
+
+        const authWraps = document.querySelectorAll('.chat-auth-wrap');
+        authWraps.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '20px' : '110px'; });
+
+        const navWrapper = document.querySelector('.nav-wrapper');
+        if (navWrapper) { 
+          navWrapper.style.display = isKeyboardOpen ? 'none' : 'flex'; 
+        }
+        
+        if (!isKeyboardOpen) {
           window.scrollTo(0, 0);
           document.body.scrollTop = 0;
           document.documentElement.scrollTop = 0;
-        }, 100);
-      }
-    });
+        }
+      });
+    }
   </script>
 </body>
 

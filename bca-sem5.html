@@ -495,7 +495,7 @@
     }
 
     /* ---- CHAT SLIDE STYLES ---- */
-    .chat-slide {
+    .chat-slide { background-color: #000; /* Added for solid background */ 
       display: flex;
       flex-direction: column;
       height: 100%;
@@ -794,7 +794,7 @@
             <div class="subject-group"><span class="subject">PHP</span></div>
           </div>
           <p class="description">Notes for PHP.</p>
-          <a href="#" class="action-btn">Open PDF</a>
+          <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
@@ -829,7 +829,7 @@
             <div class="subject-group"><span class="subject">Mobile Marketing</span></div>
           </div>
           <p class="description">Notes for Mobile Marketing.</p>
-          <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
+          <a href="#" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
@@ -1276,16 +1276,35 @@
   <script src="chat-widget.js"></script>
 
   <script>
-    // iOS Safari Keyboard Fix: forces layout back to top when keyboard closes
-    document.addEventListener('focusout', function(e) {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-        setTimeout(function() {
+    // Advanced Keyboard layout fix for iOS/Android
+    let initialHeight = window.innerHeight;
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => { initialHeight = window.innerHeight; }, 200);
+    });
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => {
+        const currentHeight = window.visualViewport.height;
+        const isKeyboardOpen = currentHeight < initialHeight * 0.85;
+        
+        const chatMains = document.querySelectorAll('.chat-main');
+        chatMains.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '10px' : '110px'; });
+
+        const authWraps = document.querySelectorAll('.chat-auth-wrap');
+        authWraps.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '20px' : '110px'; });
+
+        const navWrapper = document.querySelector('.nav-wrapper');
+        if (navWrapper) { 
+          navWrapper.style.display = isKeyboardOpen ? 'none' : 'flex'; 
+        }
+        
+        if (!isKeyboardOpen) {
           window.scrollTo(0, 0);
           document.body.scrollTop = 0;
           document.documentElement.scrollTop = 0;
-        }, 100);
-      }
-    });
+        }
+      });
+    }
   </script>
 </body>
 
