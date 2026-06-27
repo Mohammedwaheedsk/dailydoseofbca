@@ -785,7 +785,7 @@
 
     /* ======== INLINE CHAT ======== */
     const IC_KEY = 'ddobca-chat-profile';
-    const API_BASE = 'https://waheed-bca-backend.onrender.com';
+    const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
     let icProfile = null, icPollTimer = null;
     try { icProfile = JSON.parse(localStorage.getItem(IC_KEY) || 'null'); } catch (e) { icProfile = null; }
 
@@ -814,7 +814,7 @@
       if (window.location.protocol === 'file:') {
         const status = document.getElementById('ic-auth-status');
         if (status) {
-          status.innerHTML = '⚠️ Note: Open <a href="http://localhost:3001/' + window.location.pathname.split('/').pop() + '" style="color:#00ffff;text-decoration:underline;">http://localhost:3001</a> in your browser to use chat.';
+          status.innerHTML = '⚠️ Note: Open <a href="http://localhost:3000/' + window.location.pathname.split('/').pop() + '" style="color:#00ffff;text-decoration:underline;">http://localhost:3000</a> in your browser to use chat.';
         }
       }
     }
