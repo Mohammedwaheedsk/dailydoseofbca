@@ -498,6 +498,7 @@
       background-color: #000;
       color: #fff;
       height: 100vh;
+      height: 100dvh;
       width: 100vw;
       margin: 0;
       padding: 0;
@@ -555,7 +556,6 @@
       flex-shrink: 0;
       width: 100%;
       background-color: transparent;
-      transition: height 0.2s ease-out;
     }
     /* ---- CHAT SLIDE STYLES ---- */
     .chat-slide { background-color: #000; /* Added for solid background */  display:flex;flex-direction:column;height:100%;overflow:hidden;padding:0 !important; }
@@ -1022,12 +1022,11 @@
   <script src="notifications.js"></script>
   <script src="chat-widget.js"></script>
 
-    <script>
+      <script>
     // Keyboard visibility handler
     (function () {
       if (!window.visualViewport) return;
       let baseHeight = window.visualViewport.height;
-      let kbTimer = null;
 
       window.addEventListener('orientationchange', () => {
         setTimeout(() => { baseHeight = window.visualViewport.height; }, 300);
@@ -1039,11 +1038,9 @@
         const isKeyboardOpen = ratio < 0.85;
 
         if (isKeyboardOpen) {
-          // Keyboard is open — hide nav and remove safe area
+          // Keyboard is open — instantly hide nav and remove safe area
           if (nav) {
-            nav.style.opacity = '0';
-            nav.style.pointerEvents = 'none';
-            nav.style.transform = 'translateY(20px)';
+            nav.style.display = 'none';
           }
           document.documentElement.style.setProperty('--chat-safe-area', '0px');
           
@@ -1051,15 +1048,10 @@
           window.scrollTo(0, 0);
           document.body.scrollTop = 0;
         } else {
-          // Keyboard closed — restore nav and safe area
+          // Keyboard closed — instantly restore nav and safe area
           document.documentElement.style.setProperty('--chat-safe-area', '110px');
           if (nav) {
-            clearTimeout(kbTimer);
-            kbTimer = setTimeout(() => {
-              nav.style.opacity = '';
-              nav.style.pointerEvents = '';
-              nav.style.transform = '';
-            }, 120);
+            nav.style.display = 'flex';
           }
         }
       });
