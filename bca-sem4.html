@@ -93,26 +93,66 @@
     }
 
     /* --- HEADER --- */
-            
+    /* ===== REDESIGNED HEADER ===== */
+    header {
+      width: 100%;
+      max-width: 800px;
+      padding: 2rem 1.5rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex-shrink: 0;
+      z-index: 20;
+      position: relative;
+    }
+
+    .header-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+    }
+
+    .header-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.38);
+      margin-bottom: 6px;
+    }
 
     .brand {
-      width: 100%;
-      text-align: center;
-      width: 100%;
-      text-align: center;
-      font-size: 2.8rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #fff, #a1a1aa);
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 0.2rem;
+      background-clip: text;
       cursor: pointer;
+      transition: opacity 0.2s;
+      margin-bottom: 0;
     }
 
     .brand:active {
-      opacity: 0.7;
+      opacity: 0.65;
     }
+
+    .header-divider {
+      width: 32px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      border-radius: 2px;
+      margin: 10px auto;
+    }
+
+    
+
+    
 
                 .sem-subtitle {
       width: 100%;
@@ -468,17 +508,7 @@
       position: relative;
     }
 
-    header {
-      width: 100%;
-      max-width: 800px;
-      padding: 3.5rem 1.5rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      flex-shrink: 0;
-      z-index: 20;
-    }
+
 
     
 
@@ -566,9 +596,12 @@
   <div class="blob blob-5"></div>
 
     <header>
-    <div class="brand" onclick="window.location.href='index.html'">DailyDoseofBCA</div>
-    <div class="sem-subtitle">Sem-4</div>
-    <p class="subtitle">Get all your notes, assignments here which are handwritten</p>
+    <div class="header-inner">
+      <span class="header-eyebrow">Daily Dose of BCA</span>
+      <div class="brand" onclick="window.location.href='index.html'" role="heading" aria-level="1">DailyDoseofBCA</div>
+      <div class="header-divider"></div>
+      <div class="sem-subtitle">SEM 4</div>
+    </div>
   </header>
 
   <!-- Main Content Slider -->
