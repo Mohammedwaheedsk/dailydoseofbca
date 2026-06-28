@@ -1013,35 +1013,37 @@
   <script src="chat-widget.js"></script>
 
   <script>
-    // Advanced Keyboard layout fix for iOS/Android
-    let initialHeight = window.innerHeight;
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => { initialHeight = window.innerHeight; }, 200);
-    });
+    // Keyboard visibility handler — hides the floating nav when keyboard is open
+    // so it doesn't cover the message input. CSS handles all layout; no inline overrides.
+    (function () {
+      if (!window.visualViewport) return;
+      let baseHeight = window.visualViewport.height;
+      let kbTimer = null;
 
-    if (window.visualViewport) {
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => { baseHeight = window.visualViewport.height; }, 300);
+      });
+
       window.visualViewport.addEventListener('resize', () => {
-        const currentHeight = window.visualViewport.height;
-        const isKeyboardOpen = currentHeight < initialHeight * 0.85;
-        
-        const chatMains = document.querySelectorAll('.chat-main');
-        chatMains.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '10px' : '110px'; });
-
-        const authWraps = document.querySelectorAll('.chat-auth-wrap');
-        authWraps.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '20px' : '110px'; });
-
-        const navWrapper = document.querySelector('.nav-wrapper');
-        if (navWrapper) { 
-          navWrapper.style.display = isKeyboardOpen ? 'none' : 'flex'; 
-        }
-        
-        if (!isKeyboardOpen) {
-          window.scrollTo(0, 0);
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
+        const nav = document.querySelector('.nav-wrapper');
+        if (!nav) return;
+        clearTimeout(kbTimer);
+        const ratio = window.visualViewport.height / baseHeight;
+        if (ratio < 0.75) {
+          // Keyboard is open — hide the nav so it doesn't overlap input
+          nav.style.opacity = '0';
+          nav.style.pointerEvents = 'none';
+          nav.style.transform = 'translateY(20px)';
+        } else {
+          // Keyboard closed — restore nav with a small delay for smoothness
+          kbTimer = setTimeout(() => {
+            nav.style.opacity = '';
+            nav.style.pointerEvents = '';
+            nav.style.transform = '';
+          }, 120);
         }
       });
-    }
+    })();
   </script>
 </body>
 

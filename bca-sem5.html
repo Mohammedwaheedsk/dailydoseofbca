@@ -525,12 +525,15 @@
     }
 
     /* ---- CHAT SLIDE STYLES ---- */
-    .chat-slide { background-color: #000; /* Added for solid background */ 
+    .chat-slide {
+      background-color: #000;
       display: flex;
       flex-direction: column;
+      /* total height - nav height (68px) - nav bottom offset (30px) - extra buffer (20px) */
       height: 100%;
       overflow: hidden;
       padding: 0 !important;
+      position: relative;
     }
     .chat-header-bar {
       padding: 16px 20px 12px;
@@ -551,7 +554,8 @@
     .chat-auth-wrap {
       flex: 1;
       overflow-y: auto;
-      padding: 20px 20px 110px 20px;
+      /* bottom padding accounts for floating nav: 68px height + 30px offset + 20px buffer */
+      padding: 20px 20px 118px 20px;
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -613,7 +617,7 @@
       display: none;
       flex-direction: column;
       overflow: hidden;
-      padding-bottom: 110px;
+      /* No padding-bottom here — send bar is sticky at bottom of this container */
     }
     .chat-logged-bar {
       display: flex;
@@ -659,10 +663,12 @@
     .chat-messages-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 20px;
+      /* bottom padding leaves room above floating nav */
+      padding: 16px 20px 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      min-height: 0;
       -webkit-overflow-scrolling: touch;
     }
     /* Message bubbles */
@@ -729,14 +735,19 @@
       padding: 0 4px;
     }
     .msg-row.mine .msg-time { text-align: right; }
-    /* Send bar */
+        /* Send bar — sticky at bottom of chat-main, always above the nav */
     .chat-send-bar {
       display: flex;
       gap: 10px;
-      padding: 12px 20px 20px;
+      /* bottom padding = nav height (68px) + nav bottom offset (30px) + extra (10px) */
+      padding: 10px 16px 118px;
       flex-shrink: 0;
       border-top: 1px solid rgba(255,255,255,0.06);
+      background-color: #000;
       align-items: center;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
     }
     .chat-send-input {
       flex: 1;
@@ -827,7 +838,7 @@
             <div class="subject-group"><span class="subject">PHP</span></div>
           </div>
           <p class="description">Notes for PHP.</p>
-          <a href="#" class="action-btn">Open PDF</a>
+          <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
@@ -879,12 +890,12 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">PHP Assignment</span>
-              <span class="topic-preview">Topic: PHP operators</span>
+              <span class="topic-preview">Topic: PHP</span>
             </div>
           </div>
           <div class="accordion-content">
-            <p class="description">PHP Operators.</p>
-            <a href="https://drive.google.com/file/d/1U61kRV45ncgnCnb4RnyODbVWI70aWXix/view?usp=sharing" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+            <p class="description">PHP Assignment details to be added.</p>
+            <a href="#" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
           </div>
         </div>
         <div class="card" onclick="toggleAccordion(this)">
@@ -896,7 +907,7 @@
           </div>
           <div class="accordion-content">
             <p class="description">Popular E-Mail Marketing Tools.</p>
-            <a href="https://drive.google.com/file/d/1RQ_ayBdLQrU5Wy-_LmA9j1_Ng1Y50pv5/view?usp=sharing" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
+            <a href="https://drive.google.com/file/d/1QRc0evOG5tV-6OsZuIuvb-U-WOp6GHfY/view?usp=sharing" target="_blank" class="action-btn assign" onclick="event.stopPropagation()">Open Assignment</a>
           </div>
         </div>
       </div>
@@ -1321,35 +1332,37 @@
   <script src="chat-widget.js"></script>
 
   <script>
-    // Advanced Keyboard layout fix for iOS/Android
-    let initialHeight = window.innerHeight;
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => { initialHeight = window.innerHeight; }, 200);
-    });
+    // Keyboard visibility handler — hides the floating nav when keyboard is open
+    // so it doesn't cover the message input. CSS handles all layout; no inline overrides.
+    (function () {
+      if (!window.visualViewport) return;
+      let baseHeight = window.visualViewport.height;
+      let kbTimer = null;
 
-    if (window.visualViewport) {
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => { baseHeight = window.visualViewport.height; }, 300);
+      });
+
       window.visualViewport.addEventListener('resize', () => {
-        const currentHeight = window.visualViewport.height;
-        const isKeyboardOpen = currentHeight < initialHeight * 0.85;
-        
-        const chatMains = document.querySelectorAll('.chat-main');
-        chatMains.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '10px' : '110px'; });
-
-        const authWraps = document.querySelectorAll('.chat-auth-wrap');
-        authWraps.forEach(el => { el.style.paddingBottom = isKeyboardOpen ? '20px' : '110px'; });
-
-        const navWrapper = document.querySelector('.nav-wrapper');
-        if (navWrapper) { 
-          navWrapper.style.display = isKeyboardOpen ? 'none' : 'flex'; 
-        }
-        
-        if (!isKeyboardOpen) {
-          window.scrollTo(0, 0);
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
+        const nav = document.querySelector('.nav-wrapper');
+        if (!nav) return;
+        clearTimeout(kbTimer);
+        const ratio = window.visualViewport.height / baseHeight;
+        if (ratio < 0.75) {
+          // Keyboard is open — hide the nav so it doesn't overlap input
+          nav.style.opacity = '0';
+          nav.style.pointerEvents = 'none';
+          nav.style.transform = 'translateY(20px)';
+        } else {
+          // Keyboard closed — restore nav with a small delay for smoothness
+          kbTimer = setTimeout(() => {
+            nav.style.opacity = '';
+            nav.style.pointerEvents = '';
+            nav.style.transform = '';
+          }, 120);
         }
       });
-    }
+    })();
   </script>
 </body>
 
