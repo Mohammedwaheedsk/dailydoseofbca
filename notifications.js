@@ -70,16 +70,26 @@ function showNoirNotification() {
         notif.id = 'noir-notif';
         
         // Determine icon type
-        const isEmbed = (NOTIFICATION_CONFIG.icon || "").includes('<div');
-        const isImage = /\.(png|jpg|jpeg|gif|webp)$/i.test(NOTIFICATION_CONFIG.icon || "");
+        const rawIcon = NOTIFICATION_CONFIG.icon || "";
+        const isEmbed = rawIcon.includes('<div');
+        const isImage = /\.(png|jpg|jpeg|gif|webp)$/i.test(rawIcon);
+        
+        // Sanitize: if icon is a long sentence (not embed/image), use only the first emoji/char
+        // This prevents a full sentence accidentally entered in the Icon field from breaking layout
+        let safeIcon = rawIcon;
+        if (!isEmbed && !isImage && rawIcon.length > 6) {
+            // Extract first emoji or first character
+            const emojiMatch = rawIcon.match(/\p{Emoji}/u);
+            safeIcon = emojiMatch ? emojiMatch[0] : rawIcon.charAt(0);
+        }
         
         let iconHtml = "";
         if (isEmbed) {
-            iconHtml = `<div class="notif-icon-embed">${NOTIFICATION_CONFIG.icon}</div>`;
+            iconHtml = `<div class="notif-icon-embed">${rawIcon}</div>`;
         } else if (isImage) {
-            iconHtml = `<img src="${NOTIFICATION_CONFIG.icon}" class="notif-icon-img" alt="icon">`;
+            iconHtml = `<img src="${rawIcon}" class="notif-icon-img" alt="icon">`;
         } else {
-            iconHtml = `<span class="notif-icon">${NOTIFICATION_CONFIG.icon || "✨"}</span>`;
+            iconHtml = `<span class="notif-icon">${safeIcon || "✨"}</span>`;
         }
 
         notif.innerHTML = `
@@ -98,22 +108,23 @@ function showNoirNotification() {
             style.innerHTML = `
                 #noir-notif {
                     position: fixed;
-                    top: 25px;
+                    top: 20px;
                     left: 50%;
                     transform: translateX(-50%) translateY(-150%);
-                    width: calc(100% - 40px);
-                    max-width: 450px;
+                    width: calc(100vw - 40px);
+                    max-width: 440px;
                     z-index: 10000;
-                    background: rgba(255, 255, 255, 0.08);
+                    background: rgba(20, 20, 30, 0.85);
                     backdrop-filter: blur(50px) saturate(180%);
                     -webkit-backdrop-filter: blur(50px) saturate(180%);
                     border: 1px solid rgba(255, 255, 255, 0.15);
                     border-top: 1px solid rgba(255, 255, 255, 0.35);
                     border-radius: 20px;
-                    padding: 12px 18px;
-                    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+                    padding: 12px 16px;
+                    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
                     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), opacity 0.4s;
                     opacity: 0;
+                    box-sizing: border-box;
                 }
                 #noir-notif.active {
                     transform: translateX(-50%) translateY(0);
@@ -122,33 +133,48 @@ function showNoirNotification() {
                 .notif-content {
                     display: flex;
                     align-items: center;
-                    gap: 12px;
+                    gap: 10px;
                     position: relative;
+                    width: 100%;
+                    overflow: hidden;
                 }
                 .notif-icon {
-                    font-size: 1.2rem;
+                    font-size: 1.3rem;
+                    flex-shrink: 0;
+                    width: 28px;
+                    height: 28px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                    line-height: 1;
                 }
                 .notif-icon-img {
-                    width: 32px;
-                    height: 32px;
+                    width: 28px;
+                    height: 28px;
+                    flex-shrink: 0;
                     object-fit: cover;
                     border-radius: 50%;
                 }
                 .notif-icon-embed {
-                    width: 32px;
-                    height: 32px;
+                    width: 28px;
+                    height: 28px;
+                    flex-shrink: 0;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                 }
                 .notif-text {
                     flex: 1;
-                    font-size: 0.95rem;
+                    min-width: 0;
+                    font-size: 0.9rem;
                     font-weight: 500;
                     color: #fff;
-                    line-height: 1.4;
+                    line-height: 1.45;
                     margin: 0;
-                    padding-right: 20px;
+                    word-break: break-word;
+                    overflow-wrap: break-word;
+                    white-space: normal;
                 }
                 .notif-link {
                     background: rgba(255, 255, 255, 0.15);
@@ -156,9 +182,10 @@ function showNoirNotification() {
                     text-decoration: none;
                     padding: 5px 12px;
                     border-radius: 12px;
-                    font-size: 0.85rem;
+                    font-size: 0.82rem;
                     font-weight: 600;
                     white-space: nowrap;
+                    flex-shrink: 0;
                     transition: background 0.2s;
                 }
                 .notif-link:active {
@@ -168,10 +195,11 @@ function showNoirNotification() {
                     background: none;
                     border: none;
                     color: rgba(255, 255, 255, 0.5);
-                    font-size: 1.6rem;
+                    font-size: 1.5rem;
                     cursor: pointer;
-                    padding: 0 5px;
+                    padding: 0 4px;
                     line-height: 1;
+                    flex-shrink: 0;
                     transition: color 0.2s;
                 }
                 .notif-close:hover {
