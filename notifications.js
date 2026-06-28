@@ -1,10 +1,12 @@
 // --- NOTIFICATION HANDLER ---
+// Default is INACTIVE — the admin controls this via the admin panel.
+// If both the API and the JSON file fail to load, NO notification is shown.
 let NOTIFICATION_CONFIG = {
-    active: true,
-    message: "Site is under progress, every content from Sem 1 to Sem 4 are updated.",
+    active: false,
+    message: "",
     type: "info",
-    link: "bca-sem4.html",
-    expireSeconds: 24
+    link: "#",
+    expireSeconds: 5
 };
 
 let lastConfigString = "";

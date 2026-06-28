@@ -1,8 +1,8 @@
 {
-  "active": true,
-  "message": "Test",
+  "active": false,
+  "message": "",
   "type": "info",
-  "link": "bca-sem4.html",
-  "icon": "😊",
+  "link": "#",
+  "icon": "",
   "expireSeconds": 5
 }

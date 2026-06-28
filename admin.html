@@ -626,56 +626,85 @@
         <div class="header-top">
           <div>
             <h1>Settings</h1>
-            <p class="lead">Configure global site settings and notification banners.</p>
+            <p class="lead">Configure site settings. After saving, download the config files and commit them to GitHub to make changes permanent.</p>
+          </div>
+        </div>
+
+        <!-- HOW IT WORKS CALLOUT -->
+        <div class="panel" style="background: rgba(59,130,246,0.07); border-color: rgba(59,130,246,0.25); margin-bottom: 24px;">
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <span style="font-size:1.5rem;">ℹ️</span>
+            <div>
+              <p style="font-weight:700; margin-bottom:6px;">How Settings Work on GitHub Pages</p>
+              <p style="color: var(--text-muted); font-size:0.92rem; line-height:1.6;">
+                Your site runs on <strong>GitHub Pages (static hosting)</strong>. When you save settings here, they update on the live server immediately. However, if the server restarts or for visitors who miss the API, the site falls back to the <code>notification-config.json</code> and <code>site-config.json</code> files committed in your GitHub repo.<br><br>
+                <strong>To make changes permanent:</strong> Click "Save", then click <strong>"⬇ Download for GitHub"</strong>, and commit the downloaded file to your GitHub repo.
+              </p>
+            </div>
           </div>
         </div>
 
         <div class="grid-2-col" style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px;">
           
+          <!-- SITE CONFIG -->
           <div class="panel">
             <div class="panel-header">
-              <h2>Site Configuration</h2>
+              <h2>Landing Page</h2>
+              <span id="current-landing-badge" class="badge info">Loading...</span>
             </div>
             <form id="site-config-form">
               <div class="form-group">
-                <label>Landing Page</label>
+                <label>Set Landing Page</label>
                 <select id="landingPage" name="landingPage">
-                  <option value="bca-sem1.html">Semester 1</option>
-                  <option value="bca-sem2.html">Semester 2</option>
-                  <option value="bca-sem3.html">Semester 3</option>
-                  <option value="bca-sem4.html">Semester 4</option>
-                  <option value="bca-sem5.html">Semester 5</option>
-                  <option value="bca-sem6.html">Semester 6</option>
-                  <option value="about.html">About</option>
-                  <option value="contact.html">Contact</option>
+                  <option value="bca-sem1.html">📚 Semester 1</option>
+                  <option value="bca-sem2.html">📚 Semester 2</option>
+                  <option value="bca-sem3.html">📚 Semester 3</option>
+                  <option value="bca-sem4.html">📚 Semester 4</option>
+                  <option value="bca-sem5.html">📚 Semester 5</option>
+                  <option value="bca-sem6.html">📚 Semester 6</option>
+                  <option value="about.html">ℹ️ About</option>
+                  <option value="contact.html">✉️ Contact</option>
                 </select>
               </div>
-              <button class="btn btn-primary" type="submit">Save Site Settings</button>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" type="submit" id="save-site-config-btn">💾 Save on Server</button>
+                <button class="btn btn-secondary" type="button" id="download-site-config-btn">⬇ Download for GitHub</button>
+              </div>
+              <p style="color:var(--text-muted); font-size:0.8rem; margin-top:10px;">After saving, download and commit <code>site-config.json</code> to your GitHub repo.</p>
             </form>
           </div>
 
+          <!-- NOTIFICATION BANNER -->
           <div class="panel">
             <div class="panel-header">
               <h2>Notification Banner</h2>
+              <span id="notif-status-badge" class="badge inactive">Inactive</span>
             </div>
+
+            <!-- Quick Disable Button -->
+            <div id="quick-disable-wrap" style="display:none; background: rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:14px 16px; margin-bottom:18px;">
+              <p style="font-weight:600; color:#f87171; margin-bottom:10px;">⚠️ Notification is currently ACTIVE</p>
+              <button class="btn btn-danger" type="button" id="btn-quick-disable" style="padding:8px 18px; font-size:0.9rem;">🔇 Disable Notification Now</button>
+            </div>
+
             <form id="notification-form">
               <div class="form-group checkbox-group">
                 <input id="active" name="active" type="checkbox">
-                <label for="active" style="margin:0">Enable site-wide notification</label>
+                <label for="active" style="margin:0; font-weight:600;">Enable site-wide notification</label>
               </div>
               
               <div class="form-group">
                 <label>Message Content</label>
-                <textarea id="message" name="message" required placeholder="Enter notification text..."></textarea>
+                <textarea id="notif-message" name="message" placeholder="Enter notification text..."></textarea>
               </div>
               
               <div class="grid-2-col" style="margin-bottom:16px;">
                 <div class="form-group" style="margin:0">
                   <label>Banner Type</label>
                   <select id="type" name="type">
-                    <option value="info">Info</option>
-                    <option value="success">Success</option>
-                    <option value="warning">Warning</option>
+                    <option value="info">ℹ️ Info</option>
+                    <option value="success">✅ Success</option>
+                    <option value="warning">⚠️ Warning</option>
                   </select>
                 </div>
                 <div class="form-group" style="margin:0">
@@ -690,11 +719,15 @@
               </div>
 
               <div class="form-group">
-                <label>Icon (Emoji or Path)</label>
-                <input id="icon" name="icon" type="text" placeholder="Optional">
+                <label>Icon (Emoji)</label>
+                <input id="icon" name="icon" type="text" placeholder="e.g. 📢">
               </div>
               
-              <button class="btn btn-primary" type="submit">Save Notification</button>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" type="submit" id="save-notif-btn">💾 Save on Server</button>
+                <button class="btn btn-secondary" type="button" id="download-notif-btn">⬇ Download for GitHub</button>
+              </div>
+              <p style="color:var(--text-muted); font-size:0.8rem; margin-top:10px;">After saving, download and commit <code>notification-config.json</code> to your GitHub repo.</p>
             </form>
           </div>
         </div>
@@ -793,7 +826,10 @@
       try {
         const response = await fetch("/api/site-config");
         const config = await response.json();
-        document.getElementById("landingPage").value = config.landingPage || "bca-sem5.html";
+        const lp = config.landingPage || "bca-sem5.html";
+        document.getElementById("landingPage").value = lp;
+        const badge = document.getElementById("current-landing-badge");
+        if (badge) { badge.textContent = lp; }
       } catch (e) {
         showToast("Failed to load site config", "error");
       }
@@ -804,56 +840,126 @@
         const response = await fetch("/api/notifications");
         const config = await response.json();
         document.getElementById("active").checked = Boolean(config.active);
-        document.getElementById("message").value = config.message || "";
+        document.getElementById("notif-message").value = config.message || "";
         document.getElementById("type").value = config.type || "info";
         document.getElementById("expireSeconds").value = config.expireSeconds || 5;
         document.getElementById("link").value = config.link || "";
         document.getElementById("icon").value = config.icon || "";
+        updateNotifUI(config.active);
       } catch (e) {
         showToast("Failed to load notification config", "error");
       }
     }
 
-    // Save Settings
+    function updateNotifUI(isActive) {
+      const badge = document.getElementById("notif-status-badge");
+      const quickDisable = document.getElementById("quick-disable-wrap");
+      if (isActive) {
+        badge.textContent = "🟢 Active";
+        badge.className = "badge active";
+        quickDisable.style.display = "block";
+      } else {
+        badge.textContent = "Inactive";
+        badge.className = "badge inactive";
+        quickDisable.style.display = "none";
+      }
+    }
+
+    // Save Site Config
     document.getElementById("site-config-form").addEventListener("submit", async (e) => {
       e.preventDefault();
+      const landingPage = document.getElementById("landingPage").value;
       try {
         const response = await fetch("/api/site-config", {
           method: "PUT",
           headers: authHeaders(),
-          body: JSON.stringify({ landingPage: document.getElementById("landingPage").value })
+          body: JSON.stringify({ landingPage })
         });
         const data = await response.json();
         if (!response.ok || !data.ok) throw new Error(data.error);
-        showToast("Site settings saved!", "success");
+        const badge = document.getElementById("current-landing-badge");
+        badge.textContent = landingPage;
+        showToast(`Landing page set to ${landingPage}! Now download the JSON to commit to GitHub.`, "success");
       } catch (err) {
         showToast(err.message || "Unable to save settings.", "error");
       }
     });
 
-    document.getElementById("notification-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    // Download site-config.json for GitHub commit
+    document.getElementById("download-site-config-btn").addEventListener("click", () => {
+      const landingPage = document.getElementById("landingPage").value;
+      const configObj = { landingPage };
+      downloadJson("site-config.json", configObj);
+      showToast("Downloaded site-config.json — commit it to GitHub!", "info");
+    });
+
+    // Save Notification
+    async function saveNotification(overrideActive) {
+      const isActive = overrideActive !== undefined ? overrideActive : document.getElementById("active").checked;
       const payload = {
-        active: document.getElementById("active").checked,
-        message: document.getElementById("message").value,
+        active: isActive,
+        message: document.getElementById("notif-message").value,
         type: document.getElementById("type").value,
-        expireSeconds: document.getElementById("expireSeconds").value,
+        expireSeconds: Number(document.getElementById("expireSeconds").value) || 5,
         link: document.getElementById("link").value,
         icon: document.getElementById("icon").value
       };
+      const response = await fetch("/api/notifications", {
+        method: "PUT",
+        headers: authHeaders(),
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error);
+      document.getElementById("active").checked = isActive;
+      updateNotifUI(isActive);
+      return payload;
+    }
+
+    document.getElementById("notification-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
       try {
-        const response = await fetch("/api/notifications", {
-          method: "PUT",
-          headers: authHeaders(),
-          body: JSON.stringify(payload)
-        });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error);
-        showToast("Notification banner updated!", "success");
+        await saveNotification();
+        showToast("Notification saved! Now download the JSON to commit to GitHub.", "success");
       } catch (err) {
         showToast(err.message || "Unable to save notification.", "error");
       }
     });
+
+    // Download notification-config.json for GitHub commit
+    document.getElementById("download-notif-btn").addEventListener("click", () => {
+      const payload = {
+        active: document.getElementById("active").checked,
+        message: document.getElementById("notif-message").value,
+        type: document.getElementById("type").value,
+        expireSeconds: Number(document.getElementById("expireSeconds").value) || 5,
+        link: document.getElementById("link").value,
+        icon: document.getElementById("icon").value
+      };
+      downloadJson("notification-config.json", payload);
+      showToast("Downloaded notification-config.json — commit it to GitHub!", "info");
+    });
+
+    // Quick Disable notification
+    document.getElementById("btn-quick-disable").addEventListener("click", async () => {
+      try {
+        await saveNotification(false);
+        showToast("Notification disabled! Download the JSON to make it permanent on GitHub.", "success");
+      } catch (err) {
+        showToast(err.message || "Unable to disable notification.", "error");
+      }
+    });
+
+    // Helper: download JSON file
+    function downloadJson(filename, obj) {
+      const blob = new Blob([JSON.stringify(obj, null, 2) + "\n"], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
 
     // Load Chat & Users & Dashboard Metrics
     async function loadChat() {
