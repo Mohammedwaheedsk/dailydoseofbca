@@ -1,5 +1,5 @@
 {
-  "active": true,
+  "active": false,
   "message": "PHP notes. EM, PHP assignments are uploaded.",
   "type": "info",
   "expireSeconds": 7,
