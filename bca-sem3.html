@@ -514,6 +514,31 @@
     
 
   
+    
+    /* --- STATUS BADGES --- */
+    .status-badge {
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 8px;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+    }
+    .status-live {
+      background: rgba(34, 197, 94, 0.15); /* Green */
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    .status-pending {
+      background: rgba(239, 68, 68, 0.15); /* Red */
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
     /* --- CRITICAL SLIDER STABILITY FIX --- */
     .slider-viewport {
       width: 100%;
@@ -623,7 +648,8 @@
       <!-- PAGE 1: NOTES -->
       <div class="slide">
         <div class="card">
-          <div class="card-header"><span class="subject">All Notes</span></div>
+          <div class="card-header"><span class="subject">All Notes</span>
+              <span class="status-badge status-live">Live</span></div>
           <p class="description">Access all subjects notes for Semester 3.</p>
           <a href="3-notes.html" class="action-btn">Open Notes</a>
         </div>
@@ -632,7 +658,8 @@
       <!-- PAGE 2: ASSIGNMENTS -->
       <div class="slide">
         <div class="card">
-          <div class="card-header"><span class="subject">All Assignments</span></div>
+          <div class="card-header"><span class="subject">All Assignments</span>
+              <span class="status-badge status-live">Live</span></div>
           <p class="description">Access all assignments for Semester 3.</p>
           <a href="3-assignment.html" class="action-btn assign">Open Assignments</a>
         </div>
@@ -641,7 +668,8 @@
       <!-- PAGE 3: LAB WORK -->
       <div class="slide">
         <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">No Lab Work</span></div>
+          <div class="card-header"><span class="subject">No Lab Work</span>
+              <span class="status-badge status-live">Live</span></div>
           <p class="description">There are no lab manuals available.</p>
         </div>
       </div>

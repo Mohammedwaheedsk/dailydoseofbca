@@ -514,6 +514,31 @@
     
 
   
+    
+    /* --- STATUS BADGES --- */
+    .status-badge {
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 8px;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+    }
+    .status-live {
+      background: rgba(34, 197, 94, 0.15); /* Green */
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    .status-pending {
+      background: rgba(239, 68, 68, 0.15); /* Red */
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
     /* --- CRITICAL SLIDER STABILITY FIX --- */
     .slider-viewport {
       width: 100%;
@@ -624,7 +649,8 @@
       <div class="slide">
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">Mobile App Dev</span></div>
+            <div class="subject-group"><span class="subject">Mobile App Dev</span>
+              <span class="status-badge status-live">Live</span></div>
             
           </div>
           <p class="description">Development of Android Applications.</p>
@@ -633,7 +659,8 @@
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">Python</span></div>
+            <div class="subject-group"><span class="subject">Python</span>
+              <span class="status-badge status-live">Live</span></div>
             
           </div>
           <p class="description">Programming with Python.</p>
@@ -642,7 +669,8 @@
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">Operating Systems</span></div>
+            <div class="subject-group"><span class="subject">Operating Systems</span>
+              <span class="status-badge status-live">Live</span></div>
             
           </div>
           <p class="description">Working of Operating Systems.</p>
@@ -651,7 +679,8 @@
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">AFM</span></div>
+            <div class="subject-group"><span class="subject">AFM</span>
+              <span class="status-badge status-live">Live</span></div>
             
           </div>
           <p class="description">Accounting & Financial Management.</p>
@@ -660,7 +689,8 @@
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">SEO</span></div>
+            <div class="subject-group"><span class="subject">SEO</span>
+              <span class="status-badge status-live">Live</span></div>
             
           </div>
           <p class="description">What is SEO, how does it work?</p>
@@ -675,6 +705,7 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">MAD Assignment</span>
+              <span class="status-badge status-live">Live</span>
               <span class="topic-preview">Topic: Android Studio Install</span>
             </div>
             
@@ -689,6 +720,7 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">AFM Assignment</span>
+              <span class="status-badge status-live">Live</span>
               <span class="topic-preview">Topic: Types, Advantages and disadvantages of AFM</span>
             </div>
             
@@ -703,6 +735,7 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">Python Assignment</span>
+              <span class="status-badge status-live">Live</span>
               <span class="topic-preview">Topic: Strings and String Functions</span>
             </div>
             
@@ -717,6 +750,7 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">Operating System Assignment 1</span>
+              <span class="status-badge status-live">Live</span>
               <span class="topic-preview">Topic: Scheduling algorithms and page replacement policies.</span>
             </div>
             
@@ -731,6 +765,7 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">Operating System Assignment 2</span>
+              <span class="status-badge status-live">Live</span>
               <span class="topic-preview">Topic: Paging and Deadlocks</span>
             </div>
             
@@ -745,6 +780,7 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">MAD Assignment 2</span>
+              <span class="status-badge status-live">Live</span>
               <span class="topic-preview">Topic: alarm clock and calculator app</span>
             </div>
             
@@ -761,17 +797,20 @@
       <!-- PAGE 3: LAB WORK -->
       <div class="slide">
         <div class="card">
-          <div class="card-header"><span class="subject">MAD Lab</span></div>
+          <div class="card-header"><span class="subject">MAD Lab</span>
+              <span class="status-badge status-live">Live</span></div>
           <p class="description">14 programs in record and 9 programs in observation book.</p>
           <a href="https://docs.google.com/document/d/1u38OqstCpUlzHHhg9g8Ee6tE4BXXSeE0/edit?usp=sharing&ouid=110377963400939528523&rtpof=true&sd=true" class="action-btn lab">View Manual</a>
         </div>
         <div class="card">
-          <div class="card-header"><span class="subject">Python Lab</span></div>
+          <div class="card-header"><span class="subject">Python Lab</span>
+              <span class="status-badge status-live">Live</span></div>
           <p class="description">Write in observation book also.</p>
           <a href="https://drive.google.com/file/d/1GdHQyXqEnHg_s559GgjUF4S9nJs210eu/view?usp=sharing" class="action-btn lab">View Manual</a>
         </div>
         <div class="card">
-          <div class="card-header"><span class="subject">OS Lab</span></div>
+          <div class="card-header"><span class="subject">OS Lab</span>
+              <span class="status-badge status-live">Live</span></div>
           <p class="description">7 programs and 7 questions in record and in observation book, questions are mentioned in the PDF.</p>
           <a href="https://drive.google.com/file/d/1K6ePs3T1vuZQBKSOMyC1g9img90QHqq3/view?usp=sharing" class="action-btn lab">View Manual</a>
         </div>
