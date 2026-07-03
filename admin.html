@@ -731,6 +731,28 @@
             </form>
           </div>
         </div>
+        
+        <div class="grid-2-col" style="display:grid; grid-template-columns: 1fr; gap: 24px; margin-top: 24px;">
+          <!-- SUBJECTS STATUS CONFIG -->
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Subject Notes Status</h2>
+              <span id="subjects-status-badge" class="badge info">Loading...</span>
+            </div>
+            <form id="subjects-config-form">
+              <div class="form-group">
+                <label>Live Subjects (Comma separated)</label>
+                <textarea id="liveSubjects" name="liveSubjects" placeholder="e.g. PHP, WEB, Cloud Computing" style="min-height: 80px;"></textarea>
+                <p style="color:var(--text-muted); font-size:0.8rem; margin-top:6px;">Any subject not listed here will automatically show as "PENDING".</p>
+              </div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" type="submit" id="save-subjects-btn">💾 Save on Server</button>
+                <button class="btn btn-secondary" type="button" id="download-subjects-btn">⬇ Download for GitHub</button>
+              </div>
+              <p style="color:var(--text-muted); font-size:0.8rem; margin-top:10px;">After saving, download and commit <code>subjects-config.json</code> to your GitHub repo.</p>
+            </form>
+          </div>
+        </div>
       </div>
 
     </main>
@@ -822,6 +844,53 @@
     }
 
     // Load Settings
+    // --- SUBJECTS STATUS ---
+    async function loadSubjectsConfig() {
+      try {
+        const response = await fetch("/subjects-config.json?v=" + new Date().getTime());
+        const config = await response.json();
+        const liveStr = (config.liveSubjects || []).join(", ");
+        document.getElementById("liveSubjects").value = liveStr;
+        const badge = document.getElementById("subjects-status-badge");
+        if (badge) { badge.textContent = "Loaded"; badge.className = "badge active"; }
+      } catch (e) {
+        showToast("Failed to load subjects config", "error");
+      }
+    }
+
+    document.getElementById("subjects-config-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if(!tokenInput.value) return showToast("No admin token", "error");
+      
+      const liveStr = document.getElementById("liveSubjects").value;
+      const liveArr = liveStr.split(",").map(s => s.trim()).filter(s => s.length > 0);
+      
+      try {
+        const response = await fetch("/api/admin/config/subjects", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ liveSubjects: liveArr })
+        });
+        const data = await response.json();
+        if(!response.ok || !data.ok) throw new Error(data.error);
+        showToast("Subjects saved on server", "success");
+      } catch(e) {
+        showToast(e.message, "error");
+      }
+    });
+
+    document.getElementById("download-subjects-btn").addEventListener("click", () => {
+      const liveStr = document.getElementById("liveSubjects").value;
+      const liveArr = liveStr.split(",").map(s => s.trim()).filter(s => s.length > 0);
+      const blob = new Blob([JSON.stringify({ liveSubjects: liveArr }, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "subjects-config.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
     async function loadSiteConfig() {
       try {
         const response = await fetch("/api/site-config");
@@ -1137,6 +1206,7 @@
     // Init
     loadSiteConfig();
     loadNotification();
+    loadSubjectsConfig();
     if(tokenInput.value) {
       loadChat();
     }
