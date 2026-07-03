@@ -515,7 +515,7 @@
 
   
     
-    /* --- STATUS BADGES --- */
+        /* --- STATUS BADGES --- */
     .status-badge {
       font-size: 0.6rem;
       font-weight: 800;
@@ -523,10 +523,12 @@
       border-radius: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-left: 8px;
+      position: absolute;
+      top: 16px;
+      right: 16px;
       display: inline-flex;
       align-items: center;
-      vertical-align: middle;
+      justify-content: center;
     }
     .status-live {
       background: rgba(34, 197, 94, 0.15); /* Green */
@@ -547,7 +549,8 @@
       flex: 1;
       overflow: hidden;
       position: relative;
-      display: block; /* Ensure it's a block container for the track */
+      display: flex;
+      flex-direction: column;
     }
 
     
@@ -866,56 +869,49 @@
       <div class="slide">
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">PHP</span>
-              <span class="status-badge status-pending">Pending</span></div>
+            <div class="subject-group"><span class="subject">PHP</span></div>
           </div>
           <p class="description">Notes for PHP.</p>
           <a href="#" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">WEB</span>
-              <span class="status-badge status-pending">Pending</span></div>
+            <div class="subject-group"><span class="subject">WEB</span></div>
           </div>
           <p class="description">Notes for WEB.</p>
           <a href="#" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">Cloud Computing</span>
-              <span class="status-badge status-pending">Pending</span></div>
+            <div class="subject-group"><span class="subject">Cloud Computing</span></div>
           </div>
           <p class="description">Notes for Cloud Computing.</p>
           <a href="#" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">Software Testing</span>
-              <span class="status-badge status-pending">Pending</span></div>
+            <div class="subject-group"><span class="subject">Software Testing</span></div>
           </div>
           <p class="description">Notes for Software Testing.</p>
           <a href="#" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">Email Marketing</span>
-              <span class="status-badge status-pending">Pending</span></div>
+            <div class="subject-group"><span class="subject">Email Marketing</span></div>
           </div>
           <p class="description">Notes for Email Marketing.</p>
           <a href="#" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">Mobile Marketing</span>
-              <span class="status-badge status-live">Live</span></div>
+            <div class="subject-group"><span class="subject">Mobile Marketing</span></div>
           </div>
           <p class="description">Notes for Mobile Marketing.</p>
           <a href="https://drive.google.com/file/d/1ldg0evQU-VgHqkJEBCaw6K3teLvI7pyV/view?usp=sharing" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="subject-group"><span class="subject">EVS</span>
-              <span class="status-badge status-pending">Pending</span></div>
+            <div class="subject-group"><span class="subject">EVS</span></div>
           </div>
           <p class="description">Notes for EVS.</p>
           <a href="#" class="action-btn">Open PDF</a>
@@ -928,7 +924,6 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">PHP Assignment</span>
-              <span class="status-badge status-pending">Pending</span>
               <span class="topic-preview">Topic: PHP</span>
             </div>
           </div>
@@ -941,7 +936,6 @@
           <div class="card-header">
             <div class="subject-group">
               <span class="subject">EM Assignment</span>
-              <span class="status-badge status-live">Live</span>
               <span class="topic-preview">Topic: EMail Marketing Tools</span>
             </div>
           </div>
@@ -955,8 +949,7 @@
       <!-- PAGE 3: LAB WORK -->
       <div class="slide">
         <div class="card" style="opacity:0.6;">
-          <div class="card-header"><span class="subject">To Be Added</span>
-              <span class="status-badge status-live">Live</span></div>
+          <div class="card-header"><span class="subject">To Be Added</span></div>
           <p class="description">Lab Manuals for Semester 5 will be available soon.</p>
         </div>
       </div>
@@ -1409,6 +1402,7 @@
       });
     })();
   </script>
+  <script src="status.js"></script>
 </body>
 
 </html>

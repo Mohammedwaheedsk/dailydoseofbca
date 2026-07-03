@@ -515,7 +515,7 @@
 
   
     
-    /* --- STATUS BADGES --- */
+        /* --- STATUS BADGES --- */
     .status-badge {
       font-size: 0.6rem;
       font-weight: 800;
@@ -523,10 +523,12 @@
       border-radius: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-left: 8px;
+      position: absolute;
+      top: 16px;
+      right: 16px;
       display: inline-flex;
       align-items: center;
-      vertical-align: middle;
+      justify-content: center;
     }
     .status-live {
       background: rgba(34, 197, 94, 0.15); /* Green */
@@ -547,7 +549,8 @@
       flex: 1;
       overflow: hidden;
       position: relative;
-      display: block; /* Ensure it's a block container for the track */
+      display: flex;
+      flex-direction: column;
     }
 
     .slider-track {
@@ -648,8 +651,7 @@
       <!-- PAGE 1: NOTES -->
       <div class="slide">
         <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">To Be Added</span>
-              <span class="status-badge status-pending">Pending</span></div>
+          <div class="card-header"><span class="subject">To Be Added</span></div>
           <p class="description">Notes for Semester 6 will be available soon.</p>
         </div>
       </div>
@@ -657,8 +659,7 @@
       <!-- PAGE 2: ASSIGNMENTS -->
       <div class="slide">
         <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">To Be Added</span>
-              <span class="status-badge status-pending">Pending</span></div>
+          <div class="card-header"><span class="subject">To Be Added</span></div>
           <p class="description">Assignments for Semester 6 will be available soon.</p>
         </div>
       </div>
@@ -666,8 +667,7 @@
       <!-- PAGE 3: LAB WORK -->
       <div class="slide">
         <div class="card" style="opacity: 0.5;">
-          <div class="card-header"><span class="subject">To Be Added</span>
-              <span class="status-badge status-live">Live</span></div>
+          <div class="card-header"><span class="subject">To Be Added</span></div>
           <p class="description">Lab Manuals for Semester 6 will be available soon.</p>
         </div>
       </div>
@@ -1085,6 +1085,7 @@
       });
     })();
   </script>
+  <script src="status.js"></script>
 </body>
 
 </html>
