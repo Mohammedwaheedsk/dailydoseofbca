@@ -16,6 +16,7 @@ const CHAT_MESSAGES_FILE = path.join(DATA_DIR, "chat-messages.json");
 const ADMIN_NOTIFICATIONS_FILE = path.join(DATA_DIR, "admin-notifications.json");
 const NOTIFICATION_FILE = path.join(ROOT_DIR, "notification-config.json");
 const SITE_CONFIG_FILE = path.join(ROOT_DIR, "site-config.json");
+const SUBJECTS_CONFIG_FILE = path.join(ROOT_DIR, "subjects-config.json");
 const CHAT_MESSAGE_TTL_MS = 24 * 60 * 60 * 1000;
 const db = process.env.DATABASE_URL
   ? new Pool({
@@ -550,6 +551,35 @@ app.post("/api/contact", async (req, res, next) => {
       ok: true,
       message: "Thanks. Your message has been saved."
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+app.get("/api/config/subjects", async (req, res, next) => {
+  try {
+    const config = await readJson(SUBJECTS_CONFIG_FILE, {
+      availableSubjects: []
+    });
+    res.json(config);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/admin/config/subjects", requireAdminToken, async (req, res, next) => {
+  try {
+    let availableSubjects = req.body.availableSubjects;
+    if (!Array.isArray(availableSubjects)) {
+      availableSubjects = [];
+    }
+    // Clean text to avoid injection
+    availableSubjects = availableSubjects.map(s => cleanText(s, 100));
+    
+    const config = { availableSubjects };
+    await writeJson(SUBJECTS_CONFIG_FILE, config);
+    res.json({ ok: true, config });
   } catch (error) {
     next(error);
   }

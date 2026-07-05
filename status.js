@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const res = await fetch('subjects-config.json');
-    if (!res.ok) throw new Error('Failed to load subjects config');
+    const response = await fetch(`/api/config/subjects?v=\${Date.now()}`).catch(() => null);
+    const fallbackResponse = response && response.ok
+        ? response
+        : await fetch(\`subjects-config.json?v=\${Date.now()}\`);
+        
+    if (!fallbackResponse.ok) throw new Error('Failed to load subjects config');
     
-    const config = await res.json();
+    const config = await fallbackResponse.json();
     const availableSubjects = config.availableSubjects || [];
     
     const cards = document.querySelectorAll('.card');

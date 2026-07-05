@@ -741,9 +741,11 @@
             </div>
             <form id="subjects-config-form">
               <div class="form-group">
-                <label>Available Subjects (Comma separated)</label>
-                <textarea id="availableSubjects" name="availableSubjects" placeholder="e.g. PHP, WEB, Cloud Computing" style="min-height: 80px;"></textarea>
-                <p style="color:var(--text-muted); font-size:0.8rem; margin-top:6px;">Any subject not listed here will automatically show as "INCOMPLETE".</p>
+                <label style="margin-bottom: 12px; display: block;">Toggle Subject Availability</label>
+                <p style="color:var(--text-muted); font-size:0.8rem; margin-top:-8px; margin-bottom: 16px;">Turn on switches for available subjects. Others will show as "INCOMPLETE".</p>
+                <div id="subject-toggles-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; max-height: 300px; overflow-y: auto; padding-right: 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; background: rgba(0,0,0,0.2);">
+                  <!-- Dynamically populated -->
+                </div>
               </div>
               <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <button class="btn btn-primary" type="submit" id="save-subjects-btn">💾 Save on Server</button>
@@ -844,13 +846,55 @@
     }
 
     // Load Settings
-    // --- SUBJECTS STATUS ---
+        // --- SUBJECTS STATUS ---
+    const allKnownSubjects = [
+      "Mobile App Dev", "Python", "Operating Systems", "AFM", "SEO", "PHP", "WEB", "Cloud Computing", "Software Testing", "Email Marketing", "Mobile Marketing", "EVS",
+      "MAD Assignment", "AFM Assignment", "Python Assignment", "Operating System Assignment 1", "Operating System Assignment 2", "MAD Assignment 2", "PHP Assignment", "EM Assignment",
+      "MAD Lab", "Python Lab", "OS Lab"
+    ];
+
     async function loadSubjectsConfig() {
       try {
-        const response = await fetch("/subjects-config.json?v=" + new Date().getTime());
-        const config = await response.json();
-        const liveStr = (config.availableSubjects || []).join(", ");
-        document.getElementById("availableSubjects").value = liveStr;
+        const response = await fetch("/api/config/subjects?v=" + new Date().getTime()).catch(() => null);
+        const fallback = response && response.ok ? response : await fetch("/subjects-config.json?v=" + new Date().getTime());
+        const config = await fallback.json();
+        
+        const availableArr = config.availableSubjects || [];
+        
+        const container = document.getElementById("subject-toggles-container");
+        container.innerHTML = "";
+        
+        allKnownSubjects.forEach(subject => {
+          const isChecked = availableArr.includes(subject);
+          
+          const div = document.createElement("div");
+          div.style.display = "flex";
+          div.style.alignItems = "center";
+          div.style.gap = "8px";
+          div.innerHTML = `
+            <label class="toggle-switch" style="position: relative; display: inline-block; width: 34px; height: 20px;">
+              <input type="checkbox" value="${subject}" class="subject-toggle-input" style="opacity: 0; width: 0; height: 0;" ${isChecked ? 'checked' : ''}>
+              <span class="slider round" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px;"></span>
+            </label>
+            <span style="font-size: 0.85rem; color: #fff;">${subject}</span>
+          `;
+          
+          container.appendChild(div);
+        });
+
+        // Add custom CSS for the toggles dynamically
+        if (!document.getElementById("toggle-styles")) {
+          const style = document.createElement("style");
+          style.id = "toggle-styles";
+          style.innerHTML = `
+            .toggle-switch input:checked + .slider { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+            .toggle-switch input:focus + .slider { box-shadow: 0 0 1px #00f2fe; }
+            .toggle-switch .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+            .toggle-switch input:checked + .slider:before { transform: translateX(14px); }
+          `;
+          document.head.appendChild(style);
+        }
+
         const badge = document.getElementById("subjects-status-badge");
         if (badge) { badge.textContent = "Loaded"; badge.className = "badge active"; }
       } catch (e) {
@@ -858,12 +902,20 @@
       }
     }
 
+    function getSelectedSubjects() {
+      const checkboxes = document.querySelectorAll(".subject-toggle-input");
+      const selected = [];
+      checkboxes.forEach(cb => {
+        if (cb.checked) selected.push(cb.value);
+      });
+      return selected;
+    }
+
     document.getElementById("subjects-config-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       if(!tokenInput.value) return showToast("No admin token", "error");
       
-      const liveStr = document.getElementById("availableSubjects").value;
-      const liveArr = liveStr.split(",").map(s => s.trim()).filter(s => s.length > 0);
+      const liveArr = getSelectedSubjects();
       
       try {
         const response = await fetch("/api/admin/config/subjects", {
@@ -880,8 +932,7 @@
     });
 
     document.getElementById("download-subjects-btn").addEventListener("click", () => {
-      const liveStr = document.getElementById("availableSubjects").value;
-      const liveArr = liveStr.split(",").map(s => s.trim()).filter(s => s.length > 0);
+      const liveArr = getSelectedSubjects();
       const blob = new Blob([JSON.stringify({ availableSubjects: liveArr }, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
