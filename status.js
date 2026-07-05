@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const response = await fetch(`/api/config/subjects?v=\${Date.now()}`).catch(() => null);
+    const response = await fetch(`/api/config/subjects?v=${Date.now()}`).catch(() => null);
     const fallbackResponse = response && response.ok
         ? response
-        : await fetch(\`subjects-config.json?v=\${Date.now()}\`);
+        : await fetch(`subjects-config.json?v=${Date.now()}`);
         
     if (!fallbackResponse.ok) throw new Error('Failed to load subjects config');
     

@@ -847,11 +847,10 @@
 
     // Load Settings
         // --- SUBJECTS STATUS ---
-    const allKnownSubjects = [
-      "Mobile App Dev", "Python", "Operating Systems", "AFM", "SEO", "PHP", "WEB", "Cloud Computing", "Software Testing", "Email Marketing", "Mobile Marketing", "EVS",
-      "MAD Assignment", "AFM Assignment", "Python Assignment", "Operating System Assignment 1", "Operating System Assignment 2", "MAD Assignment 2", "PHP Assignment", "EM Assignment",
-      "MAD Lab", "Python Lab", "OS Lab"
-    ];
+    const subjectsBySem = {
+      "SEM 4": ["Mobile App Dev", "Python", "Operating Systems", "AFM", "SEO", "MAD Assignment", "AFM Assignment", "Python Assignment", "Operating System Assignment 1", "Operating System Assignment 2", "MAD Assignment 2", "MAD Lab", "Python Lab", "OS Lab"],
+      "SEM 5": ["PHP", "WEB", "Cloud Computing", "Software Testing", "Email Marketing", "Mobile Marketing", "EVS", "PHP Assignment", "EM Assignment"]
+    };
 
     async function loadSubjectsConfig() {
       try {
@@ -864,23 +863,39 @@
         const container = document.getElementById("subject-toggles-container");
         container.innerHTML = "";
         
-        allKnownSubjects.forEach(subject => {
-          const isChecked = availableArr.includes(subject);
+        for (const [semName, subjects] of Object.entries(subjectsBySem)) {
+          const semGroup = document.createElement("div");
+          semGroup.style.marginBottom = "16px";
+          semGroup.style.width = "100%";
+          semGroup.style.gridColumn = "1 / -1"; // Span full width of grid
           
-          const div = document.createElement("div");
-          div.style.display = "flex";
-          div.style.alignItems = "center";
-          div.style.gap = "8px";
-          div.innerHTML = `
-            <label class="toggle-switch" style="position: relative; display: inline-block; width: 34px; height: 20px;">
-              <input type="checkbox" value="${subject}" class="subject-toggle-input" style="opacity: 0; width: 0; height: 0;" ${isChecked ? 'checked' : ''}>
-              <span class="slider round" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px;"></span>
-            </label>
-            <span style="font-size: 0.85rem; color: #fff;">${subject}</span>
-          `;
+          semGroup.innerHTML = \`<h4 style="color: #fff; margin-bottom: 12px; font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; margin-top: \${container.children.length === 0 ? '0' : '12px'};">\${semName}</h4>\`;
           
-          container.appendChild(div);
-        });
+          const grid = document.createElement("div");
+          grid.style.display = "grid";
+          grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(200px, 1fr))";
+          grid.style.gap = "12px";
+          
+          subjects.forEach(subject => {
+            const isChecked = availableArr.includes(subject);
+            
+            const div = document.createElement("div");
+            div.style.display = "flex";
+            div.style.alignItems = "center";
+            div.style.gap = "8px";
+            div.innerHTML = \`
+              <label class="toggle-switch" style="position: relative; display: inline-block; width: 34px; height: 20px;">
+                <input type="checkbox" value="\${subject}" class="subject-toggle-input" style="opacity: 0; width: 0; height: 0;" \${isChecked ? 'checked' : ''}>
+                <span class="slider round" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px;"></span>
+              </label>
+              <span style="font-size: 0.85rem; color: #fff;">\${subject}</span>
+            \`;
+            grid.appendChild(div);
+          });
+          
+          semGroup.appendChild(grid);
+          container.appendChild(semGroup);
+        }
 
         // Add custom CSS for the toggles dynamically
         if (!document.getElementById("toggle-styles")) {
