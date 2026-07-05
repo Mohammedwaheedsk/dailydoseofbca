@@ -13,20 +13,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cards = document.querySelectorAll('.card');
     
     cards.forEach(card => {
-      // Find the subject name inside .subject
       const subjectEl = card.querySelector('.subject');
       if (!subjectEl) return;
       
       const subjectName = subjectEl.textContent.trim();
+      const isAvailable = availableSubjects.some(s => s.toLowerCase() === subjectName.toLowerCase());
       
-      // Determine if live
-      // We check if the subjectName exactly matches any string in availableSubjects array
-      // (Case insensitive match might be better for safety)
-      const isLive = availableSubjects.some(live => live.toLowerCase() === subjectName.toLowerCase());
-      
-      // Create badge element
+      // Create badge
       const badge = document.createElement('span');
-      if (isLive) {
+      if (isAvailable) {
         badge.className = 'status-badge status-available';
         badge.textContent = 'Available';
       } else {
@@ -34,13 +29,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         badge.textContent = 'Incomplete';
       }
       
-      // Append badge to .card-header
       const cardHeader = card.querySelector('.card-header');
       if (cardHeader) {
         cardHeader.appendChild(badge);
       } else {
-        // Fallback: just append to the card if header doesn't exist
         card.appendChild(badge);
+      }
+
+      // If subject is Incomplete, check every action-btn link on the card
+      // - If the link already has a real URL (not # and not empty), LEAVE IT ALONE — let it open
+      // - If the link is # (no PDF uploaded yet), gray it out and prevent the useless scroll-to-top
+      if (!isAvailable) {
+        const links = card.querySelectorAll('.action-btn');
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          const isReal = href && href !== '#' && href.trim() !== '';
+          if (!isReal) {
+            // No real link — disable gracefully
+            link.addEventListener('click', e => e.preventDefault());
+            link.style.opacity = '0.4';
+            link.style.cursor = 'not-allowed';
+            link.title = 'Not yet available';
+          }
+          // Real link → do nothing, let it open normally
+        });
       }
     });
   } catch (err) {
