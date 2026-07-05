@@ -741,9 +741,9 @@
             </div>
             <form id="subjects-config-form">
               <div class="form-group">
-                <label>Live Subjects (Comma separated)</label>
-                <textarea id="liveSubjects" name="liveSubjects" placeholder="e.g. PHP, WEB, Cloud Computing" style="min-height: 80px;"></textarea>
-                <p style="color:var(--text-muted); font-size:0.8rem; margin-top:6px;">Any subject not listed here will automatically show as "PENDING".</p>
+                <label>Available Subjects (Comma separated)</label>
+                <textarea id="availableSubjects" name="availableSubjects" placeholder="e.g. PHP, WEB, Cloud Computing" style="min-height: 80px;"></textarea>
+                <p style="color:var(--text-muted); font-size:0.8rem; margin-top:6px;">Any subject not listed here will automatically show as "INCOMPLETE".</p>
               </div>
               <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <button class="btn btn-primary" type="submit" id="save-subjects-btn">💾 Save on Server</button>
@@ -849,8 +849,8 @@
       try {
         const response = await fetch("/subjects-config.json?v=" + new Date().getTime());
         const config = await response.json();
-        const liveStr = (config.liveSubjects || []).join(", ");
-        document.getElementById("liveSubjects").value = liveStr;
+        const liveStr = (config.availableSubjects || []).join(", ");
+        document.getElementById("availableSubjects").value = liveStr;
         const badge = document.getElementById("subjects-status-badge");
         if (badge) { badge.textContent = "Loaded"; badge.className = "badge active"; }
       } catch (e) {
@@ -862,14 +862,14 @@
       e.preventDefault();
       if(!tokenInput.value) return showToast("No admin token", "error");
       
-      const liveStr = document.getElementById("liveSubjects").value;
+      const liveStr = document.getElementById("availableSubjects").value;
       const liveArr = liveStr.split(",").map(s => s.trim()).filter(s => s.length > 0);
       
       try {
         const response = await fetch("/api/admin/config/subjects", {
           method: "POST",
           headers: authHeaders(),
-          body: JSON.stringify({ liveSubjects: liveArr })
+          body: JSON.stringify({ availableSubjects: liveArr })
         });
         const data = await response.json();
         if(!response.ok || !data.ok) throw new Error(data.error);
@@ -880,9 +880,9 @@
     });
 
     document.getElementById("download-subjects-btn").addEventListener("click", () => {
-      const liveStr = document.getElementById("liveSubjects").value;
+      const liveStr = document.getElementById("availableSubjects").value;
       const liveArr = liveStr.split(",").map(s => s.trim()).filter(s => s.length > 0);
-      const blob = new Blob([JSON.stringify({ liveSubjects: liveArr }, null, 2)], { type: "application/json" });
+      const blob = new Blob([JSON.stringify({ availableSubjects: liveArr }, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

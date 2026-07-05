@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) throw new Error('Failed to load subjects config');
     
     const config = await res.json();
-    const liveSubjects = config.liveSubjects || [];
+    const availableSubjects = config.availableSubjects || [];
     
     const cards = document.querySelectorAll('.card');
     
@@ -16,18 +16,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       const subjectName = subjectEl.textContent.trim();
       
       // Determine if live
-      // We check if the subjectName exactly matches any string in liveSubjects array
+      // We check if the subjectName exactly matches any string in availableSubjects array
       // (Case insensitive match might be better for safety)
-      const isLive = liveSubjects.some(live => live.toLowerCase() === subjectName.toLowerCase());
+      const isLive = availableSubjects.some(live => live.toLowerCase() === subjectName.toLowerCase());
       
       // Create badge element
       const badge = document.createElement('span');
       if (isLive) {
-        badge.className = 'status-badge status-live';
-        badge.textContent = 'Live';
+        badge.className = 'status-badge status-available';
+        badge.textContent = 'Available';
       } else {
-        badge.className = 'status-badge status-pending';
-        badge.textContent = 'Pending';
+        badge.className = 'status-badge status-incomplete';
+        badge.textContent = 'Incomplete';
       }
       
       // Append badge to .card-header
