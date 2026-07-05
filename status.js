@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const subjectName = subjectEl.textContent.trim();
       const isAvailable = availableSubjects.some(s => s.toLowerCase() === subjectName.toLowerCase());
       
-      // Create badge
+      // Badge is purely visual — it never touches any links
       const badge = document.createElement('span');
       if (isAvailable) {
         badge.className = 'status-badge status-available';
@@ -34,25 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         cardHeader.appendChild(badge);
       } else {
         card.appendChild(badge);
-      }
-
-      // If subject is Incomplete, check every action-btn link on the card
-      // - If the link already has a real URL (not # and not empty), LEAVE IT ALONE — let it open
-      // - If the link is # (no PDF uploaded yet), gray it out and prevent the useless scroll-to-top
-      if (!isAvailable) {
-        const links = card.querySelectorAll('.action-btn');
-        links.forEach(link => {
-          const href = link.getAttribute('href');
-          const isReal = href && href !== '#' && href.trim() !== '';
-          if (!isReal) {
-            // No real link — disable gracefully
-            link.addEventListener('click', e => e.preventDefault());
-            link.style.opacity = '0.4';
-            link.style.cursor = 'not-allowed';
-            link.title = 'Not yet available';
-          }
-          // Real link → do nothing, let it open normally
-        });
       }
     });
   } catch (err) {
