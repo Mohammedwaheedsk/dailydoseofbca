@@ -870,7 +870,7 @@
         <div class="card">
           <div class="card-header">
             <div class="subject-group"><span class="subject">PHP</span></div>
-            <span class="status-badge status-no-incomplete">No-Incomplete</span>
+            <span class="status-badge status-no-incomplete" data-expires="2026-07-09T16:00:00">No-Incomplete</span>
           </div>
           <p class="description">Notes for PHP.</p>
           <a href="https://drive.google.com/file/d/1v9Imxnwr6LGDzzPHWIZppvW8eUVmt1WZ/view?usp=sharing" class="action-btn">Open PDF</a>
@@ -878,7 +878,7 @@
         <div class="card">
           <div class="card-header">
             <div class="subject-group"><span class="subject">WEB</span></div>
-            <span class="status-badge status-no-incomplete">No-Incomplete</span>
+            <span class="status-badge status-no-incomplete" data-expires="2026-07-09T16:00:00">No-Incomplete</span>
           </div>
           <p class="description">Notes for WEB.</p>
           <a href="https://drive.google.com/file/d/135P6IQ06I3bsvgrpcGqoKTv-mFTnR9F_/view?usp=sharing" class="action-btn">Open PDF</a>
@@ -888,21 +888,21 @@
             <div class="subject-group"><span class="subject">Cloud Computing</span></div>
             <span class="status-badge status-no-incomplete">No-Incomplete</span>
           </div>
-          <p class="description">Material for Cloud Computing.</p>
-          <a href="https://drive.google.com/file/d/1NJi-gpRw0Fo2SZ4LcaxqmJk6STCfHumz/view?usp=sharing" class="action-btn">Open PDF</a>
+          <p class="description">Notes for Cloud Computing.</p>
+          <a href="https://drive.google.com/file/d/1FIjeaJ1K791KphefXWHzbBG2CXhSHNXm/view?usp=sharing" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
             <div class="subject-group"><span class="subject">Software Testing</span></div>
-            <span class="status-badge status-incomplete">Incomplete</span>
+            <span class="status-badge status-no-incomplete">No-Incomplete</span>
           </div>
-          <p class="description">Notes for Software Testing.</p>
+          <p class="description">Material for Software Testing.</p>
           <a href="#" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
             <div class="subject-group"><span class="subject">Email Marketing</span></div>
-            <span class="status-badge status-incomplete">Incomplete</span>
+            <span class="status-badge status-no-incomplete" data-expires="2026-07-09T16:00:00">No-Incomplete</span>
           </div>
           <p class="description">Notes for Email Marketing.</p>
           <a href="https://drive.google.com/file/d/1idRjsjMjrAJkwebURicInK2_SgVOVS-E/view?usp=sharing" class="action-btn">Open PDF</a>
@@ -910,15 +910,15 @@
         <div class="card">
           <div class="card-header">
             <div class="subject-group"><span class="subject">Mobile Marketing</span></div>
-            <span class="status-badge status-no-incomplete">No-Incomplete</span>
+            <span class="status-badge status-no-incomplete" data-expires="2026-07-09T16:00:00">No-Incomplete</span>
           </div>
-          <p class="description">Almost completed notes, 3 to 5 pages incomplete.</p>
+          <p class="description">Notes for Mobile Marketing.</p>
           <a href="https://drive.google.com/file/d/1iGijjpTTn3KHLGDzSJLYJx0A4fKYjRbO/view?usp=sharing" class="action-btn">Open PDF</a>
         </div>
         <div class="card">
           <div class="card-header">
             <div class="subject-group"><span class="subject">EVS</span></div>
-            <span class="status-badge status-incomplete">Incomplete</span>
+            <span class="status-badge status-no-incomplete" data-expires="2026-07-09T16:00:00">No-Incomplete</span>
           </div>
           <p class="description">Notes for EVS.</p>
           <a href="#" class="action-btn">Open PDF</a>
@@ -1408,6 +1408,36 @@
         }
       });
     })();
+  </script>
+
+  <script>
+    // --- BADGE EXPIRY TIMER ---
+    // How to use: add data-expires="YYYY-MM-DDTHH:MM:SS" to any status-no-incomplete badge.
+    // When the current time passes that date/time, the badge automatically
+    // changes from green "No-Incomplete" to red "Incomplete".
+    // Only works on badges that currently have the class "status-no-incomplete".
+    //
+    // Example in HTML:
+    //   <span class="status-badge status-no-incomplete" data-expires="2026-07-20T23:59:00">No-Incomplete</span>
+
+    function checkBadgeExpiry() {
+      const now = new Date();
+      document.querySelectorAll('.status-badge.status-no-incomplete[data-expires]').forEach(badge => {
+        const expiresAt = new Date(badge.getAttribute('data-expires'));
+        if (!isNaN(expiresAt) && now >= expiresAt) {
+          badge.classList.remove('status-no-incomplete');
+          badge.classList.add('status-incomplete');
+          badge.textContent = 'Incomplete';
+          badge.removeAttribute('data-expires'); // No need to keep checking this badge
+        }
+      });
+    }
+
+    // Run immediately on page load
+    checkBadgeExpiry();
+
+    // Then re-check every 60 seconds (in case user leaves tab open)
+    setInterval(checkBadgeExpiry, 60000);
   </script>
 
 </body>
